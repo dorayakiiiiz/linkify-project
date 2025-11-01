@@ -1,0 +1,1 @@
+// cung cấp data global về authentication qua useContext
