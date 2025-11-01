@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import Home from './pages/Dashboard/Home'
 import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
@@ -12,7 +13,7 @@ function App() {
         <>
             <Navbar />
             <main
-                className=''
+                className="min-h-[534px] flex items-center justify-center"
             >
 
                 <Routes>
@@ -20,8 +21,9 @@ function App() {
                     <Route path='/auth/login' element={<Login />} />
                     <Route path='/auth/register' element={<Register />} />
                 </Routes>
-
             </main>
+
+            <Footer />
         </>
     )
 }
