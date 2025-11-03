@@ -5,26 +5,29 @@ import Footer from './components/Footer'
 import Home from './pages/Dashboard/Home'
 import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
+import BaseLayout from './layouts/BaseLayout'
+import BlankLayout from './layouts/BlankLayout'
 
 // Định nghĩa các route trong này
 
 function App() {
     return (
-        <>
-            <Navbar />
-            <main
-                className="min-h-[534px] flex items-center justify-center"
-            >
+        <Routes>
 
-                <Routes>
-                    <Route path='/' element={<Home />} />
-                    <Route path='/auth/login' element={<Login />} />
-                    <Route path='/auth/register' element={<Register />} />
-                </Routes>
-            </main>
+            {/* Layout có navbar + footer */}
+            <Route element={<BaseLayout />}>
+                <Route path="/" element={<Home />} />
 
-            <Footer />
-        </>
+            </Route>
+
+            {/* Layout ko có navbar + footer */}
+            <Route element={<BlankLayout />}>
+                <Route path="/auth/login" element={<Login />} />
+                <Route path="/auth/register" element={<Register />} />
+            </Route>
+
+
+        </Routes>
     )
 }
 

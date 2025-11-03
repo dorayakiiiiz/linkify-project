@@ -1,16 +1,26 @@
 // code các page trong này, gọi các service xử lí API từ folder service
 
-import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react"
+import { Link, useNavigate } from "react-router-dom";
 
 import { authService } from "../../services/authService";
 import { Validator } from "../../utils/validators";
+
+import Input from "../../components/Input";
+import SubmitButton from "../../components/SubmitButton";
 
 export default function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repassword, setRepassword] = useState('');
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (error) {
+            const timerId = setTimeout(() => setError(''), 3000);
+            return () => clearTimeout(timerId);
+        }
+    }, [error]);
 
     const navigate = useNavigate();
 
@@ -24,7 +34,7 @@ export default function Register() {
             return;
         }
 
-        const passwordError = Validator.validatePassword(username);
+        const passwordError = Validator.validatePassword(password);
         if (passwordError) {
             setError(passwordError);
             return;
@@ -54,53 +64,199 @@ export default function Register() {
     }
 
     return (
-        <div className="w-[300px] h-[360px] bg-[green] rounded-3xl flex flex-col justify-center items-center">
-            <div
-                className="text-[#fff] font-semibold text-2xl mb-[20px]"
+        // <>
+        //     <div className="flex justify-center w-full h-screen">
+                
+        //         {/* Login panel */}
+        //         <div className="w-full lg:w-[60%] bg-[#fff] rounded-3xl flex flex-col items-center">
+                    
+        //             <Link
+        //                 to="/"
+        //                 className="font-momo m-[20px] self-start"
+        //             >
+        //                 Linktree
+        //                 <i className="fa-brands fa-linktree text-[#43E660]"></i>
+        //             </Link>
+
+        //             <div
+        //                 className="font-semibold text-3xl font-momo"
+        //             >
+        //                 Join Linkify
+        //             </div>
+
+        //             <div
+        //                 className="text-[#898b8c] my-[10px]"
+        //             >
+        //                 Sign up for free!
+        //             </div>
+
+        //             <form 
+        //                 onSubmit={handleSubmit}
+        //                 className="flex flex-col justify-center items-center mt-[20px]"
+        //             >
+
+        //                 <Input 
+        //                     type="text" 
+        //                     value={username} 
+        //                     placeholder="Input your username" 
+        //                     setState={setUsername}
+        //                 />
+
+        //                 <Input 
+        //                     type="password" 
+        //                     value={password} 
+        //                     placeholder="Input password" 
+        //                     setState={setPassword}
+        //                 />
+
+        //                 <Input 
+        //                     type="password" 
+        //                     value={repassword} 
+        //                     placeholder="Input password again" 
+        //                     setState={setRepassword}
+        //                 />
+
+        //                 <div className="mt-[4px] mb-[10px]  text-[red] font-semibold">
+        //                     {error}
+        //                 </div>
+
+        //                 <div className="w-[520px] text-[#898b8c] mb-[10px] text-center">
+        //                     By clicking 
+        //                     <span className="font-semibold"> Create account</span>
+        //                     , you agree to Linkify's 
+        //                     <span className="font-semibold underline"> privacy notice</span>, 
+        //                     <a href="/" className="font-semibold underline">T&Cs </a> 
+        //                     and to receive offers, news and updates.
+        //                 </div>
+
+        //                 <SubmitButton backgrond={{ normal: "#000", hover: "#676b5f "}} color="#fff" text="Create account" />
+
+        //             </form>
+
+        //             <div className="text-[#898b8c] mt-[10px]">
+        //                 OR
+        //             </div>
+
+        //             <button
+        //                 type="submit"
+        //                 className="w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
+        //             >
+        //                 <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
+        //                 Sign up with Google
+        //             </button> 
+
+        //             <button
+        //                 type="submit"
+        //                 className="w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
+        //             >
+        //                 <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
+        //                 Sign up with Facebook
+        //             </button>      
+
+
+        //         </div>
+
+        //         {/* Ảnh */}
+        //         <img 
+        //             src="../../../public/social_background.jpeg" 
+        //             alt="Background" 
+        //             className="hidden lg:block w-[40%] h-full object-cover"
+        //         />
+        //     </div>
+        // </>
+        <div className="w-full h-screen md:bg-[url('/background_authentication.jpeg')] bg-cover bg-center flex flex-col justify-center items-center md:items-start">
+            
+            <Link
+                to="/"
+                className="font-momo md:text-[#fff] mt-[50px] md:mt-[30px] ml-[30px] md:ml-[50px] self-start"
             >
-                Đăng kí
-            </div>
-            <form 
-                onSubmit={handleSubmit}
-                className="flex flex-col justify-center items-center"
-            >
+                Linktree
+                <i className="fa-brands fa-linktree text-[#43E660]"></i>
+            </Link>
+            
+            <div className="w-full max-w-[660px] max-h-[600px] mt-[16px] mb-[60px] md:ml-[100px] p-[20px] bg-[#fff] rounded-3xl flex flex-col items-center">
+                
 
-                <input 
-                    type="text"
-                    value={username}
-                    className="bg-[white] outline-none w-[250px] h-[30px] px-[10px]"
-                    placeholder="Nhập username của bạn"
-                    onChange={e => setUsername(e.target.value)}
-                />
+                <div
+                    className="font-semibold text-3xl font-momo"
+                >
+                    Join Linkify
+                </div>
 
-                <input 
-                    type="text"
-                    value={password}
-                    className="bg-[white] outline-none w-[250px] h-[30px] px-[10px] mt-[20px]"
-                    placeholder="Nhập mật khẩu"
-                    onChange={e => setPassword(e.target.value)}
-                />
+                <div
+                    className="text-[#898b8c] my-[5px]"
+                >
+                    Sign up for free!
+                </div>
 
-                <input 
-                    type="text"
-                    value={repassword}
-                    className="bg-[white] outline-none w-[250px] h-[30px] px-[10px] mt-[20px]"
-                    placeholder="Nhập lại mật khẩu"
-                    onChange={e => setRepassword(e.target.value)}
-                />
+                <form 
+                    onSubmit={handleSubmit}
+                    className="flex flex-col justify-center items-center mt-[10px]"
+                >
 
-                <div className="mt-[20px] h-[10px] text-[yellow]">
-                    {error}
+                    <Input 
+                        type="text" 
+                        value={username} 
+                        placeholder="Input your username" 
+                        setState={setUsername}
+                    />
+
+                    <Input 
+                        type="password" 
+                        value={password} 
+                        placeholder="Input password" 
+                        setState={setPassword}
+                    />
+
+                    <div className="mt-[4px] mb-[10px]  text-[red] font-semibold">
+                        {error}
+                    </div>
+
+                    <div className="w-full max-w-[520px] text-[#898b8c] mb-[10px] text-center">
+                        By clicking 
+                        <span className="font-semibold"> Create account</span>
+                        , you agree to Linkify's 
+                        <a href="" className="font-semibold underline"> privacy notice</a>, 
+                        <a href="/" className="font-semibold underline">T&Cs </a> 
+                        and to receive offers, news and updates.
+                    </div>
+
+                    <SubmitButton backgrond={{ normal: "#000", hover: "#676b5f "}} color="#fff" text="Create account" />
+
+                </form>
+
+                <div className="text-[#898b8c] mt-[10px]">
+                    OR
                 </div>
 
                 <button
                     type="submit"
-                    className="h-[40px] w-[150px] bg-[#1f5] mt-[30px] rounded-xl"
+                    className="w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
                 >
-                    Đăng kí
+                    <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
+                    Sign up with Google
+                </button> 
+
+                <button
+                    type="submit"
+                    className="w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
+                >
+                    <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
+                    Sign up with Facebook
                 </button>
 
-            </form>
+                <div className="mt-[10px] text-[#898b8c]">
+                    Already have an account?
+                    <Link 
+                        to="/auth/login"
+                        className="ml-[4px] text-[#9029D9]"
+                    >
+                        Log in
+                    </Link>
+                </div>      
+
+
+            </div>
         </div>
     )
 }

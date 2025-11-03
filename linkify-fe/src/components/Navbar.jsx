@@ -1,32 +1,46 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
 
     return (
-        <nav className="w-screen h-[100px] px-[20px] flex justify-between items-center gap-[30px] bg-[#11ff55]">
-            <div>
+        <nav className="bg-[#fff] fixed left-[5%] right-[5%] top-[40px] h-[70px] rounded-full px-[20px] flex justify-between items-center gap-[30px]">
+            <div className="flex justify-center items-center">
                 <Link 
                     to="/"
-                    className="bg-[aqua] p-[10px] rounded"
+                    className="flex-shrink-0 text-xl font-bold font-inter ml-[10px] cursor-pointer"
                 >
-                    Home
+                    Linkify
+                    <i className="fa-brands fa-linktree"></i>
+
                 </Link>
+
+                <div className="hidden md:flex justify-center items-center md:ml-[10px] lg:ml-[70px] font-semibold">
+                    <div className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
+                        Template
+                    </div>
+                    <div className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
+                        Marketplace
+                    </div>
+                    <div className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
+                        Learn
+                    </div>
+                </div>
             </div>
 
-            <div className="">
+            <div className="flex">
                 <Link 
                     to="/auth/login"
-                    className="bg-[yellow] p-[10px] mr-[20px] rounded"
+                    className="flex-shrink-0 font-semibold bg-[#EFF0EC] px-[20px] py-[14px] mr-[20px] rounded"
                 >
-                    Đăng nhập
+                    Login
                 </Link>
 
                 <Link 
                     to="/auth/register"
-                    className="bg-[red] text-[#fff] p-[10px] rounded"
+                    className="flex-shrink-0 font-semibold bg-[#262D3E] text-[#fff] px-[20px] py-[14px] rounded-4xl"
                 >
-                    Đăng kí
+                    Sign up
                 </Link>
             </div>
 
