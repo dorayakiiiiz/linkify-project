@@ -10,7 +10,7 @@ export default function SubmitButton({ backgrond: { normal, hover}, color, text 
             }}
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = hover)}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = normal)}
-            className={`px-[40px] py-[12px] font-semibold rounded-3xl`}
+            className={`cursor-pointer px-[40px] py-[12px] font-semibold rounded-3xl`}
         >
             {text}
         </button>

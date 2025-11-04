@@ -51,7 +51,7 @@ export default function Login() {
 
         } catch (err) {
             console.error('Login error:', err, err.response?.data);
-            let errorMessage = 'Đã có lỗi xảy ra. Vui lòng thử lại sau.';
+            let errorMessage = 'Error occured. Try again later.';
             if (err.response && err.response.data) {
                 errorMessage = err.response.data.message || errorMessage;
             }
@@ -127,7 +127,7 @@ export default function Login() {
 
                     <button
                         type="submit"
-                        className="w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
+                        className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
                     >
                         <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
                         Continue with Google
@@ -135,7 +135,7 @@ export default function Login() {
 
                     <button
                         type="submit"
-                        className="w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
+                        className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
                     >
                         <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
                         Continue with Facebook

@@ -14,7 +14,7 @@ class AuthController {
 
             const user = await User.findOne({ username });
             if (user) 
-                return res.status(400).json({ message: 'Username đã tồn tại'});
+                return res.status(400).json({ message: 'Username existed.'});
 
             const hassPassword = await bcrypt.hash(password, saltRounds);
 
@@ -23,7 +23,7 @@ class AuthController {
                 password: hassPassword
             });
 
-            res.json({ messgae: 'Đăng kí thành công!', userId: newUser._id });
+            res.json({ messgae: 'Register successfully!', userId: newUser._id });
             
         } catch (err) {
             res.status(500).json({ error: err.message });
@@ -37,11 +37,11 @@ class AuthController {
 
             const user = await User.findOne({ username: username });
             if (!user)
-                return res.status(404).json({ message: 'Username không tồn tại'});
+                return res.status(404).json({ message: 'Username does not exist.'});
 
             const match = await bcrypt.compare(password, user.password);
             if (!match) 
-                return res.status(400).json({ message: 'Mật khẩu sai' });
+                return res.status(400).json({ message: 'Incorrect password.' });
 
             const token = jwt.sign(
                 { id: user._id, username: user.username },
@@ -50,7 +50,7 @@ class AuthController {
             );
 
             res.json({
-                message: 'Đăng nhập thành công',
+                message: 'Login successfully!',
                 token, 
                 user: { id: user._id, name: user.name }
             });

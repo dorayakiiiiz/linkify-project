@@ -12,7 +12,6 @@ import SubmitButton from "../../components/SubmitButton";
 export default function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [repassword, setRepassword] = useState('');
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -40,10 +39,6 @@ export default function Register() {
             return;
         }
         
-        if (password !== repassword) {
-            setError('Mật khẩu nhập lại không khớp.');
-            return;
-        }
 
         try {
             await authService.register({
@@ -54,7 +49,7 @@ export default function Register() {
             navigate('/');
 
         } catch (err) {
-            let errorMessage = 'Đã có lỗi xảy ra. Vui lòng thử lại sau.';
+            let errorMessage = 'Error occured. Try again later.';
             if (err.response && err.response.data) {
                 errorMessage = err.response.data.message || errorMessage;
             }
@@ -217,7 +212,7 @@ export default function Register() {
                         <span className="font-semibold"> Create account</span>
                         , you agree to Linkify's 
                         <a href="" className="font-semibold underline"> privacy notice</a>, 
-                        <a href="/" className="font-semibold underline">T&Cs </a> 
+                        <a href="" className="font-semibold underline">T&Cs </a> 
                         and to receive offers, news and updates.
                     </div>
 
@@ -231,7 +226,7 @@ export default function Register() {
 
                 <button
                     type="submit"
-                    className="w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
+                    className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
                 >
                     <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
                     Sign up with Google
@@ -239,7 +234,7 @@ export default function Register() {
 
                 <button
                     type="submit"
-                    className="w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
+                    className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
                 >
                     <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
                     Sign up with Facebook

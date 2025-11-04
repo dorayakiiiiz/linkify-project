@@ -80,7 +80,7 @@ export default function Home() {
                     autoPlay
                     loop
                     muted
-                    className="hidden md:block w-[50%] h-full mr-[20px]"
+                    className="hidden md:block w-[50%] h-full"
                 />
                 <div className="w-full md:w-[50%]">
                     <div
@@ -104,8 +104,21 @@ export default function Home() {
                     </Link> 
                 </div>
 
-                
+            </div>
 
+            <div className="w-full bg-[#780016] min-h-[500px] md:min-h-[800px] flex flex-col items-center justify-center gap-[30px] md:gap-[60px] px-[50px] md:px-[100px] lg:px-[140px]">
+                <div className="text-center font-momo font-bold text-[#E9C0E9] text-3xl md:text-5xl">
+                    Ready to build your own Linkify page?
+                </div>
+                <div className="font-inter font-bold text-[#fff] md:text-2xl">
+                    Start sharing your world with one simple link. 
+                </div>
+                <Link
+                        to="/auth/login"
+                        className="block w-full max-w-[250px] text-center py-[16px] mt-[10px] md:mt-[30px] bg-[#DE9FDE] font-semibold rounded-3xl cursor-pointer"
+                    >
+                        Create my page now
+                    </Link> 
             </div>
 
             
