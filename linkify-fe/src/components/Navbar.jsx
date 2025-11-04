@@ -1,10 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
 
+    const [show, setShow] = useState(true);
+    const lastScrollY = useRef(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > lastScrollY.current && window.scrollY > 100)
+                setShow(false);
+            else
+                setShow(true);
+            lastScrollY.current = window.scrollY;
+        }
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
-        <nav className="bg-[#fff] fixed left-[5%] right-[5%] top-[40px] h-[70px] rounded-full px-[20px] flex justify-between items-center gap-[30px]">
+        <nav 
+            className={`bg-[#fff] fixed left-[5%] right-[5%] top-[40px] h-[70px] rounded-full px-[20px] flex justify-between items-center gap-[30px] transition-transform duration-500
+            ${show ? "translate-y-0" : "-translate-y-[160%]"}`}
+        >
             <div className="flex justify-center items-center">
                 <Link 
                     to="/"
