@@ -1,61 +1,88 @@
 // code các page trong này, gọi các service xử lí API từ folder service
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
 import { Validator } from "../../utils/validators";
 import Input from "../../components/Input";
 import SubmitButton from "../../components/SubmitButton";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 
 export default function Login() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [log, setLog] = useState({
+        type: '',
+        content: ''
+    });
 
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     useEffect(() => {
-        if (error) {
-            const timerId = setTimeout(() => setError(''), 3000);
+        if (log.content) {
+            const timerId = setTimeout(() => setLog({
+                type: '',
+                content: ''
+            }), 3000);
             return () => clearTimeout(timerId);
         }
-    }, [error]);
+    }, [log]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         // validate data
-        const usernameError = Validator.validateUsername(username);
-        if (usernameError) {
-            setError(usernameError);
+        const emailError = Validator.validateEmail(email);
+        if (emailError) {
+            setLog({
+                type: 'error',
+                content: emailError
+            });
             return;
         }
 
         const passwordError = Validator.validatePassword(password);
         if (passwordError) {
-            setError(passwordError);
+            setLog({
+                type: 'error',
+                content: passwordError
+            });
             return;
         }
 
         try {
-            await authService.login({
-                username,
+            const res = await authService.login({
+                email,
                 password
             });
 
-            console.log('login successfully')
+            // request lên api trả về token, lấy token ra lưu vào storage
+            // const { token } = res;
+            // localStorage.setItem('token', token);
 
-            navigate('/');
+            login(res.token);
+
+            setLog({
+                type: 'success',
+                content: 'Login successfully! Redirecting to dashboard...'
+            });
+
+            setTimeout(() => {
+                navigate('/dashboard');
+            }, 3000);
 
         } catch (err) {
-            console.error('Login error:', err, err.response?.data);
             let errorMessage = 'Error occured. Try again later.';
             if (err.response && err.response.data) {
                 errorMessage = err.response.data.message || errorMessage;
             }
-            setError(errorMessage);
+            setLog({
+                type: 'error',
+                content: errorMessage
+            });
         }
         
     }
@@ -100,10 +127,10 @@ export default function Login() {
                     >
 
                         <Input 
-                            type="text" 
-                            value={username} 
-                            placeholder="Input your username" 
-                            setState={setUsername}
+                            type="email" 
+                            value={email} 
+                            placeholder="Input your email" 
+                            setState={setEmail}
                         />
 
                         <Input 
@@ -113,8 +140,8 @@ export default function Login() {
                             setState={setPassword}
                         />
 
-                        <div className="mt-[4px] mb-[10px] text-[red] font-semibold">
-                            {error}
+                        <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+                            {log.content}
                         </div>
 
                         <SubmitButton backgrond={{ normal: "#000", hover: "#676b5f "}} color="#fff" text="Continue" />

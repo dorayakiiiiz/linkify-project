@@ -2,8 +2,32 @@ import mongoose from "mongoose"
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
+    email: { 
+        type: String, 
+        required: true, 
+        unique: true 
+    },
+    password: { 
+        type: String, 
+        required: true 
+    },
+    googleId: { 
+        type: String, 
+    },
+    facebookId: { 
+        type: String, 
+    },
+    role: {
+        type: String,
+        enum: ['creator', 'admin'],
+        default: 'creator',
+        required: true
+    },
+    isLocked: {
+        type: Boolean,
+        default: false,
+        required: true
+    }
 }, {
     timestamps: true
 })

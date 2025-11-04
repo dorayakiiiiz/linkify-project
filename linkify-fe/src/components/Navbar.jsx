@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
 
@@ -19,6 +20,14 @@ export default function Navbar() {
 
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    const { isLogin, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogOut = () => {
+        logout();
+        navigate('/');
+    }
 
     return (
         <nav 
@@ -48,7 +57,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            <div className="flex">
+            <div className={`${isLogin ? "hidden" : "flex"}`}>
                 <Link 
                     to="/auth/login"
                     className="flex-shrink-0 font-semibold bg-[#EFF0EC] px-[20px] py-[14px] mr-[20px] rounded"
@@ -62,6 +71,16 @@ export default function Navbar() {
                 >
                     Sign up
                 </Link>
+            </div>
+
+            <div className={`${isLogin ? "block" : "hidden"}`}>
+                <button 
+                    onClick={handleLogOut}
+                    className="flex-shrink-0 font-semibold bg-[#EFF0EC] px-[20px] py-[14px] mr-[20px] rounded-2xl cursor-pointer"
+                >
+                    Log out
+                </button>
+
             </div>
 
         </nav>

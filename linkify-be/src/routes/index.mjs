@@ -1,11 +1,13 @@
 
 import authRouter from "./auth.mjs";
 import homeRouter from "./home.mjs";
+import userRouter from "./user.mjs"
 
 
 export default function route(app) {
 
-    app.use('/auth', authRouter);
+    app.use('/api/auth', authRouter);
+    app.use('/api/user', userRouter);
 
-    app.use('/', homeRouter);
+    app.use('/api', homeRouter);
 }

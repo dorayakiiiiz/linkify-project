@@ -10,16 +10,22 @@ import Input from "../../components/Input";
 import SubmitButton from "../../components/SubmitButton";
 
 export default function Register() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [log, setLog] = useState({
+        type: '',
+        content: ''
+    });
 
     useEffect(() => {
-        if (error) {
-            const timerId = setTimeout(() => setError(''), 3000);
+        if (log.content) {
+            const timerId = setTimeout(() => setLog({
+                type: '',
+                content: ''
+            }), 3000);
             return () => clearTimeout(timerId);
         }
-    }, [error]);
+    }, [log]);
 
     const navigate = useNavigate();
 
@@ -27,138 +33,54 @@ export default function Register() {
         e.preventDefault();
 
         // validate data
-        const usernameError = Validator.validateUsername(username);
-        if (usernameError) {
-            setError(usernameError);
+        const emailError = Validator.validateEmail(email);
+        if (emailError) {
+            setLog({
+                type: 'error',
+                content: emailError
+            });
             return;
         }
 
         const passwordError = Validator.validatePassword(password);
         if (passwordError) {
-            setError(passwordError);
+            setLog({
+                type: 'error',
+                content: passwordError
+            });
             return;
         }
         
-
         try {
             await authService.register({
-                username,
+                email,
                 password
             });
 
-            navigate('/');
+            setLog({
+                type: 'success',
+                content: 'Register successfully! Redirecting to login page...'
+            });
+
+            setTimeout(() => {
+                navigate('/auth/login');
+            }, 3000);
 
         } catch (err) {
             let errorMessage = 'Error occured. Try again later.';
             if (err.response && err.response.data) {
                 errorMessage = err.response.data.message || errorMessage;
             }
-            setError(errorMessage);
+            setLog({
+                type: 'error',
+                content: errorMessage
+            });;
         }
         
     }
 
     return (
-        // <>
-        //     <div className="flex justify-center w-full h-screen">
-                
-        //         {/* Login panel */}
-        //         <div className="w-full lg:w-[60%] bg-[#fff] rounded-3xl flex flex-col items-center">
-                    
-        //             <Link
-        //                 to="/"
-        //                 className="font-momo m-[20px] self-start"
-        //             >
-        //                 Linktree
-        //                 <i className="fa-brands fa-linktree text-[#43E660]"></i>
-        //             </Link>
-
-        //             <div
-        //                 className="font-semibold text-3xl font-momo"
-        //             >
-        //                 Join Linkify
-        //             </div>
-
-        //             <div
-        //                 className="text-[#898b8c] my-[10px]"
-        //             >
-        //                 Sign up for free!
-        //             </div>
-
-        //             <form 
-        //                 onSubmit={handleSubmit}
-        //                 className="flex flex-col justify-center items-center mt-[20px]"
-        //             >
-
-        //                 <Input 
-        //                     type="text" 
-        //                     value={username} 
-        //                     placeholder="Input your username" 
-        //                     setState={setUsername}
-        //                 />
-
-        //                 <Input 
-        //                     type="password" 
-        //                     value={password} 
-        //                     placeholder="Input password" 
-        //                     setState={setPassword}
-        //                 />
-
-        //                 <Input 
-        //                     type="password" 
-        //                     value={repassword} 
-        //                     placeholder="Input password again" 
-        //                     setState={setRepassword}
-        //                 />
-
-        //                 <div className="mt-[4px] mb-[10px]  text-[red] font-semibold">
-        //                     {error}
-        //                 </div>
-
-        //                 <div className="w-[520px] text-[#898b8c] mb-[10px] text-center">
-        //                     By clicking 
-        //                     <span className="font-semibold"> Create account</span>
-        //                     , you agree to Linkify's 
-        //                     <span className="font-semibold underline"> privacy notice</span>, 
-        //                     <a href="/" className="font-semibold underline">T&Cs </a> 
-        //                     and to receive offers, news and updates.
-        //                 </div>
-
-        //                 <SubmitButton backgrond={{ normal: "#000", hover: "#676b5f "}} color="#fff" text="Create account" />
-
-        //             </form>
-
-        //             <div className="text-[#898b8c] mt-[10px]">
-        //                 OR
-        //             </div>
-
-        //             <button
-        //                 type="submit"
-        //                 className="w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
-        //             >
-        //                 <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
-        //                 Sign up with Google
-        //             </button> 
-
-        //             <button
-        //                 type="submit"
-        //                 className="w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
-        //             >
-        //                 <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
-        //                 Sign up with Facebook
-        //             </button>      
-
-
-        //         </div>
-
-        //         {/* Ảnh */}
-        //         <img 
-        //             src="../../../public/social_background.jpeg" 
-        //             alt="Background" 
-        //             className="hidden lg:block w-[40%] h-full object-cover"
-        //         />
-        //     </div>
-        // </>
+      
         <div className="w-full h-screen md:bg-[url('/background_authentication.jpeg')] bg-cover bg-center flex flex-col justify-center items-center md:items-start">
             
             <Link
@@ -190,10 +112,10 @@ export default function Register() {
                 >
 
                     <Input 
-                        type="text" 
-                        value={username} 
-                        placeholder="Input your username" 
-                        setState={setUsername}
+                        type="email" 
+                        value={email} 
+                        placeholder="Input your email" 
+                        setState={setEmail}
                     />
 
                     <Input 
@@ -203,8 +125,8 @@ export default function Register() {
                         setState={setPassword}
                     />
 
-                    <div className="mt-[4px] mb-[10px]  text-[red] font-semibold">
-                        {error}
+                    <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+                        {log.content}
                     </div>
 
                     <div className="w-full max-w-[520px] text-[#898b8c] mb-[10px] text-center">
