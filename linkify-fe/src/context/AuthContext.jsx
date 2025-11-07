@@ -10,6 +10,8 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('token') || '');
+    const [isLoading, setIsLoading] = useState(true);
+
 
     // nếu có token thì fetch lại user từ API
     // useeffect ko dc dùng async trực tiếp
@@ -22,9 +24,15 @@ export const AuthProvider = ({ children }) => {
                     setUser(res.data.user);
                 } catch (err) {
                     console.log('Error while getting user account: ', err);
+                } finally {
+                    // loading xong
+                    setIsLoading(false);
                 }
             }
             fetchUser();
+        } else {
+            // must have, phải set loading false nếu ko sẽ bị mắt kẹt ở màn loading mãi
+            setIsLoading(false);
         }
     }, [token]);
 
@@ -43,6 +51,15 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         setToken('');
         localStorage.removeItem('token');
+    }
+
+    // render ra trang loading ở đây
+    if (isLoading) {
+        return (
+            <div className="h-screen w-full flex justify-center items-center bg-[#0060AD] text-5xl text-[#fff] font-momo">
+                Linkify is loading...
+            </div>
+        )
     }
 
     return (

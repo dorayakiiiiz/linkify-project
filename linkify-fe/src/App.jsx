@@ -4,9 +4,14 @@ import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import BaseLayout from './layouts/BaseLayout'
 import BlankLayout from './layouts/BlankLayout'
-import PrivateRoute from './routes/PrivateRoute'
 
-import Demo from './pages/Dashboard/Demo'
+import PrivateRoute from './routes/PrivateRoute'
+import CreatorRoute from './routes/CreatorRoute'
+import AdminRoute from './routes/AdminRoute'
+
+import DemoCreatorHome from './pages/Dashboard/DemoCreatorHome'
+// import DemoAdminHome from './pages/Dashboard/DemoAdminHome'
+import AdminDashboard from './pages/Dashboard/AdminDashboard'
 
 import { AuthProvider } from './context/AuthContext'
 
@@ -21,15 +26,22 @@ function App() {
                 <Route element={<BaseLayout />}>
                     <Route path="/" element={<Home />} />
 
-                    <Route element={<PrivateRoute />}>
-                        <Route path="/dashboard/" element={<Demo />} />
+                    <Route element={<CreatorRoute />}>
+                        <Route path="/dashboard/creator" element={<DemoCreatorHome />} />
                     </Route>
+
+                    
                 </Route>
 
                 {/* Layout ko có navbar + footer */}
                 <Route element={<BlankLayout />}>
                     <Route path="/auth/login" element={<Login />} />
                     <Route path="/auth/register" element={<Register />} />
+                    
+                    <Route element={<AdminRoute />}>
+                        <Route path="/dashboard/admin" element={<AdminDashboard />} />
+                    </Route>
+
                 </Route>
 
             </Routes>

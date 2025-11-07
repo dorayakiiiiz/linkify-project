@@ -19,8 +19,9 @@ export default function Login() {
     });
 
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, user } = useAuth();
 
+    // tự xóa log sau 3s
     useEffect(() => {
         if (log.content) {
             const timerId = setTimeout(() => setLog({
@@ -30,6 +31,20 @@ export default function Login() {
             return () => clearTimeout(timerId);
         }
     }, [log]);
+
+    // tự redirect qua trang tương ứng sau 3s
+    useEffect(() => {
+        if (user) {
+            const timerId = setTimeout(() => {
+                if (user.role === 'creator')
+                    navigate('/dashboard/creator');
+                else 
+                    navigate('/dashboard/admin');
+            }, 2000);
+
+            return () => clearTimeout(timerId);
+        }
+    }, [user, navigate]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -70,9 +85,6 @@ export default function Login() {
                 content: 'Login successfully! Redirecting to dashboard...'
             });
 
-            setTimeout(() => {
-                navigate('/dashboard');
-            }, 3000);
 
         } catch (err) {
             let errorMessage = 'Error occured. Try again later.';
