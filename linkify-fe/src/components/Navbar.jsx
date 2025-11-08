@@ -21,7 +21,7 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const { isLogin, logout } = useAuth();
+    const { isLogin, logout, user } = useAuth();
     const navigate = useNavigate();
 
     const handleLogOut = () => {
@@ -73,7 +73,13 @@ export default function Navbar() {
                 </Link>
             </div>
 
-            <div className={`${isLogin ? "block" : "hidden"}`}>
+            <div className={`${isLogin ? "flex" : "hidden"} items-center justify-center gap-[20px]`}>
+                <div className="">
+                    Hi, 
+                    <span className="font-bold text-[#002795] ml-[4px]">
+                        {user?.displayName}
+                    </span>
+                </div>
                 <button 
                     onClick={handleLogOut}
                     className="flex-shrink-0 font-semibold bg-[#EFF0EC] px-[20px] py-[14px] mr-[20px] rounded-2xl cursor-pointer"

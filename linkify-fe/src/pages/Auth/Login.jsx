@@ -166,7 +166,7 @@ export default function Login() {
 
                     <button
                         type="submit"
-                        className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
+                        className="cursor-pointer w-full max-w-[300px] md:max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
                     >
                         <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
                         Continue with Google
@@ -174,7 +174,7 @@ export default function Login() {
 
                     <button
                         type="submit"
-                        className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
+                        className="cursor-pointer w-full max-w-[300px] md:max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
                     >
                         <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
                         Continue with Facebook

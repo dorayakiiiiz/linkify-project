@@ -5,7 +5,7 @@ import Register from './pages/Auth/Register'
 import BaseLayout from './layouts/BaseLayout'
 import BlankLayout from './layouts/BlankLayout'
 
-import PrivateRoute from './routes/PrivateRoute'
+// import PrivateRoute from './routes/PrivateRoute'
 import CreatorRoute from './routes/CreatorRoute'
 import AdminRoute from './routes/AdminRoute'
 

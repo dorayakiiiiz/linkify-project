@@ -8,10 +8,11 @@ const saltRounds = 10;
 
 class AuthController {
     // [POST] /auth/register
+    // TODO: xử lí validate data ng dùng gửi lên
     async register(req, res, next) {
         try {
 
-            const { email, password } = req.body;
+            const { email, displayName, password } = req.body;
 
             const user = await User.findOne({ email });
             if (user) 
@@ -21,6 +22,7 @@ class AuthController {
 
             const newUser = await User.create({
                 email,
+                displayName,
                 password: hashPassword
             });
 
@@ -46,7 +48,6 @@ class AuthController {
             const match = await bcrypt.compare(password, user.password);
             if (!match) 
                 return res.status(400).json({ message: 'Incorrect password.' });
-
 
             const token = jwt.sign(
                 { 

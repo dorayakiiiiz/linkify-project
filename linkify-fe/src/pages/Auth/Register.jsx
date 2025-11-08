@@ -11,6 +11,7 @@ import SubmitButton from "../../components/SubmitButton";
 
 export default function Register() {
     const [email, setEmail] = useState('');
+    const [displayName, setDisplayName] = useState('');
     const [password, setPassword] = useState('');
     const [log, setLog] = useState({
         type: '',
@@ -42,6 +43,15 @@ export default function Register() {
             return;
         }
 
+        const displayNameError = Validator.validateDisplayName(displayName);
+        if (displayNameError) {
+            setLog({
+                type: 'error',
+                content: displayNameError
+            });
+            return;
+        }
+
         const passwordError = Validator.validatePassword(password);
         if (passwordError) {
             setLog({
@@ -54,6 +64,7 @@ export default function Register() {
         try {
             await authService.register({
                 email,
+                displayName,
                 password
             });
 
@@ -119,6 +130,13 @@ export default function Register() {
                     />
 
                     <Input 
+                        type="text" 
+                        value={displayName} 
+                        placeholder="Input your display name" 
+                        setState={setDisplayName}
+                    />
+
+                    <Input 
                         type="password" 
                         value={password} 
                         placeholder="Input password" 
@@ -146,7 +164,26 @@ export default function Register() {
                     OR
                 </div>
 
-                <button
+                <div className="flex w-full max-w-[250px] md:max-w-[500px] gap-[30px] mt-[4px]">
+                    <button
+                        type="submit"
+                        className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] border bg-[#ff2821] hover:bg-[#f96666] text-[#fff] font-semibold rounded-3xl"
+                    >
+                        <i className="fa-brands fa-google md:mr-[10px]"></i>
+                        <div className="hidden md:block">Sign up with Google</div>
+                    </button> 
+
+                    <button
+                        type="submit"
+                        className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] bg-[#295ff4] hover:bg-[#5683ff] text-[#fff] font-semibold rounded-3xl"
+                    >
+                        <i className="fa-brands fa-facebook md:mr-[10px]"></i>
+                        <div className="hidden md:block">Sign up with Facebook</div>
+                    </button>
+                </div>
+                
+
+                {/* <button
                     type="submit"
                     className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
                 >
@@ -160,7 +197,7 @@ export default function Register() {
                 >
                     <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
                     Sign up with Facebook
-                </button>
+                </button> */}
 
                 <div className="mt-[10px] text-[#898b8c]">
                     Already have an account?

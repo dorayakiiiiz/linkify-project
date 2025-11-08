@@ -2,7 +2,7 @@
 import { useAuth } from "../../context/AuthContext"
 
 export default function AdminDashboard() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     return (
         <div className="h-screen w-full flex bg-[#ccc]">
             {/* Admin panel */}
@@ -15,8 +15,8 @@ export default function AdminDashboard() {
                             className="w-[26px] h-[26px] rounded-full"
                         />
                         <div className="font-inter font-semibold ml-[10px] text-[#fff]">
-                            dorayakiiiiz
-                            <i className="fa-solid fa-chevron-down ml-[4px] text-xs"></i>
+                            {user.displayName}
+                            <i className="fa-solid fa-chevron-down ml-[6px] text-xs"></i>
                         </div>
                     </div>
 

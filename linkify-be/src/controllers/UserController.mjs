@@ -13,6 +13,7 @@ class UserController {
                 user: {
                     id: user._id,
                     email: user.email,
+                    displayName: user.displayName,
                     role: user.role,
                     isLocked: user.isLocked
                 }
