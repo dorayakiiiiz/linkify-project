@@ -1,13 +1,13 @@
 
 import { useAuth } from "../../context/AuthContext"
 
-export default function DemoAdminHome() {
+export default function CreatorDashboard() {
     const { user } = useAuth();
     return (
         <>
         
             <div className="h-[500px] w-full flex gap-[50px] justify-center items-center font-momo text-5xl bg-[#0060AD] text-[#fff]">
-                <div>Admin page</div>
+                <div>Creator</div>
                 <div>
                     {user ? (
                         <div className="text-lg text-[#0060AD] bg-white rounded-xl p-[20px] shadow">

@@ -8,7 +8,7 @@ export default function CreatorRoute() {
         return <Navigate to="/auth/login" />;
 
     if (user.role === 'admin') 
-        return <Navigate to="/dashboard/admin" />;
+        return <Navigate to="/dashboard" />;
     
     return <Outlet />;
 }

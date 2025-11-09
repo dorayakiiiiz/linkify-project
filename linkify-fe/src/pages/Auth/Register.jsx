@@ -7,7 +7,7 @@ import { authService } from "../../services/authService";
 import { Validator } from "../../utils/validators";
 
 import Input from "../../components/Input";
-import SubmitButton from "../../components/SubmitButton";
+import Button from "../../components/Button";
 
 export default function Register() {
     const [email, setEmail] = useState('');
@@ -117,8 +117,7 @@ export default function Register() {
                     Sign up for free!
                 </div>
 
-                <form 
-                    onSubmit={handleSubmit}
+                <div
                     className="flex flex-col justify-center items-center mt-[10px]"
                 >
 
@@ -156,9 +155,14 @@ export default function Register() {
                         and to receive offers, news and updates.
                     </div>
 
-                    <SubmitButton backgrond={{ normal: "#000", hover: "#676b5f "}} color="#fff" text="Create account" />
+                    <Button 
+                        backgrond={{ normal: "#000", hover: "#676b5f "}} 
+                        color="#fff" 
+                        text="Create account" 
+                        onClick={handleSubmit}
+                    />
 
-                </form>
+                </div>
 
                 <div className="text-[#898b8c] mt-[10px]">
                     OR

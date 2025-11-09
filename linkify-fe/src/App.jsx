@@ -7,11 +7,11 @@ import BlankLayout from './layouts/BlankLayout'
 
 // import PrivateRoute from './routes/PrivateRoute'
 import CreatorRoute from './routes/CreatorRoute'
-import AdminRoute from './routes/AdminRoute'
+// import AdminRoute from './routes/AdminRoute'
 
-import DemoCreatorHome from './pages/Dashboard/DemoCreatorHome'
-// import DemoAdminHome from './pages/Dashboard/DemoAdminHome'
-import AdminDashboard from './pages/Dashboard/AdminDashboard'
+import Onboarding from './pages/Onboarding'
+
+import Dashboard from './pages/Dashboard/Dashboard'
 
 import { AuthProvider } from './context/AuthContext'
 
@@ -26,9 +26,18 @@ function App() {
                 <Route element={<BaseLayout />}>
                     <Route path="/" element={<Home />} />
 
-                    <Route element={<CreatorRoute />}>
+
+
+
+
+
+
+
+
+
+                    {/* <Route element={<CreatorRoute />}>
                         <Route path="/dashboard/creator" element={<DemoCreatorHome />} />
-                    </Route>
+                    </Route> */}
 
                     
                 </Route>
@@ -38,9 +47,24 @@ function App() {
                     <Route path="/auth/login" element={<Login />} />
                     <Route path="/auth/register" element={<Register />} />
                     
-                    <Route element={<AdminRoute />}>
-                        <Route path="/dashboard/admin" element={<AdminDashboard />} />
+                    {/* fix ở đây đổi qua route  */}
+                    <Route element={<CreatorRoute />}>
+                        <Route path="/onboarding" element={<Onboarding />} />
                     </Route>
+
+
+
+
+
+
+
+
+                    {/* <Route element={<AdminRoute />}>
+                        <Route path="/dashboard/admin" element={<AdminDashboard />} />
+                    </Route> */}
+
+                    <Route path="/dashboard" element={<Dashboard />} />
+
 
                 </Route>
 

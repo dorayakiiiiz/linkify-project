@@ -2,6 +2,7 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt"
 import User from "../models/User.mjs";
+import Profile from '../models/Profile.mjs';
 
 
 const saltRounds = 10;
@@ -49,6 +50,9 @@ class AuthController {
             if (!match) 
                 return res.status(400).json({ message: 'Incorrect password.' });
 
+            const userProfile = await Profile.findOne({ userId: user._id });
+            const hasProfile = !!userProfile;
+
             const token = jwt.sign(
                 { 
                     id: user._id
@@ -60,6 +64,7 @@ class AuthController {
             res.json({
                 message: 'Login successfully!',
                 token, 
+                hasProfile
                 // user: { 
                 //     id: user._id, 
                 //     email: user.email,

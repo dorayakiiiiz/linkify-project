@@ -76,9 +76,12 @@ export default function Navbar() {
             <div className={`${isLogin ? "flex" : "hidden"} items-center justify-center gap-[20px]`}>
                 <div className="">
                     Hi, 
-                    <span className="font-bold text-[#002795] ml-[4px]">
+                    <Link 
+                        to="/dashboard"
+                        className="font-bold text-[#002795] ml-[4px]"
+                    >
                         {user?.displayName}
-                    </span>
+                    </Link>
                 </div>
                 <button 
                     onClick={handleLogOut}
