@@ -20,7 +20,7 @@ export default function Login() {
     // dùng trong trường hợp đang đăng nhập r ở chỗ khác mà tnhien nhảy vào trang login lại
     const [justLoggedIn, setJustLoggedIn] = useState(false);
     // dùng để lựa chọn route khi user (creator) có profile rồi/chưa có
-    const [hasProfile, setHasProfile] = useState(null);
+    const [hasProfile, setHasProfile] = useState(false);
 
     const navigate = useNavigate();
     const { login, user } = useAuth();
@@ -39,22 +39,19 @@ export default function Login() {
     // tự redirect qua trang tương ứng sau 2s
     useEffect(() => {
         if (user) {
-            // khi ấn button login thì chờ 2s mới redirect
+            const redirect = () => {
+                // nếu là creator mà chưa có profile -> onboarding
+                if (user.role === 'creator' && !hasProfile)
+                    navigate('/onboarding');
+                else 
+                    navigate('/dashboard');
+            }
             if (justLoggedIn) {
-                const timerId = setTimeout(() => {
-                    // nếu là creator mà chưa có profile -> onboarding 
-                    if (user.role === 'creator' && !hasProfile)
-                        navigate('/onboarding');
-                    else 
-                        navigate('/dashboard');
-                }, 2000);
-    
+                const timerId = setTimeout(redirect, 2000);
                 return () => clearTimeout(timerId);
             } else {
-            // khi ở chỗ khác (đã login) mà vào đây thì quay lại dashboard liền
-            // TODO: fix khi ở onboarding mà vào đây thì sẽ check lại để redirect
-            // vào đúng chỗ như logic phía trên
-                navigate('/dashboard');
+                // TODO: fix logic trùng lặp phía trên
+                redirect();
             }
         }
     }, [user, navigate, justLoggedIn, hasProfile]);
@@ -97,18 +94,14 @@ export default function Login() {
             setHasProfile(hasProfile);
             setLog({
                 type: 'success',
-                content: 'Login successfully! Redirecting to dashboard...'
+                content: 'Login successfully! Redirecting...'
             });
 
 
         } catch (err) {
-            let errorMessage = 'Error occured. Try again later.';
-            if (err.response && err.response.data) {
-                errorMessage = err.response.data.message || errorMessage;
-            }
             setLog({
                 type: 'error',
-                content: errorMessage
+                content: err?.response?.data?.message || 'Error occured. Try again later.'
             });
         }
         
@@ -132,7 +125,7 @@ export default function Login() {
                         to="/"
                         className="font-momo m-[20px] self-start md:self-end"
                     >
-                        Linktree
+                        Linkify
                         <i className="fa-brands fa-linktree text-[#43E660]"></i>
                     </Link>
 
@@ -148,7 +141,7 @@ export default function Login() {
                         Log in to your Linkify
                     </div>
 
-                    <div
+                    <form
                         className="flex flex-col w-full justify-center items-center mt-[20px]"
                     >
 
@@ -177,7 +170,7 @@ export default function Login() {
                             onClick={handleSubmit}
                         />
 
-                    </div>
+                    </form>
 
                     <div className="text-[#898b8c] mt-[10px]">
                         OR
