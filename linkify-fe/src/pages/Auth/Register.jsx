@@ -78,14 +78,10 @@ export default function Register() {
             }, 3000);
 
         } catch (err) {
-            let errorMessage = 'Error occured. Try again later.';
-            if (err.response && err.response.data) {
-                errorMessage = err.response.data.message || errorMessage;
-            }
             setLog({
                 type: 'error',
-                content: errorMessage
-            });;
+                content: err?.response?.data?.message || 'Error occured. Try again later.'
+            });
         }
         
     }
@@ -98,7 +94,7 @@ export default function Register() {
                 to="/"
                 className="font-momo md:text-[#fff] mt-[50px] md:mt-[30px] ml-[30px] md:ml-[50px] self-start"
             >
-                Linktree
+                Linkify
                 <i className="fa-brands fa-linktree text-[#43E660]"></i>
             </Link>
             

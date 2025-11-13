@@ -1,13 +1,14 @@
 import User from "../models/User.mjs";
-import route from "../routes/index.mjs";
 
 class UserController {
+    // 
     async getAccount(req, res, next) {
         try {
             // req.user chứa id và role lưu trong auth controller lúc login và gửi jwt về
             const user = await User.findById(req.user.id);
             if (!user) 
                 return res.status(404).json({ message: "User not found"});
+
             res.status(200).json({
                 message: "Get account successfully",
                 user: {
@@ -15,7 +16,7 @@ class UserController {
                     email: user.email,
                     displayName: user.displayName,
                     role: user.role,
-                    isLocked: user.isLocked
+                    isLocked: user.isLocked,
                 }
             })
 
