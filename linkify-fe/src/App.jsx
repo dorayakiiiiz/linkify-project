@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import Home from './pages/Dashboard/Home'
+import Home from './pages/Home'
 import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import BaseLayout from './layouts/BaseLayout'
@@ -25,14 +25,6 @@ function App() {
                 {/* Layout có navbar + footer */}
                 <Route element={<BaseLayout />}>
                     <Route path="/" element={<Home />} />
-
-
-
-
-
-
-
-
 
 
                     {/* <Route element={<CreatorRoute />}>

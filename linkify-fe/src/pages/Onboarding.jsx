@@ -1,12 +1,12 @@
-import { useNavigate, Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
-import api from "../services/api"
-import { useAuth } from "../context/AuthContext"
 
 import Button from "../components/Button"
 import Input from "../components/Input"
 
 import { Validator } from "../utils/validators"
+
+import { profileService } from "../services/profileService"
 
 export default function Onboarding() {
     const [step, setStep] = useState(1);
@@ -16,6 +16,9 @@ export default function Onboarding() {
     const [avatarPreview, setAvatarPreview] = useState('');
     const [avatar, setAvatar] = useState(null);
 
+    const navigate = useNavigate();
+
+    // TODO: xử lí khi đã onboarding xong mà bấm quay lại route này -> chuyển hướng lại dashboard
 
     const [log, setLog] = useState({
         type: '',
@@ -49,7 +52,13 @@ export default function Onboarding() {
         setAvatar(file);
     }
 
-    const handleSubmit = (e) => {
+    const handleBack = (e) => {
+        setStep(step - 1);
+    }
+
+
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (step === 1) {
@@ -65,7 +74,34 @@ export default function Onboarding() {
         if (step <= 3) {
             setStep(step + 1);
         } else {
-            // gọi api
+            // gọi service
+            try {
+                // fix: xoá res
+                const res = await profileService.createOnboardingProfile({
+                    username,
+                    bio,
+                    avatar
+                })
+
+                console.log(res);
+
+                setLog({
+                    type: 'success',
+                    content: 'Profile created! Redirecting to dashboard...'
+                });
+
+                setTimeout(() => {
+                    navigate('/dashboard');
+                }, 1500);
+
+
+
+            } catch (err) {
+                setLog({
+                    type: 'error',
+                    content: err?.response?.data?.message || 'Error occured. Try again later.'
+                });
+            }
 
 
         }
@@ -83,13 +119,13 @@ export default function Onboarding() {
                 />
                 
                 {/* panel */}
-                <div className="w-full lg:w-[60%] p-[20px] bg-[#fff] rounded-3xl flex flex-col items-center">
+                <form className="w-full lg:w-[60%] p-[20px] bg-[#fff] rounded-3xl flex flex-col items-center">
                     
                     <Link
                         to="/"
-                        className="font-momo mx-[20px] my-[80px] md:mt-[0px] self-start md:self-end"
+                        className={`font-momo mx-[20px] mt-[40px] ${step > 3 ? 'mb-[100px]' : step === 3 ? 'mb-[40px]' : step === 2 ? 'mb-[50px]' : 'mb-[80px]'} self-start md:self-end`}
                     >
-                        Linktree
+                        Linkify
                         <i className="fa-brands fa-linktree text-[#43E660]"></i>
                     </Link>
 
@@ -121,6 +157,14 @@ export default function Onboarding() {
                     {step === 2 && (
                         <>
                             <div>
+                                <div 
+                                    className="cursor-pointer text-[#8129d9] mb-[6px]"
+                                    onClick={handleBack}
+                                >
+                                    <i className="fa-solid fa-arrow-left mr-[4px]"></i>
+                                    Back
+                                </div>
+
                                 <div
                                     className="font-semibold text-3xl font-momo"
                                 >
@@ -146,6 +190,14 @@ export default function Onboarding() {
                     {step === 3 && (
                         <>
                             <div>
+                                <div 
+                                    className="cursor-pointer text-[#8129d9] mb-[4px]"
+                                    onClick={handleBack}
+                                >
+                                    <i className="fa-solid fa-arrow-left mr-[4px]"></i>
+                                    Back
+                                </div>
+
                                 <div
                                     className="font-semibold text-3xl font-momo"
                                 >
@@ -188,6 +240,33 @@ export default function Onboarding() {
                         </>
                     )}
 
+                    {step === 4 && (
+                        <>
+                            <div>
+
+                                <div 
+                                    className="cursor-pointer text-[#8129d9] mb-[4px]"
+                                    onClick={handleBack}
+                                >
+                                    <i className="fa-solid fa-arrow-left mr-[4px]"></i>
+                                    Back
+                                </div>
+
+                                <div
+                                    className="font-semibold text-4xl font-momo"
+                                >
+                                    Everything looks good
+                                </div>
+
+                                <div
+                                    className="text-[#898b8c] mt-[10px] mb-[30px]"
+                                >
+                                    Create your profile now!
+                                </div>
+                            </div>
+                        </>
+                    )}
+
 
 
                     <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
@@ -197,11 +276,11 @@ export default function Onboarding() {
                     <Button 
                         backgrond={{ normal: "#8129d9", hover: "#5D18A2 "}} 
                         color="#fff" 
-                        text="Continue" 
+                        text={step === 4 ? "Create" : "Continue"} 
                         onClick={handleSubmit}
                     />
 
-                </div>
+                </form>
 
             </div>
         </>
