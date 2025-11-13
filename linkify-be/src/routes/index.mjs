@@ -11,4 +11,8 @@ export default function route(app) {
     app.use('/api/profile', profileRouter);
 
     app.use('/api', homeRouter);
+
+    // link routes (CRUD link)
+    // app.use('/api/links', linkRouter);
+
 }
