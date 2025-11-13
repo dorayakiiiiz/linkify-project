@@ -8,6 +8,9 @@ export default function route(app) {
 
     app.use('/api/auth', authRouter);
     app.use('/api/user', userRouter);
-
     app.use('/api', homeRouter);
+
+    // link routes (CRUD link)
+    // app.use('/api/links', linkRouter);
+
 }

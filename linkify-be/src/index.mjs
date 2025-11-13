@@ -22,7 +22,7 @@ app.use(
 );
 
 const allowedOrigins = [
-    'http://localhost:5173'
+    'http://localhost:5173' // frontend dev
 ]
 
 app.use(cors({
