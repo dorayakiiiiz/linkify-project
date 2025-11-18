@@ -9,7 +9,8 @@ import BlankLayout from './layouts/BlankLayout'
 import CreatorRoute from './routes/CreatorRoute'
 // import AdminRoute from './routes/AdminRoute'
 
-import Onboarding from './pages/Onboarding'
+import OnboardingProfile from './pages/Onboarding/OnboardingProfile'
+import OnboardingLink from './pages/Onboarding/OnboardingLink'
 
 import Dashboard from './pages/Dashboard/Dashboard'
 
@@ -41,7 +42,8 @@ function App() {
                     
                     {/* fix ở đây đổi qua route  */}
                     <Route element={<CreatorRoute />}>
-                        <Route path="/onboarding" element={<Onboarding />} />
+                        <Route path="/onboarding/profile" element={<OnboardingProfile />} />
+                        <Route path="/onboarding/link" element={<OnboardingLink />} />
                     </Route>
 
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext";
 import {ButtonAdd, UserInfo} from "../../components/UserInfo";
 import {mainMenu, tools, links, navItems} from '../../const/testDataDashboard.js'
@@ -30,7 +31,7 @@ export default function CreatorDashboard() {
     } else {
       setActiveItem(item.label); //set active cho nút này
       setActiveSubItem(null); //tắt active subItem
-      setLabel(item.label)
+      setLabel(item.label);
     }
     console.log(label)
   };
@@ -46,10 +47,15 @@ export default function CreatorDashboard() {
 
   return (
     <>
-      <div className="w-full h-screen flex flex-col">
+      <div className="w-full h-screen flex flex-col font-quicksand font-medium">
         {/* Header */}
-        <div className="bg-[#1d232f] h-[60px] w-full flex items-center">
-          <h2 className="text-[#43e963] mb-2 ml-4 font-mono font-semibold text-2xl">LINKIFY</h2>
+        <div className="bg-[#1d232f] h-[70px] w-full flex items-center">
+          <Link 
+            to="/"
+            className="text-[#43e963] mb-2 ml-4 font-momo text-xl"
+          >
+            Linkify
+          </Link>
         </div>
 
 

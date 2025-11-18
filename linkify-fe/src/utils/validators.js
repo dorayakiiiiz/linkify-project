@@ -11,7 +11,7 @@ const validateUsername = (username) => {
 const validateDisplayName = (displayName) => {
     if (!displayName) return "Please input display name.";
 
-    if (displayName.length < 5) return "Username must be at least 5 characters.";
+    if (displayName.length < 5) return "Display name must be at least 5 characters.";
 
     return null;
 }

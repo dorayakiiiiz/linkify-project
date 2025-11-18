@@ -1,14 +1,27 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useLayoutEffect } from "react"
 
-import Button from "../components/Button"
-import Input from "../components/Input"
+import Button from "../../components/Button"
+import Input from "../../components/Input"
 
-import { Validator } from "../utils/validators"
+import { useAuth } from "../../context/AuthContext"
+import { Validator } from "../../utils/validators"
+import { profileService } from "../../services/profileService"
 
-import { profileService } from "../services/profileService"
+export default function OnboardingProfile() {
+    const { user } = useAuth();
 
-export default function Onboarding() {
+    // TODO: fix khi đã có profile rồi mà vào trang này thì nó vẫn chớp 1 cái rồi mới quay lại dashboard
+    useEffect(() => {
+        const redirect = async () => {
+            const res = await profileService.getProfile(user.id);
+            if (res.profile) {
+                navigate('/dashboard', { replace: true });
+            }
+        }
+        redirect();
+    }, [])
+
     const [step, setStep] = useState(1);
 
     const [username, setUsername] = useState('');
@@ -18,12 +31,7 @@ export default function Onboarding() {
 
     const navigate = useNavigate();
 
-    // TODO: xử lí khi đã onboarding xong mà bấm quay lại route này -> chuyển hướng lại dashboard
-
-    const [log, setLog] = useState({
-        type: '',
-        content: ''
-    });
+    const [log, setLog] = useState({ type: '', content: '' });
 
     // tự xóa log sau 2s
     useEffect(() => {
@@ -42,6 +50,7 @@ export default function Onboarding() {
         }
     }, [avatar]);
 
+    // avatar change
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -56,54 +65,59 @@ export default function Onboarding() {
         setStep(step - 1);
     }
 
-
-
-    const handleSubmit = async (e) => {
+    const handleContinue = async (e) => {
         e.preventDefault();
 
         if (step === 1) {
             const error = Validator.validateUsername(username);
             if (error) {
+                setLog({ type: 'error', content: error });
+                return;
+            }
+
+            const { isAvailable } = await profileService.checkUsername(username);
+            if (!isAvailable) {
                 setLog({
                     type: 'error',
-                    content: error
+                    content: 'This username is already taken.'
                 });
                 return;
             }
         }
-        if (step <= 3) {
-            setStep(step + 1);
-        } else {
-            // gọi service
-            try {
-                // fix: xoá res
-                const res = await profileService.createOnboardingProfile({
-                    username,
-                    bio,
-                    avatar
-                })
-
-                console.log(res);
-
-                setLog({
-                    type: 'success',
-                    content: 'Profile created! Redirecting to dashboard...'
-                });
-
-                setTimeout(() => {
-                    navigate('/dashboard');
-                }, 1500);
-
-
-
-            } catch (err) {
+        else if (step === 3) {
+            if (!avatar) {
                 setLog({
                     type: 'error',
-                    content: err?.response?.data?.message || 'Error occured. Try again later.'
+                    content: 'Please upload an avatar.'
                 });
+                return;
             }
+        }
+        setStep(step + 1);
+    }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
+        try {
+
+            // TODO: nhận về 
+            const { profileId } = await profileService.createOnboardingProfile({
+                username,
+                bio,
+                avatar
+            })
+
+            // TODO: khi nhận kqua từ res sẽ hiện tbao có muốn thêm link ko
+            // và có thể ấn bỏ qua để naviagte thẳng vào dashboard
+            // -> thêm 1 state ready
+            navigate('/onboarding/link', { state: { profileId }});
+
+        } catch (err) {
+            setLog({
+                type: 'error',
+                content: err?.response?.data?.message || 'Error occured. Try again later.'
+            });
         }
     }
     
@@ -113,7 +127,7 @@ export default function Onboarding() {
 
                 {/* Ảnh */}
                 <img 
-                    src="/background_onboarding.jpg" 
+                    src="/onboarding_profile.jpg" 
                     alt="Background" 
                     className="hidden lg:block w-[40%] h-screen object-cover"
                 />
@@ -136,6 +150,7 @@ export default function Onboarding() {
                                     className="font-semibold text-3xl font-momo"
                                 >
                                     Pick a username for your page
+                                    <span className="text-[#f95757] ml-[6px]">*</span>
                                 </div>
 
                                 <div
@@ -202,6 +217,7 @@ export default function Onboarding() {
                                     className="font-semibold text-3xl font-momo"
                                 >
                                     Choose a profile pic that pops
+                                    <span className="text-[#f95757] ml-[6px]">*</span>
                                 </div>
 
                                 <div
@@ -277,7 +293,7 @@ export default function Onboarding() {
                         backgrond={{ normal: "#8129d9", hover: "#5D18A2 "}} 
                         color="#fff" 
                         text={step === 4 ? "Create" : "Continue"} 
-                        onClick={handleSubmit}
+                        onClick={step === 4 ? handleSubmit : handleContinue}
                     />
 
                 </form>

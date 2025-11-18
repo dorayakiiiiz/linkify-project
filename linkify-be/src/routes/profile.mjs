@@ -13,5 +13,7 @@ const router = Router();
 // const upload = multer({ storage });
 
 router.post('/onboarding', authMiddleware, upload.single("avatar"), profileController.createProfile);
+router.get('/check-username/:username', authMiddleware, profileController.checkUsername);
+router.get('/user/:userId', authMiddleware, profileController.getProfileByUserId);
 
 export default router;
