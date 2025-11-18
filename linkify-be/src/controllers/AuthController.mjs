@@ -17,7 +17,7 @@ class AuthController {
 
             const user = await User.findOne({ email });
             if (user) 
-                return res.status(400).json({ message: 'Username existed.'});
+                return res.status(400).json({ message: 'User existed.'});
 
             const hashPassword = await bcrypt.hash(password, saltRounds);
 
@@ -50,9 +50,6 @@ class AuthController {
             if (!match) 
                 return res.status(400).json({ message: 'Incorrect password.' });
 
-            const userProfile = await Profile.findOne({ userId: user._id });
-            const hasProfile = !!userProfile;
-
             const token = jwt.sign(
                 { 
                     id: user._id
@@ -64,7 +61,6 @@ class AuthController {
             res.json({
                 message: 'Login successfully!',
                 token, 
-                hasProfile
                 // user: { 
                 //     id: user._id, 
                 //     email: user.email,

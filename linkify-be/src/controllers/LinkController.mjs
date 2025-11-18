@@ -2,15 +2,21 @@ import Link from "../models/Link.mjs";
 
 class LinkController {
     // [POST] api/links/add-link
-    //...
-    addLink(req, res, next) {
-        const {title, url} = req.body;
-        const newLink = new Link({
-            title,
-            url,
-            profileId: req.user.id, // Lấy từ thông tin user đã xác thực
-        });
-        newLink.save()
+    async createLink(req, res, next) {
+        try {
+            const { links } = req.body;
+            const linksToCreate = links.map((link, index) => ({
+                ...link,
+                order: index
+            }))
+
+            await Link.insertMany(linksToCreate);
+
+            res.status(201).json({ message: 'Create links successfully' });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
     }
 
 

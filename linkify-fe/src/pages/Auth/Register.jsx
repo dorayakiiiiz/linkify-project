@@ -13,17 +13,11 @@ export default function Register() {
     const [email, setEmail] = useState('');
     const [displayName, setDisplayName] = useState('');
     const [password, setPassword] = useState('');
-    const [log, setLog] = useState({
-        type: '',
-        content: ''
-    });
+    const [log, setLog] = useState({ type: '', content: '' });
 
     useEffect(() => {
         if (log.content) {
-            const timerId = setTimeout(() => setLog({
-                type: '',
-                content: ''
-            }), 3000);
+            const timerId = setTimeout(() => setLog({ type: '', content: ''}), 3000);
             return () => clearTimeout(timerId);
         }
     }, [log]);
@@ -36,28 +30,19 @@ export default function Register() {
         // validate data
         const emailError = Validator.validateEmail(email);
         if (emailError) {
-            setLog({
-                type: 'error',
-                content: emailError
-            });
+            setLog({ type: 'error', content: emailError });
             return;
         }
 
         const displayNameError = Validator.validateDisplayName(displayName);
         if (displayNameError) {
-            setLog({
-                type: 'error',
-                content: displayNameError
-            });
+            setLog({ type: 'error', content: displayNameError });
             return;
         }
 
         const passwordError = Validator.validatePassword(password);
         if (passwordError) {
-            setLog({
-                type: 'error',
-                content: passwordError
-            });
+            setLog({ type: 'error', content: passwordError });
             return;
         }
         
@@ -113,7 +98,7 @@ export default function Register() {
                     Sign up for free!
                 </div>
 
-                <div
+                <form
                     className="flex flex-col justify-center items-center mt-[10px]"
                 >
 
@@ -158,7 +143,7 @@ export default function Register() {
                         onClick={handleSubmit}
                     />
 
-                </div>
+                </form>
 
                 <div className="text-[#898b8c] mt-[10px]">
                     OR
