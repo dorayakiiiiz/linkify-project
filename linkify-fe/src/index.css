@@ -11,6 +11,43 @@
     --font-quicksand: 'Quicksand', sans-serif;
 }
 
+/* đoạn này AI nha hj */
+@keyframes successSlide {
+    /* Bắt đầu: ngoài màn hình bên trái, mờ, chữ giãn nhẹ */
+    0% {
+        transform: translateX(-100%) scale(0.98);
+        opacity: 0;
+        letter-spacing: 0.12em;
+    }
+
+    /* Vào rất nhanh */
+    20% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+        letter-spacing: 0.02em;
+    }
+
+    /* Giữa: đứng yên, chữ bình thường */
+    50% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+        letter-spacing: 0.02em;
+    }
+
+    /* Ra ngoài bên phải, nhanh + giãn chữ */
+    100% {
+        transform: translateX(100%) scale(1.02);
+        opacity: 0;
+        letter-spacing: 0.15em;
+    }
+}
+
+.success-text {
+    display: inline-block;  
+    animation: successSlide 2.8s ease-in-out forwards;
+}
+
+
 ::-webkit-scrollbar {
     width: 6px;
     height: 10px;
