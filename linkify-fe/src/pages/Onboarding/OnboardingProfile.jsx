@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useState, useEffect, useLayoutEffect } from "react"
+import { useState, useEffect } from "react"
 
 import Button from "../../components/Button"
 import Input from "../../components/Input"
@@ -11,8 +11,9 @@ import { profileService } from "../../services/profileService"
 export default function OnboardingProfile() {
     const { user } = useAuth();
 
-    // TODO: fix khi đã có profile rồi mà vào trang này thì nó vẫn chớp 1 cái rồi mới quay lại dashboard
+    // TODO: fix bị chớp khi ở route khác (đã có profile) mà nhảy vào đây lại -> tự quay ra dashboard
     useEffect(() => {
+        // chỉ redirect khi chưa có màn ready to add link
         const redirect = async () => {
             const res = await profileService.getProfile(user.id);
             if (res.profile) {
@@ -22,17 +23,22 @@ export default function OnboardingProfile() {
         redirect();
     }, [])
 
+    
     const [step, setStep] = useState(1);
-
+    
     const [username, setUsername] = useState('');
     const [bio, setBio] = useState('');
     const [avatarPreview, setAvatarPreview] = useState('');
     const [avatar, setAvatar] = useState(null);
-
+    // để hiển thị màn hình skip/continue tới onboarding link
+    const [showReady, setShowReady] = useState(false);
+    // lưu profile id để gửi qua onboarding link
+    const [profileId, setProfileId] = useState(null);
+    
     const navigate = useNavigate();
-
+    
     const [log, setLog] = useState({ type: '', content: '' });
-
+    
     // tự xóa log sau 2s
     useEffect(() => {
         if (log.content) {
@@ -43,6 +49,7 @@ export default function OnboardingProfile() {
             return () => clearTimeout(timerId);
         }
     }, [log]);
+    
 
     useEffect(() => {
         return () => {
@@ -108,10 +115,8 @@ export default function OnboardingProfile() {
                 avatar
             })
 
-            // TODO: khi nhận kqua từ res sẽ hiện tbao có muốn thêm link ko
-            // và có thể ấn bỏ qua để naviagte thẳng vào dashboard
-            // -> thêm 1 state ready
-            navigate('/onboarding/link', { state: { profileId }});
+            setShowReady(true);
+            setProfileId(profileId);
 
         } catch (err) {
             setLog({
@@ -119,6 +124,16 @@ export default function OnboardingProfile() {
                 content: err?.response?.data?.message || 'Error occured. Try again later.'
             });
         }
+    }
+
+    const handleNext = (e) => {
+        e.preventDefault();
+        navigate('/onboarding/link', { state: { profileId, fromOnboarding: true }})
+    };
+
+    const handleSkip = (e) => {
+        e.preventDefault();
+        navigate('/dashboard');
     }
     
     return (
@@ -233,30 +248,34 @@ export default function OnboardingProfile() {
                                     accept="image/*"
                                     id="avatar"
                                     onChange={handleAvatarChange}
-                                    className="w-0 h-0 opacity-0 hidden"
+                                    className="hidden"
                                 />
 
                                 <label
                                     htmlFor="avatar"
-                                    className="w-[150px] h-[50px] rounded-4xl bg-[#15d8ea] hover:bg-[#21abb7] text-[#fff] flex items-center justify-center"
+                                    className="w-[500px] md:w-[450px] rounded-4xl flex items-center justify-center"
                                 >
-                                    {avatar ? 'Change' : 'Upload avatar'}
+                                    
+                                    {avatarPreview ? (
+                                        <img
+                                            src={avatarPreview}
+                                            alt="Avatar Preview"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-[150px] h-[50px] text-[#fff] bg-[#15d8ea] hover:bg-[#21abb7] flex items-center justify-center rounded-4xl">
+                                            +
+                                        </div>
+                                    )}
                                 </label>
 
-                                {avatarPreview && (
-                                    <img
-                                        src={avatarPreview}
-                                        alt="Avatar Preview"
-                                        className="w-[500px] md:w-[450px]"
-                                    />
-                                )}
                             </div>
 
                             
                         </>
                     )}
 
-                    {step === 4 && (
+                    {step === 4 && !showReady && (
                         <>
                             <div>
 
@@ -283,19 +302,51 @@ export default function OnboardingProfile() {
                         </>
                     )}
 
+                    {!showReady && (
+                        <>
+                            <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+                                {log.content}
+                            </div>
+        
+                            <Button 
+                                backgrond={{ normal: "#8129d9", hover: "#5D18A2 "}} 
+                                color="#fff" 
+                                text={step === 4 ? "Create" : "Continue"} 
+                                onClick={step === 4 ? handleSubmit : handleContinue}
+                            />
+                        </>
+                    )}
 
+                    {showReady && (
+                        <div>
+                            <div
+                                className="font-semibold text-3xl font-momo"
+                            >
+                                Add your social link now?
+                            </div>
 
-                    <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
-                        {log.content}
-                    </div>
+                            <div
+                                className="text-[#39ce52] font-semibold mt-[10px] mb-[20px]"
+                            >
+                                Profile created successfully!
+                            </div>
 
-                    <Button 
-                        backgrond={{ normal: "#8129d9", hover: "#5D18A2 "}} 
-                        color="#fff" 
-                        text={step === 4 ? "Create" : "Continue"} 
-                        onClick={step === 4 ? handleSubmit : handleContinue}
-                    />
-
+                            <div className="flex gap-[30px] mt-[30px]">
+                                <Button 
+                                    backgrond={{ normal: "#ccc", hover: "#a5a0a0 "}} 
+                                    color="#fff" 
+                                    text={"Skip"} 
+                                    onClick={handleSkip}
+                                />
+                                <Button 
+                                    backgrond={{ normal: "#8129d9", hover: "#5D18A2 "}} 
+                                    color="#fff" 
+                                    text={"Add links"} 
+                                    onClick={handleNext}
+                                />
+                            </div>
+                        </div>
+                    )}
                 </form>
 
             </div>

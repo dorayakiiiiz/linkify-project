@@ -47,7 +47,7 @@ export default function Login() {
                 }
             }
             if (justLoggedIn) {
-                const timerId = setTimeout(redirect, 2000);
+                const timerId = setTimeout(redirect, 2600);
                 return () => clearTimeout(timerId);
             } else {
                 // đã login trước đó rồi thì cho quay lại dashboard
@@ -150,7 +150,7 @@ export default function Login() {
                             setState={setPassword}
                         />
 
-                        <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+                        <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-[green] success-text' : ''} font-semibold`}>
                             {log.content}
                         </div>
 
