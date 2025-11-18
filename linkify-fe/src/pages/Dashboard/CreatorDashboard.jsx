@@ -274,12 +274,17 @@ export default function CreatorDashboard() {
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
 
               </div>
             </div>
            : ''} 
     
         
+=======
+            </div>
+          </div> : ''}        
+>>>>>>> 98d09f1c93f136487e4caa6f3003b152dd181b2b
         </div>
       </div>
           
