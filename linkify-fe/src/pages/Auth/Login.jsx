@@ -8,6 +8,7 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { profileService } from "../../services/profileService";
 
 
 export default function Login() {
@@ -19,8 +20,6 @@ export default function Login() {
     });
     // dùng trong trường hợp đang đăng nhập r ở chỗ khác mà tnhien nhảy vào trang login lại
     const [justLoggedIn, setJustLoggedIn] = useState(false);
-    // dùng để lựa chọn route khi user (creator) có profile rồi/chưa có
-    const [hasProfile, setHasProfile] = useState(false);
 
     const navigate = useNavigate();
     const { login, user } = useAuth();
@@ -39,22 +38,25 @@ export default function Login() {
     // tự redirect qua trang tương ứng sau 2s
     useEffect(() => {
         if (user) {
-            const redirect = () => {
-                // nếu là creator mà chưa có profile -> onboarding
-                if (user.role === 'creator' && !hasProfile)
-                    navigate('/onboarding');
-                else 
+            const redirect = async () => {
+                const res = await profileService.getProfile(user.id);
+                if (res.profile) {
                     navigate('/dashboard');
+                } else {
+                    navigate('/onboarding/profile');
+                }
             }
             if (justLoggedIn) {
-                const timerId = setTimeout(redirect, 2000);
+                const timerId = setTimeout(redirect, 2600);
                 return () => clearTimeout(timerId);
             } else {
-                // TODO: fix logic trùng lặp phía trên
+                // đã login trước đó rồi thì cho quay lại dashboard
+                // do login rồi thì lần đầu use effect này chạy sẽ có user luôn
+                // và chưa bấm submit nên justloggedin là false
                 redirect();
             }
         }
-    }, [user, navigate, justLoggedIn, hasProfile]);
+    }, [user, navigate, justLoggedIn]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -62,19 +64,13 @@ export default function Login() {
         // validate data
         const emailError = Validator.validateEmail(email);
         if (emailError) {
-            setLog({
-                type: 'error',
-                content: emailError
-            });
+            setLog({ type: 'error', content: emailError });
             return;
         }
 
         const passwordError = Validator.validatePassword(password);
         if (passwordError) {
-            setLog({
-                type: 'error',
-                content: passwordError
-            });
+            setLog({ type: 'error', content: passwordError });
             return;
         }
 
@@ -84,14 +80,9 @@ export default function Login() {
                 password
             });
 
-            // request lên api trả về token, lấy token ra lưu vào storage
-            // const { token } = res;
-            // localStorage.setItem('token', token);
-
             const { token, hasProfile } = res;
             login(token);
             setJustLoggedIn(true);
-            setHasProfile(hasProfile);
             setLog({
                 type: 'success',
                 content: 'Login successfully! Redirecting...'
@@ -159,7 +150,7 @@ export default function Login() {
                             setState={setPassword}
                         />
 
-                        <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+                        <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-[green] success-text' : ''} font-semibold`}>
                             {log.content}
                         </div>
 

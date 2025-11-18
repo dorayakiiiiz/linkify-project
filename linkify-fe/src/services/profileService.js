@@ -1,5 +1,4 @@
 
-import { use } from "react";
 import api from "./api";
 
 const createOnboardingProfile = async ({ username, bio, avatar }) => {
@@ -19,6 +18,18 @@ const createOnboardingProfile = async ({ username, bio, avatar }) => {
     return response.data;
 }
 
+const checkUsername = async(username) => {
+    const response = await api.get(`/profile/check-username/${encodeURIComponent(username)}`);
+    return response.data;
+}
+
+const getProfile = async (userId) => {
+    const response = await api.get(`/profile/user/${userId}`);
+    return response.data;
+}
+
 export const profileService = {
-    createOnboardingProfile
+    createOnboardingProfile,
+    checkUsername,
+    getProfile
 };
