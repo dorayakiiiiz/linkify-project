@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom"
 import { useAuth } from "../../context/AuthContext";
-import {ButtonAdd, UserInfo} from "../../components/UserInfo";
-import {mainMenu, tools, links, navItems} from '../../const/testDataDashboard.js'
-import LinksDashboard from "../../components/DashboardComponent/Links";
-import DesignDashboard from "../../components/DashboardComponent/Design.jsx";
-import AudienceContactsDashboard from "../../components/DashboardComponent/Audience.jsx";
+import {ButtonAdd, UserInfo} from "../../components/DashboardComponent/UserInfo.jsx";
+import {mainMenu, tools, links, navItems, quickActions} from '../../const/testDataDashboard.js'
+import {LinksDashboard, InsightsDashboard, AudienceDashboard, DesignDashboard, ShopDashboard } from '../../components/DashboardComponent/index.js'
 
 export default function CreatorDashboard() {
   const { user } = useAuth();
@@ -60,9 +58,9 @@ export default function CreatorDashboard() {
 
 
         {/* Content */}
-        <div className="bg-[#f1f0ee] rounded-t-xl w-full flex-1 -mt-2.5 flex overflow-auto">
+        <div className="bg-[#f1f0ee] rounded-t-xl w-full flex-1 -mt-2.5 flex overflow-auto relative">
           {/* Left navbar */}
-          <div className="bg-[#ecede8] w-[280px] rounded-tl-xl relative flex-shrink-0">
+          <div className="bg-[#ecede8] lg:w-[280px] md:w-[200px] rounded-tl-xl relative flex-shrink-0 hidden md:block">
             {/* username and notification */}
             <div className="flex justify-between items-center px-[12px] py-[8px] mt-1">
               {/* username */}
@@ -189,7 +187,7 @@ export default function CreatorDashboard() {
 
                     <div className="flex justify-between items-center w-full p-4">
                       <button 
-                          className="flex items-center px-5 py-3 bg-gray-200 text-gray-800 font-medium rounded-xl transition duration-150 hover:bg-gray-300 shadow-sm"
+                          className="flex items-center px-2 py-3 bg-gray-200 text-gray-800 font-medium rounded-xl transition duration-150 hover:bg-gray-300 shadow-sm"
                       >
                           <i className="fa-regular fa-square w-5 h-5 mr-3 text-lg mt-1"></i>
                           Add collection
@@ -215,52 +213,53 @@ export default function CreatorDashboard() {
                 }
 
                 {/* Shop */}
-                {label === 'My Linkify-Shop' && (
-                    <div className="w-full px-10">
-                      <UserInfo/>
-                      <ButtonAdd/>
-                    </div>
-                  )
+                {label === 'My Linkify-Shop' && (<ShopDashboard/>)
 
                 }
                 {/* Design */}
                 {label === 'My Linkify-Design' && (<DesignDashboard/>)}
 
                 {/* Audience Contacts */}
-                {label === 'Audience' && (<AudienceContactsDashboard/>)}
+                {label === 'Audience' && (<AudienceDashboard/>)}
+
+                {/* Insights */}
+                {label === 'Insights' && (<InsightsDashboard/>)} 
               </div>
 
           </div>
 
           {/* Right preview */}
-          {label.includes('My Linkify') ? <div className="bg-[#f1f0ee] w-[450px] rounded-tr-xl">
-            <div className="bg-white py-2 px-6 my-3 rounded-3xl w-[300px] mx-auto flex items-center justify-between">
-                <div className="text-center flex-1">My linkify link</div>
-                <i className="fa-regular fa-share-from-square"></i>
-            </div>
+          {label.includes('My Linkify') ? 
+            <div className="bg-[#f1f0ee] xl:w-[450px] lg:w-[250px] md:w-[200px] rounded-tr-xl md:flex flex-col hidden">
 
-            <div className=" w-[300px] h-[600px] mx-auto my-12 bg-[#dad1f0] max-w-sm p-6 rounded-4xl shadow-2xl flex flex-col items-center relative">
-                {/* <!-- Avatar --> */}
-                <div className="flex flex-col items-center my-5">
-                    <img src="../../../public/anonymous-avatar.jpg"  
+              {/* Heading link */}
+              <div className="bg-white py-2 px-6 my-3 rounded-3xl lg:w-[300px] md:w-[250px] mx-auto flex items-center justify-between">
+                  <div className="text-center flex-1">My linkify link</div>
+                  <i className="fa-regular fa-share-from-square"></i>
+              </div>
+
+              {/* Screen preview */}
+              <div className="flex items-center flex-1">
+                <div 
+                    className=" lg:w-[300px] lg:max-h-[600px] lg:h-[600px] md:w-[250px] md:h-[510px]  mx-auto my-4 overflow-y-auto bg-[#dad1f0] max-w-sm p-6 rounded-4xl shadow-2xl flex flex-col items-center"
+                >
+                    {/* Avatar */}
+                    <img src="../../../public/anonymous-avatar.jpg" 
                     className="w-20 h-20 bg-gray-300 rounded-full mb-4"/>
 
-                    {/* <!-- Name & Bio --> */}
+                    {/* */}
                     <h1 className="text-xl font-semibold mb-1">otis275</h1>
                     <p className="text-center text-gray-700 text-sm mb-6">
                     🌟 Software Engineer | Tech Enthusiast | Coding my way to success! 💻
                     </p>
 
-                    {/* <!-- Links --> */}
-                    
+                    {/* */}
                     <div className="w-full flex flex-col gap-3">
-
-                        {/* Chỗ này gọi api render link ra */}
-                        {                    
+                        { 
                             links.map((link, index) => (
                                 <a 
                                     href={link.url}
-                                    className="bg-[#f8fed8] hover:bg-yellow-200 text-center py-4 rounded-3xl transition text-xs"
+                                    className="bg-[#f8fed8] hover:bg-yellow-200 text-center  lg:h-[45px] md:h-[35px] rounded-3xl transition text-xs flex items-center justify-center"
                                 >
                                     {link.title}
                                 </a>
@@ -269,23 +268,34 @@ export default function CreatorDashboard() {
 
                     </div>
 
-                    {/* <!-- Footer / Linktree --> */}
-                    <div className="absolute bottom-5">
-
-                        <div className="mt-6 text-sm text-black font-bold bg-white px-4 py-2 rounded-2xl shadow-lg">
+                    {/* */}
+                    <div className="mt-auto">
+                        <div className="mt-5 lg:text-sm md:text-[10px] text-black font-bold bg-white px-4 py-2 rounded-2xl shadow-lg md:h-[35px] flex items-center justify-center hover:cursor-pointer">
                             Join otis275 on Linktree
                         </div>
-                        <div className="flex justify-center gap-3 text-[10px] my-8">
+                        <div className="flex justify-center gap-3 text-[10px] my-2">
                             <span>Report</span>
                             <span>.</span>
                             <span>Privacy</span>
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
+
+              </div>
+            </div>
+           : ''} 
+    
+        
+=======
             </div>
           </div> : ''}        
+>>>>>>> 98d09f1c93f136487e4caa6f3003b152dd181b2b
         </div>
       </div>
+          
+    {/* --------- */}
+
     </>
   );
 }
