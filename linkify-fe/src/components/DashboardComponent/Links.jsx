@@ -1,4 +1,4 @@
-import {mainMenu, tools, links, navItems} from '../../const/testDataDashboard.js'
+import {mainMenu, tools, links, navItems, quickActions} from '../../const/testDataDashboard.js'
 export default function LinksDashboard() {
     return (
         <div className="w-full my-4">
@@ -6,7 +6,7 @@ export default function LinksDashboard() {
                 {links.map((link, index) => (
                     <div
                         key={index}
-                        className="bg-white p-8 rounded-xl shadow-md border border-gray-100 flex items-center gap-4"
+                        className="bg-white px-4 py-6 rounded-xl shadow-md border border-gray-100 flex items-center gap-4"
                     >
                         
                         {/* 1. Dấu ba chấm (:::) - Drag Handle */}
@@ -51,7 +51,7 @@ export default function LinksDashboard() {
                             {/* B. Thanh hành động dưới cùng */}
                             <div className="flex items-center justify-between mt-4 text-gray-500 text-sm">
                                 
-                                <div className="flex items-center space-x-3">
+                                <div className="flex items-center space-x-3 flex-wrap gap-2">
                                     <i className="fa-solid fa-grip text-base hover:text-gray-700 cursor-pointer" title="Bố cục"></i>
                                     <i className="fa-solid fa-link text-base hover:text-gray-700 cursor-pointer" title="Liên kết"></i>
                                     <i className="fa-regular fa-image text-base hover:text-gray-700 cursor-pointer" title="Hình ảnh"></i>
@@ -68,6 +68,28 @@ export default function LinksDashboard() {
                     </div>
                 ))}
             </div>
+
+            {/* Quick action buttons in */}
+            <div className="bg-white p-4 rounded-3xl shadow-xl max-w-full absolute bottom-0.5 left-1/2 transform -translate-x-1/2 md:hidden">
+                    
+                    {/* Flex Container cho các Icon và Text */}
+                    <div className="flex justify-between items-center space-x-6">
+                        
+                        {quickActions.map((action, index) => (
+                            <button 
+                                key={index}
+                                className="flex flex-col items-center text-gray-700 hover:text-black transition duration-150 cursor-pointer group"
+                            >
+                                {/* Icon */}
+                                <i className={`fa-solid ${action.icon} w-6 h-6 mb-1 text-2xl`}></i>
+                                
+                                {/* Label */}
+                                <span className="text-xs font-medium">{action.label}</span>
+                            </button>
+                        ))}
+
+                    </div>
+            </div>   
         </div>
     )
 }
