@@ -62,6 +62,10 @@
     background: #555;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* blink text */
 @keyframes blinkText {
     0% { opacity: 1; }

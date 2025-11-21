@@ -22,6 +22,11 @@ import LinksPage from './pages/CreatorDashboard/LinksPage'
 import DesignPage from './pages/CreatorDashboard/DesignPage'
 import ShopPage from './pages/CreatorDashboard/ShopPage'
 import InsightsPage from './pages/CreatorDashboard/InsightsPage'
+import PostIdeaPage from './pages/CreatorDashboard/Tools/PostIdeaPage'
+import InstagramAutoReplyPage from './pages/CreatorDashboard/Tools/InstagramAutoReplyPage'
+import LinkShortenerPage from './pages/CreatorDashboard/Tools/LinkShortenerPage'
+
+import PublicProfile from './pages/PubicProfile'
 
 // Định nghĩa các route trong này
 
@@ -64,12 +69,21 @@ function App() {
                                         <Route path="design" element={<DesignPage />} />
                                         <Route path="shop" element={<ShopPage />} />
                                         <Route path="insights" element={<InsightsPage />} />
-                                        {/* Các tool routes khác... */}
+
+
+                                        {/* Tools */}
+                                        <Route path="tools">
+                                            <Route path="post-ideas" element={<PostIdeaPage />} />
+                                            <Route path="link-shortener" element={<LinkShortenerPage /> } />
+                                            <Route path="instagram-auto-reply" element={<InstagramAutoReplyPage />} />
+                                        </Route>
                                     </Route>
                                 </Route>
                             </Route>
 
 
+                            {/* linkify public profile */}
+                            <Route path="/:profileId" element={<PublicProfile />} />
 
 
                         </Route>

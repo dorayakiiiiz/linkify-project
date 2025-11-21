@@ -105,7 +105,7 @@ export default function OnboardingProfile() {
 
             // TODO: nhận về 
             const { profileId } = await profileService.createOnboardingProfile({
-                username,
+                username: username.toLowerCase(),
                 bio,
                 avatar
             })
