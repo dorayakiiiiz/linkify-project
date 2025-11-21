@@ -10,6 +10,7 @@ export default function Sidebar() {
     const navigate = useNavigate();
     const location = useLocation();
     
+    // lưu index của menu cha đang dc mở
     const [openIndex, setOpenIndex] = useState(0); 
 
     // Map Label sang URL 
@@ -70,10 +71,10 @@ export default function Sidebar() {
                         className="rounded-full h-[30px] w-[30px]"
                         alt="avatar"
                     />
-                    <p className=" text-[#6a6968]">
+                    <p className="ml-[4px] text-[#37181B] font-bold">
                         {user?.displayName}
                     </p>
-                    <i className="fa-solid fa-angle-down text-[10px] pt-1 text-[#6a6968]"></i>
+                    <i className="fa-solid fa-angle-down text-[10px] pt-1 text-[#37181B]"></i>
                 </div>
                 <span className="px-2 py-2 -mx-2 -my-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl">
                     <i className="fa-regular fa-bell "></i>
@@ -92,12 +93,12 @@ export default function Sidebar() {
                                 <div
                                     onClick={() => handleMainClick(item, index)}
                                     // đang active mà ko subitem thì / đang active mà có subitem thì
-                                    className={`flex items-center py-2 px-1 -mx-1 transition-all duration-150 cursor-pointer
+                                    className={`flex text-[#37181B] items-center py-2 px-1 -mx-1 transition-all duration-150 cursor-pointer
                                         ${parentActive && item.hasDropdown 
-                                            ? "hover:bg-[#d7d4cd] hover:rounded-xl text-[#6a6968]" // Active nhưng là dropdown cha
+                                            ? "hover:bg-[#E2E2DF] hover:rounded-xl" // Active nhưng là dropdown cha
                                             : parentActive && !item.hasDropdown
-                                                ? "bg-[#d7d4cd] font-semibold text-black rounded-xl" // Active và là link đơn
-                                                : "hover:bg-[#d7d4cd] hover:rounded-xl text-[#6a6968]" // Inactive
+                                                ? "bg-[#E2E2DF] font-bold rounded-xl" // Active và là link đơn
+                                                : "hover:bg-[#E2E2DF] hover:rounded-xl" // Inactive
                                         }`}
                                 >
                                     <i className={`fa-solid ${item.icon}`} />
@@ -109,15 +110,15 @@ export default function Sidebar() {
 
                                 {/* Sub Items Dropdown */}
                                 {item.hasDropdown && openIndex === index && (
-                                    <div className="ml-6 mt-1 space-y-1">
+                                    <div className="ml-6 mt-1 space-y-1 text-[#37181B]">
                                         {item.subItems.map((sub) => (
                                             <div
                                                 key={sub.label}
                                                 onClick={() => handleSubClick(sub.label)}
                                                 className={`py-1.5 px-2 rounded-md cursor-pointer text-sm transition-all duration-150
                                                     ${isActive(sub.label)
-                                                        ? "bg-[#d7d4cd] font-semibold text-black"
-                                                        : "hover:bg-[#d7d4cd] text-[#6a6968]"
+                                                        ? "bg-[#E2E2DF] font-bold"
+                                                        : "hover:bg-[#E2E2DF]"
                                                     }`}
                                             >
                                                 {sub.label}

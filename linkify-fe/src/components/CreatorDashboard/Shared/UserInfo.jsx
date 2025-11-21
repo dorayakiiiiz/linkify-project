@@ -18,18 +18,18 @@ export function UserInfo() {
     if (!profile) return null;
 
     return (
-        <div className=" w-full py-4 flex gap-2 ">
+        <div className=" w-full py-4 flex gap-[20px]">
             <img
                 src={profile.avatarUrl}
                 alt="avatar"
                 className="rounded-full w-20 h-20 mb-2"
             />
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col">
                 <div className="text-lg font-semibold">{profile.username}</div>
                 <div className="text-gray-500 text-sm text-center">
                     {profile.bio}
                 </div>
-                <i className="fa-solid fa-plus text-xs bg-[#f1f0ee] pl-1 pr-4 py-1 rounded-full border border-[#ccc] border-solid"></i>
+                <i className="fa-solid fa-plus mt-[10px] text-xs bg-[#f1f0ee] pl-1 pr-4 py-1 rounded-full border border-[#ccc] border-solid"></i>
             </div>
         </div>
     )

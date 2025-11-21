@@ -6,13 +6,18 @@ export default function LinksPage() {
     const { links, addNewLink, updateLink, removeLink, loadingLinks } = useLinks();
     
     const handleDelete = (id) => {
-        if (window.confirm("Delete this link?")) {
+        // TODO: fix tạo model xác nhận xóa đẹp hơn
+        if (window.confirm("Are u sure to delete this link?")) {
             removeLink(id);
         }
     }
 
     const handleAddDemo = () => {
         addNewLink("New Link", "https://example.com");
+    }
+
+    const handleToggleEnable = (link, isChecked) => {
+        updateLink(link._id, { isEnable: !link.isEnable })
     }
 
     const LinkSkeleton = () => (
@@ -39,7 +44,7 @@ export default function LinksPage() {
     return (
         <div className="w-full h-full flex flex-col">
 
-            <div className="flex-1 overflow-y-auto p-6 md:px-10">
+            <div className="flex-1 overflow-y-auto p-6 md:px-[60px]">
                 <div className="max-w-3xl mx-auto w-full">
                     <UserInfo />
 
@@ -72,7 +77,7 @@ export default function LinksPage() {
 
                                     <div
                                         key={link._id}
-                                        className="bg-white px-4 py-6 rounded-xl shadow-md border border-gray-100 flex items-center gap-4"
+                                        className="bg-white px-4 py-6 rounded-3xl shadow-md flex items-center gap-4"
                                     >
                                         
                                         {/* Dấu ba chấm (:::)*/}
@@ -80,15 +85,15 @@ export default function LinksPage() {
                                             <i className="fa-solid fa-grip-vertical text-lg"></i>
                                         </div>
 
-                                        {/* 2. Nội dung chính của thẻ */}
+                                        {/* Nội dung chính của thẻ */}
                                         <div className="flex-grow min-w-0">
                                             
-                                            {/* A. Phần Tiêu đề, URL, Chia sẻ, Gạt (Toggle) */}
+                                            {/* Phần Tiêu đề, URL, Chia sẻ, Gạt (Toggle) */}
                                             <div className="flex justify-between items-start">
                                                 
                                                 <div className="flex-grow min-w-0 pr-4">
                                                     <div className="flex items-center mb-1">
-                                                        <span className="text-base font-semibold text-gray-800">{link.title}</span>
+                                                        <span className="font-bold">{link.title}</span>
                                                         <i className="fa-solid fa-pen text-gray-400 text-xs ml-2 cursor-pointer hover:text-gray-600" title="Chỉnh sửa Tiêu đề"></i>
                                                     </div>
 
@@ -107,14 +112,15 @@ export default function LinksPage() {
                                                         <input
                                                             type="checkbox"
                                                             className="sr-only peer"
-                                                            // defaultChecked={link.active}
+                                                            defaultChecked={link.isEnable}
+                                                            onChange={() => handleToggleEnable(link)}
                                                         />
                                                         <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-green-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
                                                     </label>
                                                 </div>
                                             </div>
                                             
-                                            {/* B. Thanh hành động dưới cùng */}
+                                            {/* Thanh hành động dưới cùng */}
                                             <div className="flex items-center justify-between mt-4 text-gray-500 text-sm">
                                                 
                                                 <div className="flex items-center space-x-3 flex-wrap gap-2">
