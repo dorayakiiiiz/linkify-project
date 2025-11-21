@@ -1,6 +1,6 @@
 // code các page trong này, gọi các service xử lí API từ folder service
 
-import { useState, useEffect, use } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
 import { Validator } from "../../utils/validators";
@@ -9,6 +9,7 @@ import Button from "../../components/Button";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { profileService } from "../../services/profileService";
+import { useProfile } from "../../context/ProfileContext";
 
 
 export default function Login() {
@@ -22,7 +23,8 @@ export default function Login() {
     const [justLoggedIn, setJustLoggedIn] = useState(false);
 
     const navigate = useNavigate();
-    const { login, user } = useAuth();
+    const { login, isLogin } = useAuth();
+    const { refreshProfile } = useProfile();
 
     // tự xóa log sau 3s
     useEffect(() => {
@@ -35,28 +37,13 @@ export default function Login() {
         }
     }, [log]);
 
-    // tự redirect qua trang tương ứng sau 2s
+    // đã đăng nhập rồi mà vào lại -> tự redirect về dashboard
     useEffect(() => {
-        if (user) {
-            const redirect = async () => {
-                const res = await profileService.getProfile(user.id);
-                if (res.profile) {
-                    navigate('/dashboard');
-                } else {
-                    navigate('/onboarding/profile');
-                }
-            }
-            if (justLoggedIn) {
-                const timerId = setTimeout(redirect, 2600);
-                return () => clearTimeout(timerId);
-            } else {
-                // đã login trước đó rồi thì cho quay lại dashboard
-                // do login rồi thì lần đầu use effect này chạy sẽ có user luôn
-                // và chưa bấm submit nên justloggedin là false
-                redirect();
-            }
+        if (isLogin && !justLoggedIn) {
+            navigate('/dashboard', { replace: true })
         }
-    }, [user, navigate, justLoggedIn]);
+    }, [isLogin, justLoggedIn, navigate]);
+
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -80,13 +67,19 @@ export default function Login() {
                 password
             });
 
-            const { token, hasProfile } = res;
+            const { token } = res;
             login(token);
             setJustLoggedIn(true);
             setLog({
                 type: 'success',
                 content: 'Login successfully! Redirecting...'
             });
+
+            await refreshProfile();
+
+            setTimeout(() => {
+                navigate('/dashboard', { replace: true })
+            }, 2600);
 
 
         } catch (err) {

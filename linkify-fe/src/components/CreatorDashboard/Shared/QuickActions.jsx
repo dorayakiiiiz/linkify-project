@@ -1,4 +1,5 @@
-import { quickActions } from "../../const/testDataDashboard.js";
+import { quickActions } from "../../../constants/dashboard"; 
+
 export default function QuickActions() {
     return (
         <div className="bg-white p-4 rounded-3xl shadow-xl max-w-full absolute bottom-0.5 left-1/2 transform -translate-x-1/2 md:hidden">

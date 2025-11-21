@@ -2,18 +2,15 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
 
 import Button from "../../components/Button"
-import Input from "../../components/Input"
 
-import { useAuth } from "../../context/AuthContext"
 import { SOCIALS } from "../../constants/socials"
 import { linkService } from "../../services/linkService"
-import { profileService } from "../../services/profileService"
+import { Helper } from "../../utils/helper"
 
 export default function OnboardingLink() {
 
     const location = useLocation();
     const { profileId, fromOnboarding } = location.state || {};
-    console.log('onboarding link: ', profileId, ', ', fromOnboarding);
 
     const navigate = useNavigate();
 
@@ -28,6 +25,7 @@ export default function OnboardingLink() {
     const [showReady, setShowReady] = useState(false);
     const [selectedPlatforms, setSelectedPlatforms] = useState([]);
     const [links, setLinks] = useState({});
+    const [extraLinks, setExtraLinks] = useState(["", "", ""]);
 
     const [log, setLog] = useState({ type: '', content: '' });
 
@@ -38,6 +36,14 @@ export default function OnboardingLink() {
             ...prev,
             [platformId]: value
         }));
+    }
+
+    const handleExtraChange = (index, value) => {
+        setExtraLinks(prev => {
+            const next = [...prev];
+            next[index] = value;
+            return next;
+        });
     }
 
     const handleTogglePlatform = (platform) => {
@@ -81,19 +87,33 @@ export default function OnboardingLink() {
     }
 
     const handleSubmit = async () => {
+        console.log(extraLinks);
         // lọc ra title và url từ các social đã chọn, giữ lại các link có nhập thôi
-        const linksToCreate = selectedPlatforms
-            .map((platform, index) => ({
+        const socialLinks = selectedPlatforms
+            .map((platform) => ({
                 profileId,
                 title: platform.name,
                 url: links[platform.id]
             }))
             .filter(link => link.url && link.url.trim() !== '');
+        
+        const additionalLinks = extraLinks
+            .map((link) => ({
+                profileId,
+                title: Helper.getTitleFromUrl(link),
+                url: link
+            }))
+            .filter(link => link.url && link.url.trim() !== '');
+
+        const linksToCreate = [...socialLinks, ...additionalLinks];
 
         if (linksToCreate.length > 0) {
             try {
                 // TODO: xử lí validate link...
-                await linkService.createLink({ links: linksToCreate });
+                linksToCreate.forEach(async (link) => {
+                    await linkService.addLink(link);
+                })
+
             } catch (err) {
                 setLog({
                     type: 'error',
@@ -105,7 +125,7 @@ export default function OnboardingLink() {
         setShowReady(true);
 
         setTimeout(() => {
-            navigate('/dashboard');
+            navigate('/dashboard', { replace: true });
         }, 2600);
     }
 
@@ -154,11 +174,13 @@ export default function OnboardingLink() {
                                     return (
                                         <div
                                             key={platform.id}
-                                            className={`aspect-square bg-[#fff] flex items-center justify-center rounded-2xl border ${isSelected ? 'border-[#000] border-[2px]' : 'border-[#E0E2D9]'} shadow hover:translate-y-[-2px] transition`}
+                                            className={`aspect-square bg-[#fff] flex flex-col items-center gap-[4px] justify-center rounded-2xl border ${isSelected ? 'border-[#000] border-[2px]' : 'border-[#E0E2D9]'} shadow hover:translate-y-[-2px] transition`}
                                             onClick={() => handleTogglePlatform(platform)}
                                         >
                                             <i className={`text-4xl ${platform.icon} text-[${platform.color}]`}></i>
-
+                                            <div className="text-[#9f9fa5] font-quicksand text-sm">
+                                                {platform.name}
+                                            </div>
                                         </div>
                                     )
                                 })}
@@ -166,18 +188,41 @@ export default function OnboardingLink() {
                         )}
 
                         {step === 2 && (
-                            <div className="flex flex-col gap-[10px] w-full max-w-[540px] h-[340px] mb-[14px] px-[20px] py-[10px] rounded-xl overflow-y-auto">
+                            <div className="flex flex-col gap-[10px] w-full max-w-[540px] h-[400px] md:h-[340px] mb-[14px] px-[20px] py-[10px] rounded-xl overflow-y-auto">
                                 {selectedPlatforms.map(platform => (
                                     <div 
                                         className="flex items-center justify-center gap-[10px]"
                                         key={platform.id}
                                     >
-                                        <i className={`text-4xl ${platform.icon} text-[${platform.color}]`}></i>
+                                        <div className="h-[50px] w-full max-w-[50px] border border-[#d6d6d6] rounded-2xl flex items-center justify-center">
+                                            <i className={`text-3xl ${platform.icon} text-[${platform.color}]`}></i>
+                                        </div>
                                         <input 
                                             type="text"
                                             className="h-[50px] w-full my-[10px] rounded-xl bg-[#f7f8f6] px-[20px]"
                                             placeholder={platform.placeholder}
                                             onChange={e => handleValueChange(platform.id, e.target.value)}
+                                        />
+                                    </div>
+                                ))}
+
+                                {/* additional links */}
+                                <div className="text-center font-semibold text-xl font-momo mt-[24px]">
+                                    Additional links (optional)
+                                </div>
+                                {extraLinks.map((item, idx) => (
+                                    <div 
+                                        className="flex items-center justify-center gap-[10px]"
+                                        key={idx}
+                                    >
+                                        <div className="h-[50px] w-full max-w-[50px] border border-[#d6d6d6] rounded-2xl flex items-center justify-center">
+                                            <i className="text-3xl fa-solid fa-link text-[#19a5fc]"></i>
+                                        </div>
+                                        <input 
+                                            type="text"
+                                            className="h-[50px] w-full my-[10px] rounded-xl bg-[#f7f8f6] px-[20px]"
+                                            placeholder="url"
+                                            onChange={e => handleExtraChange(idx, e.target.value)}
                                         />
                                     </div>
                                 ))}

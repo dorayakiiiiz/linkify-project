@@ -1,4 +1,4 @@
-import {sampleThemes} from '../../../const/testDataDashboard.js'
+import { sampleThemes } from "../../../constants/dashboard"
 
 export default function ThemeDesign() {
 

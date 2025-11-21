@@ -5,23 +5,14 @@ import Button from "../../components/Button"
 import Input from "../../components/Input"
 
 import { useAuth } from "../../context/AuthContext"
+import { useProfile } from "../../context/ProfileContext"
 import { Validator } from "../../utils/validators"
 import { profileService } from "../../services/profileService"
 
 export default function OnboardingProfile() {
-    const { user } = useAuth();
+    const { refreshProfile } = useProfile();
 
-    // TODO: fix bị chớp khi ở route khác (đã có profile) mà nhảy vào đây lại -> tự quay ra dashboard
-    useEffect(() => {
-        // chỉ redirect khi chưa có màn ready to add link
-        const redirect = async () => {
-            const res = await profileService.getProfile(user.id);
-            if (res.profile) {
-                navigate('/dashboard', { replace: true });
-            }
-        }
-        redirect();
-    }, [])
+    const { user } = useAuth();
 
     
     const [step, setStep] = useState(1);
@@ -41,7 +32,7 @@ export default function OnboardingProfile() {
     
     // tự xóa log sau 2s
     useEffect(() => {
-        if (log.content) {
+        if (log.content && log.type === 'error') {
             const timerId = setTimeout(() => setLog({
                 type: '',
                 content: ''
@@ -105,6 +96,10 @@ export default function OnboardingProfile() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLog({
+            type: 'success',
+            content: 'Wait a sec. Creating your profile...'
+        });
 
         try {
 
@@ -114,6 +109,8 @@ export default function OnboardingProfile() {
                 bio,
                 avatar
             })
+
+            await refreshProfile();
 
             setShowReady(true);
             setProfileId(profileId);
@@ -133,7 +130,7 @@ export default function OnboardingProfile() {
 
     const handleSkip = (e) => {
         e.preventDefault();
-        navigate('/dashboard');
+        navigate('/dashboard', { replace: true });
     }
     
     return (
@@ -253,7 +250,7 @@ export default function OnboardingProfile() {
 
                                 <label
                                     htmlFor="avatar"
-                                    className="w-[500px] md:w-[450px] rounded-4xl flex items-center justify-center"
+                                    className="w-[180px] h-[180px] md:w-[240px] md:h-[240px] rounded-full overflow-hidden border border-[4px] border-[#ccc]"
                                 >
                                     
                                     {avatarPreview ? (
@@ -263,8 +260,12 @@ export default function OnboardingProfile() {
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <div className="w-[150px] h-[50px] text-[#fff] bg-[#15d8ea] hover:bg-[#21abb7] flex items-center justify-center rounded-4xl">
-                                            +
+                                        <div className="w-full h-full rounded-full ">
+                                            <img
+                                                src="/anonymous-avatar.jpg"
+                                                alt="Default avatar"
+                                                className="w-full h-full object-cover"
+                                            />
                                         </div>
                                     )}
                                 </label>
@@ -304,7 +305,7 @@ export default function OnboardingProfile() {
 
                     {!showReady && (
                         <>
-                            <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+                            <div className={`mb-[16px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-[#43e660] blink-text font-semibold' : ''} font-semibold`}>
                                 {log.content}
                             </div>
         
