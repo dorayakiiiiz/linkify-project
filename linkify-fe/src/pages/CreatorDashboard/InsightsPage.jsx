@@ -1,15 +1,7 @@
 import React from 'react';
+import { insightMetrics } from '../../constants/dashboard';
 
-// Dữ liệu giả lập cho 5 thẻ Metrics
-const metrics = [
-    { label: 'Views', value: '0', icon: 'fa-eye' },
-    { label: 'Clicks', value: '0', icon: 'fa-solid fa-arrow-pointer' },
-    { label: 'Click rate', value: '0%', icon: 'fa-percent' },
-    { label: 'Subscribers', value: '0', icon: 'fa-user' },
-    { label: 'Earnings', value: '$0.00', icon: 'fa-solid fa-shop' },
-];
-
-export default function Insights() {
+export default function InsightsPage() {
     return (
         // Container chính (giả định nằm trong Middle Content)
         <div className="w-full px-4 lg:px-20 py-8">
@@ -22,7 +14,7 @@ export default function Insights() {
             {/* --- Container cho 5 Thẻ Metrics --- */}
             {/* Sử dụng Flexbox để xếp 5 thẻ, gap-4 để tạo khoảng cách đều */}
             <div className="flex gap-4 mb-6 w-full overflow-x-auto">
-                {metrics.map((item, index) => (
+                {insightMetrics.map((item, index) => (
                     // Thẻ Metrics riêng lẻ
                     <div 
                         key={index}

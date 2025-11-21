@@ -1,7 +1,7 @@
 
 import { useAuth } from "../../context/AuthContext"
 
-export default function AdminDashboard() {
+export default function UserManagementPage() {
     const { user, logout } = useAuth();
     return (
         <div className="h-screen w-full flex bg-[#ccc]">
