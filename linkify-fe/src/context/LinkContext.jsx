@@ -33,9 +33,9 @@ export const LinkProvider = ({ children }) => {
         }
     }, [profile?._id]);
 
-    const addNewLink = async (title, url) => {
+    const addNewLink = async (title, url, scheduledEnable, scheduledDisable) => {
         try {
-            const { link } = await linkService.addLink({ profileId: profile._id, title, url });
+            const { link } = await linkService.addLink({ profileId: profile._id, title, url, scheduledEnable, scheduledDisable });
             setLinks(prev => [...prev, link]);
         } catch (err) {
             console.log('Error while adding new link: ', err);
@@ -51,6 +51,26 @@ export const LinkProvider = ({ children }) => {
             fetchLinks();
         }
     }
+    
+    const reorderLinks = async (srcIndex, desIndex) => {
+        const newLinks = [...links];
+        const [reorderedItem] = newLinks.splice(srcIndex, 1);
+        newLinks.splice(desIndex, 0, reorderedItem);
+
+        setLinks(newLinks);
+        
+        const linksToUpdate = newLinks.map((link, index) => ({
+            _id: link._id,
+            order: index
+        }))
+        
+        try {
+            await linkService.reorderLinks(linksToUpdate);
+        } catch (err) {
+            console.log('Error while reordering links: ', err);
+            fetchLinks();
+        }
+    }
 
     const removeLink = async (linkId) => {
         try {
@@ -63,7 +83,7 @@ export const LinkProvider = ({ children }) => {
     }
 
     return (
-        <LinkContext.Provider value={{ links, loadingLinks, addNewLink, updateLink, removeLink, fetchLinks }}>
+        <LinkContext.Provider value={{ links, loadingLinks, addNewLink, updateLink, reorderLinks, removeLink, fetchLinks }}>
             {children}
         </LinkContext.Provider>
     )

@@ -16,8 +16,9 @@ export default function MobilePreview() {
                         <a 
                             className="text-center flex-1"
                             href={`/${profile.username}`}
+                            target="_blank"
                         >
-                            linkify/{profile.username}
+                            linkify.com/{profile.username}
                         </a>
                     </>
                 ) : (

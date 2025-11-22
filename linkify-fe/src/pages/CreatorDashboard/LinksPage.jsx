@@ -1,9 +1,33 @@
 import QuickActions from "../../components/CreatorDashboard/Shared/QuickActions";
 import { UserInfo } from "../../components/CreatorDashboard/Shared/UserInfo";
 import { useLinks } from "../../context/LinkContext";
+import { useState } from "react"
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
+import LinkModal from "./Modal/LinkModal";
 
 export default function LinksPage() {
-    const { links, addNewLink, updateLink, removeLink, loadingLinks } = useLinks();
+    const { links, addNewLink, updateLink, reorderLinks, removeLink, loadingLinks } = useLinks();
+    
+    
+    // mở/đóng link modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingLink, setEditingLink] = useState(null);
+
+    const handleOpenAdd = () => {
+        setEditingLink(null);
+        setIsModalOpen(true);
+    }
+
+    const handleOpenEdit = (link) => {
+        setEditingLink(link);
+        setIsModalOpen(true);
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setEditingLink(null);
+    }
     
     const handleDelete = (id) => {
         // TODO: fix tạo model xác nhận xóa đẹp hơn
@@ -12,12 +36,15 @@ export default function LinksPage() {
         }
     }
 
-    const handleAddDemo = () => {
-        addNewLink("New Link", "https://example.com");
-    }
-
     const handleToggleEnable = (link, isChecked) => {
         updateLink(link._id, { isEnable: !link.isEnable })
+    }
+
+    // xử lí di chuyển các link (truyền vào hàm reorder link index của src và des)
+    const onDragEnd = (result) => {
+        if (!result.destination || result.destination.index === result.source.index)
+            return;
+        reorderLinks(result.source.index, result.destination.index);
     }
 
     const LinkSkeleton = () => (
@@ -43,8 +70,15 @@ export default function LinksPage() {
 
     return (
         <div className="w-full h-full flex flex-col">
+            
+            {isModalOpen && (
+                <LinkModal 
+                    editingLink={editingLink}
+                    onClose={handleCloseModal}
+                />
+            )}
 
-            <div className="flex-1 overflow-y-auto p-6 md:px-[60px]">
+            <div className="flex-1 p-6 md:px-[60px]">
                 <div className="max-w-3xl mx-auto w-full">
                     <UserInfo />
 
@@ -52,7 +86,7 @@ export default function LinksPage() {
                         <div className="w-full">
                             <button 
                                 className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 px-10 rounded-full font-medium transition"
-                                onClick={handleAddDemo}
+                                onClick={handleOpenAdd}
                             >
                                 + Add
                             </button>
@@ -60,98 +94,139 @@ export default function LinksPage() {
                     </div>
                     
                     <div className="w-full my-4">
-                        <div className="space-y-4 pr-2"> 
+                        
+                        {loadingLinks && (
+                            <div className="space-y-4 pr-2">
+                                <LinkSkeleton />
+                                <LinkSkeleton />
+                                <LinkSkeleton />
+                            </div>
+                        )}
 
-                            {loadingLinks && (
-                                <>
-                                    <LinkSkeleton />
-                                    <LinkSkeleton />
-                                    <LinkSkeleton />
-                                </>
-                            )}
+                        <DragDropContext onDragEnd={onDragEnd}>
 
-                            {!loadingLinks && links && links.length > 0 && links.map((link) => {
-                                if (!link) return null;
-                                
-                                return (
+                            <Droppable droppableId="links-list">
+                                {(provided) => (
 
-                                    <div
-                                        key={link._id}
-                                        className="bg-white px-4 py-6 rounded-3xl shadow-md flex items-center gap-4"
-                                    >
-                                        
-                                        {/* Dấu ba chấm (:::)*/}
-                                        <div className="flex items-start mr-3 pt-1 text-gray-400 hover:text-gray-600 cursor-move" title="Kéo để sắp xếp">
-                                            <i className="fa-solid fa-grip-vertical text-lg"></i>
-                                        </div>
+                                    <div 
+                                        className="space-y-4 pr-2"
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                    > 
 
-                                        {/* Nội dung chính của thẻ */}
-                                        <div className="flex-grow min-w-0">
+                                        {!loadingLinks && links && links.length > 0 && links.map((link, index) => {
+                                            if (!link) return null;
                                             
-                                            {/* Phần Tiêu đề, URL, Chia sẻ, Gạt (Toggle) */}
-                                            <div className="flex justify-between items-start">
-                                                
-                                                <div className="flex-grow min-w-0 pr-4">
-                                                    <div className="flex items-center mb-1">
-                                                        <span className="font-bold">{link.title}</span>
-                                                        <i className="fa-solid fa-pen text-gray-400 text-xs ml-2 cursor-pointer hover:text-gray-600" title="Chỉnh sửa Tiêu đề"></i>
-                                                    </div>
+                                            return (
 
-                                                    <div className="flex items-center">
-                                                        <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:text-blue-500 truncate min-w-0">
-                                                            {link.url}
-                                                        </a>
-                                                        <i className="fa-solid fa-pen text-gray-400 text-xs ml-2 cursor-pointer hover:text-gray-600" title="Chỉnh sửa URL"></i>
-                                                    </div>
-                                                </div>
+                                                <Draggable key={link._id} draggableId={link._id} index={index}>
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            style={{
+                                                                ...provided.draggableProps.style,
+                                                                opacity: snapshot.isDragging ? 0.8 : 1
+                                                            }}
+                                                            className="bg-white px-4 py-6 rounded-3xl shadow-md flex items-center gap-4"
+                                                        >
+                                                            
+                                                            {/* ::: */}
+                                                            <div 
+                                                                className="flex items-start mr-3 pt-1 text-gray-400 hover:text-gray-600 cursor-move" 
+                                                                title="Move"
+                                                                // gán dragHandleProps vào nút ::: để kéo
+                                                                {...provided.dragHandleProps}
+                                                            >
+                                                                <i className="fa-solid fa-grip-vertical text-lg"></i>
+                                                            </div>
 
-                                                <div className="flex items-start pt-1 space-x-3">
-                                                    <i className="fa-solid fa-share-from-square text-gray-500 text-lg hover:text-gray-700 cursor-pointer" title="Chia sẻ"></i>
-                                                    
-                                                    <label className="relative inline-flex items-center cursor-pointer">
-                                                        <input
-                                                            type="checkbox"
-                                                            className="sr-only peer"
-                                                            defaultChecked={link.isEnable}
-                                                            onChange={() => handleToggleEnable(link)}
-                                                        />
-                                                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-green-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            
-                                            {/* Thanh hành động dưới cùng */}
-                                            <div className="flex items-center justify-between mt-4 text-gray-500 text-sm">
-                                                
-                                                <div className="flex items-center space-x-3 flex-wrap gap-2">
-                                                    <i className="fa-solid fa-grip text-base hover:text-gray-700 cursor-pointer" title="Bố cục"></i>
-                                                    <i className="fa-solid fa-link text-base hover:text-gray-700 cursor-pointer" title="Liên kết"></i>
-                                                    <i className="fa-regular fa-image text-base hover:text-gray-700 cursor-pointer" title="Hình ảnh"></i>
-                                                    <i className="fa-solid fa-star text-base hover:text-gray-700 cursor-pointer" title="Yêu thích"></i>
-                                                    <i className="fa-regular fa-bookmark text-base hover:text-gray-700 cursor-pointer" title="Lưu trữ"></i>
-                                                    <i className="fa-solid fa-lock text-base hover:text-gray-700 cursor-pointer" title="Khóa"></i>
-                                                    <i className="fa-regular fa-chart-bar text-base hover:text-gray-700 cursor-pointer" title="Thống kê"></i>
-                                                    {/* <span className="text-xs text-gray-600 ml-1">{link.clicks !== undefined ? link.clicks : 0} clicks</span> */}
-                                                </div>
-                                                
-                                                <i 
-                                                    className="fa-solid fa-trash-can text-lg hover:text-red-500 cursor-pointer" title="Xóa"
-                                                    onClick={() => handleDelete(link._id)}
-                                                ></i>
-                                            </div>
-                                        </div>
+                                                            
+                                                            <div className="flex-grow min-w-0">
+                                                                
+                                                                {/* title + url + toggle enable */}
+                                                                <div className="flex justify-between items-start">
+                                                                    
+                                                                    {/* title + url */}
+                                                                    <div className="flex-grow min-w-0 pr-4">
+                                                                        <div className="flex items-center mb-1">
+                                                                            <span className="font-bold">{link.title}</span>
+                                                                        </div>
+
+                                                                        <div className="flex items-center">
+                                                                            <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:text-blue-500 truncate min-w-0">
+                                                                                {link.url}
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/* share + toggle enable ẩn hiện */}
+                                                                    <div className="flex items-start pt-1 space-x-3">
+                                                                        <i className="fa-solid fa-share-from-square text-gray-500 text-lg hover:text-gray-700 cursor-pointer" title="Share"></i>
+                                                                        
+                                                                        <label className="relative inline-flex items-center cursor-pointer">
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                className="sr-only peer"
+                                                                                defaultChecked={link.isEnable}
+                                                                                onChange={() => handleToggleEnable(link)}
+                                                                            />
+                                                                            <div 
+                                                                                className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-green-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"
+                                                                                title="Enable/Disable"
+                                                                            ></div>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                {/* option */}
+                                                                <div className="flex items-center justify-between mt-4 text-gray-500 text-sm">
+                                                                    
+                                                                    <div className="flex items-center space-x-3 flex-wrap gap-2">
+                                                                        <i className="fa-regular fa-image text-base hover:text-gray-700 cursor-pointer" title="Thumbnal"></i>
+                                                                        <i className="fa-solid fa-star text-base hover:text-gray-700 cursor-pointer" title="Favourite"></i>
+                                                                        <i className="fa-solid fa-lock text-base hover:text-gray-700 cursor-pointer" title="Lock"></i>
+                                                                        <i className="fa-regular fa-chart-bar text-base hover:text-gray-700 cursor-pointer" title="Analytics"></i>
+                                                                    </div>
+                                                                    
+                                                                    <div>
+                                                                        <i  
+                                                                            title="Edit"
+                                                                            className="fa-solid fa-pen text-gray-400 text-lg mr-2 cursor-pointer hover:text-[#47B6FF]"
+                                                                            onClick={() => handleOpenEdit(link)}
+                                                                        ></i>
+                                                                        <i 
+                                                                            title="Delete"
+                                                                            className="fa-solid fa-trash-can text-lg hover:text-red-500 cursor-pointer" title="Xóa"
+                                                                            onClick={() => handleDelete(link._id)}
+                                                                        ></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+
+                                            )
+                                        })}
+                                        {provided.placeholder}
+
                                     </div>
-                                )
-                            })}
 
-                            {!loadingLinks && links && links.length === 0 && (
-                                <div className="text-center py-10 text-gray-500">
-                                    You don't have any links yet. Click "+ Add" to create one.
-                                </div>
-                            )}
-                        </div>
+                                )}
+                                
+                            </Droppable>
 
-                        {/* Quick action buttons in */}
+
+                        </DragDropContext>
+                        
+
+                        {!loadingLinks && links && links.length === 0 && (
+                            <div className="text-center py-10 text-gray-500">
+                                You don't have any links yet. Click "+ Add" to create one.
+                            </div>
+                        )}
+
                         <QuickActions />  
                     </div>
                 </div>

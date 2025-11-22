@@ -11,10 +11,12 @@ export default function LinkTreePreview({ profile, links, loading, loadingLinks,
         </div>
     );
 
+    const now = new Date();
+
     return (
         <div className="w-full flex justify-center items-center">
 
-            <div className={`relative w-full p-[30px] max-w-[580px] h-screen ${!isPreview ? 'md:h-[1160px] md:rounded-4xl' : ''} bg-[#ECEEF1] shadow-2xl overflow-hidden flex flex-col items-center`}>
+            <div className={`relative w-full p-[30px] max-w-[580px] h-full ${!isPreview ? 'md:h-[1160px] md:rounded-4xl' : 'md:h-[580px]'} bg-[#ECEEF1] shadow-2xl overflow-hidden flex flex-col items-center`}>
                 
                 <div className="w-full flex justify-between items-center">
                     <div className={`${!isPreview ? 'w-[40px] h-[40px]' : 'w-[34px] h-[34px]'} rounded-full bg-[#fff] flex justify-center items-center`}>
@@ -62,18 +64,27 @@ export default function LinkTreePreview({ profile, links, loading, loadingLinks,
                                     <>
                                         {links.map((link) => {
                                         
-                                        if (!link.isEnable) return null;
-                                        return (
-                                            <a 
-                                                key={link._id}
-                                                href={link.url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className={`py-[12px] ${!isPreview ? 'md:py-[20px] md:mx-[20px]' : ''} bg-white rounded-xl shadow text-center font-medium hover:scale-[1.02] transition-transform truncate`}
-                                            >
-                                                {link.title}
-                                            </a>
-                                        )})}
+                                            if (!link.isEnable) 
+                                                return null;
+                                            
+                                            if (link.scheduledEnable && now < new Date(link.scheduledEnable))
+                                                return null;
+
+                                            if (link.scheduledDisable && now > new Date(link.scheduledDisable))
+                                                return null;
+
+                                            return (
+                                                <a 
+                                                    key={link._id}
+                                                    href={link.url}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className={`py-[12px] ${!isPreview ? 'md:py-[20px] md:mx-[20px]' : ''} bg-white rounded-xl shadow text-center font-medium hover:scale-[1.02] transition-transform truncate`}
+                                                >
+                                                    {link.title}
+                                                </a>
+                                            )
+                                        })}
                                         {links.length === 0 && (
                                             <div className="text-center text-gray-400 mt-10">No links added yet</div>
                                         )}
