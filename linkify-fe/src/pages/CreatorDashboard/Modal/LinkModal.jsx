@@ -83,7 +83,7 @@ export default function LinkModal({ onClose, editingLink = null }) {
         }
 
 
-        setTimeout(() => onClose(), 2000);
+        setTimeout(() => onClose(), 1500);
     }
 
     return (
@@ -240,7 +240,7 @@ export default function LinkModal({ onClose, editingLink = null }) {
                     </div>
 
                     <div className="w-full text-center m-auto">
-                        <div className={`h-[24px] my-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+                        <div className={`h-[24px] my-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green] success-glow'} font-semibold`}>
                             {log.content}
                         </div>
 

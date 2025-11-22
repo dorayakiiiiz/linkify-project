@@ -10,7 +10,7 @@ import { Validator } from "../../utils/validators"
 import { profileService } from "../../services/profileService"
 
 export default function OnboardingProfile() {
-    const { refreshProfile } = useProfile();
+    const { refreshProfile, profile, loading } = useProfile();
 
     const { user } = useAuth();
 
@@ -40,6 +40,12 @@ export default function OnboardingProfile() {
             return () => clearTimeout(timerId);
         }
     }, [log]);
+
+    useEffect(() => {
+        if (!loading && profile) {
+            navigate('/dashboard/links', { replace: true })
+        }
+    }, [profile, loading, navigate]);
     
 
     useEffect(() => {

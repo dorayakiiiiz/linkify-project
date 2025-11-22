@@ -80,7 +80,7 @@ export default function Sidebar() {
 
     return (
         <div className="bg-[#ecede8] lg:w-[280px] md:w-[200px] rounded-tl-xl relative flex-shrink-0 hidden md:block h-full border-r border-[#d7d6d4]">
-            {/* 1. User Info & Noti */}
+            {/* User Info & Noti */}
             <div className="flex justify-between items-center px-[12px] py-[8px] mt-1">
                 <div 
                     className="relative flex items-center gap-1.5 px-2 py-[4px] -mx-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl"
@@ -100,7 +100,7 @@ export default function Sidebar() {
                         className={`text-[#212529] absolute shadow-xl top-[calc(100%+4px)] w-[220px] bg-[#fff] rounded-xl flex flex-col ${dropdown ? 'scale-100' : 'scale-0'} transition duration-200`}
                         onClick={e => e.stopPropagation()}
                     >
-                        <div className="w-full border-b border-[#e0dfde] py-[10px] flex items-center justify-center gap-[10px] pr-[20px]">
+                        <div className="w-full border-b border-[#e0dfde] py-[10px] flex items-center justify-center gap-[10px]">
                             <img
                                 src={profile?.avatarUrl}
                                 className="rounded-full h-[36px] w-[36px]"

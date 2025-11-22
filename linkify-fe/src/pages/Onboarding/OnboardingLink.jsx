@@ -1,11 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 import Button from "../../components/Button"
 
 import { SOCIALS } from "../../constants/socials"
 import { linkService } from "../../services/linkService"
 import { Helper } from "../../utils/helper"
+import { Validator } from "../../utils/validators"
 
 export default function OnboardingLink() {
 
@@ -24,8 +25,13 @@ export default function OnboardingLink() {
     // hiển thị thông báo redirect tới dashboard
     const [showReady, setShowReady] = useState(false);
     const [selectedPlatforms, setSelectedPlatforms] = useState([]);
+    // lưu 1 object links với các key là platform id và value là url
     const [links, setLinks] = useState({});
     const [extraLinks, setExtraLinks] = useState(["", "", ""]);
+
+    // mảng ref giữ các ô input để cái nào ko hợp lệ -> focus nhập lại
+    const socialInputRefs = useRef({});
+    const extraInputRefs = useRef([]);
 
     const [log, setLog] = useState({ type: '', content: '' });
 
@@ -51,8 +57,17 @@ export default function OnboardingLink() {
 
         if (isSelected) {
             setSelectedPlatforms(prev => prev.filter(p => p.id !== platform.id));
+            setLinks(prev => {
+                const newLinks = { ...prev };
+                delete newLinks[platform.id];
+                return newLinks;
+            })
         } else {
             setSelectedPlatforms(prev => [...prev, platform]);
+            setLinks(prev => ({
+                ...prev,
+                [platform.id]: platform.baseUrl
+            }))
         }
     }
 
@@ -87,33 +102,61 @@ export default function OnboardingLink() {
     }
 
     const handleSubmit = async () => {
-        console.log(extraLinks);
+        // inline helper
+        const validateInput = (url, inputRef) => {
+            if (!url || url.trim() === '') return true;
+
+            const error = Validator.validateUrl(url);
+            
+            if (error) {
+                setLog({ type: 'error', content: error })
+                if (inputRef) {
+                    inputRef.focus();
+                    inputRef.scrollIntoView({ behavior: 'smooth', block: 'center' });   
+                }
+                return false;
+            }
+            
+            return true;
+        }
+
+        for (const platform of selectedPlatforms) {
+            const url = links[platform.id];
+            const ref = socialInputRefs.current[platform.id];
+            
+            if (!validateInput(url, ref)) return;
+        }
+
+        for (let i = 0; i < extraLinks.length; i++) {
+            const url = extraLinks[i];
+            const ref = extraInputRefs.current[i];
+
+            if (!validateInput(url, ref)) return;
+        }
+
         // lọc ra title và url từ các social đã chọn, giữ lại các link có nhập thôi
         const socialLinks = selectedPlatforms
-            .map((platform) => ({
-                profileId,
-                title: platform.name,
-                url: links[platform.id]
-            }))
-            .filter(link => link.url && link.url.trim() !== '');
-        
+        .map((platform) => ({
+            profileId,
+            title: platform.name,
+            url: links[platform.id]
+        }))
+        .filter(link => link.url && link.url.trim() !== '');
+
         const additionalLinks = extraLinks
-            .map((link) => ({
-                profileId,
-                title: Helper.getTitleFromUrl(link),
-                url: link
-            }))
-            .filter(link => link.url && link.url.trim() !== '');
+        .map((link) => ({
+            profileId,
+            title: Helper.getTitleFromUrl(link),
+            url: link
+        }))
+        .filter(link => link.url && link.url.trim() !== '');
 
         const linksToCreate = [...socialLinks, ...additionalLinks];
 
         if (linksToCreate.length > 0) {
             try {
                 // TODO: xử lí validate link...
-                linksToCreate.forEach(async (link) => {
-                    await linkService.addLink(link);
-                })
-
+                await Promise.all(linksToCreate.map(link => linkService.addLink(link)));
             } catch (err) {
                 setLog({
                     type: 'error',
@@ -188,7 +231,7 @@ export default function OnboardingLink() {
                         )}
 
                         {step === 2 && (
-                            <div className="flex flex-col gap-[10px] w-full max-w-[540px] h-[400px] md:h-[340px] mb-[14px] px-[20px] py-[10px] rounded-xl overflow-y-auto">
+                            <div className="flex flex-col gap-[10px] w-full max-w-[540px] h-[400px] md:h-[340px] mb-[10px] px-[20px] py-[10px] rounded-xl overflow-y-auto">
                                 {selectedPlatforms.map(platform => (
                                     <div 
                                         className="flex items-center justify-center gap-[10px]"
@@ -199,8 +242,10 @@ export default function OnboardingLink() {
                                         </div>
                                         <input 
                                             type="text"
+                                            ref={el => socialInputRefs.current[platform.id] = el}
                                             className="h-[50px] w-full my-[10px] rounded-xl bg-[#f7f8f6] px-[20px]"
                                             placeholder={platform.placeholder}
+                                            value={links[platform.id] || ''}
                                             onChange={e => handleValueChange(platform.id, e.target.value)}
                                         />
                                     </div>
@@ -220,6 +265,7 @@ export default function OnboardingLink() {
                                         </div>
                                         <input 
                                             type="text"
+                                            ref={el => extraInputRefs.current[idx] = el}
                                             className="h-[50px] w-full my-[10px] rounded-xl bg-[#f7f8f6] px-[20px]"
                                             placeholder="url"
                                             onChange={e => handleExtraChange(idx, e.target.value)}
@@ -229,7 +275,7 @@ export default function OnboardingLink() {
                             </div>
                         )}
 
-                        <div className={`mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+                        <div className={`mb-[10px] min-h-[20px] text-center ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
                             {log.content}
                         </div>
 

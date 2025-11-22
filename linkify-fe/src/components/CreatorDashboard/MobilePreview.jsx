@@ -1,12 +1,13 @@
 import { useProfile } from "../../context/ProfileContext";
 import { useLinks } from "../../context/LinkContext"
 import LinkTreePreview from "../Shared/LinkTreePreview";
+import { useLocation } from "react-router-dom"
 
 export default function MobilePreview() {
     const { profile, loading } = useProfile();
     const { links, loadingLinks } = useLinks(); 
 
-   
+    const currentTab = location.pathname.includes('/dashboard/link') ? 'link' : 'shop';
 
     return (
         <div className="flex flex-col items-center gap-[10px]">
@@ -38,10 +39,13 @@ export default function MobilePreview() {
             <div className="w-full h-full overflow-y-auto no-scrollbar">
                 <LinkTreePreview 
                     profile={profile}
-                    links={links}
                     loading={loading}
+
+                    links={links}
                     loadingLinks={loadingLinks}
+
                     isPreview={true}
+                    tab={currentTab}
                 />
                 
             </div>
