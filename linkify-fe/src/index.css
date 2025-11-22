@@ -48,6 +48,53 @@
     animation: successSlide 2.8s ease-in-out forwards;
 }
 
+/* blink text */
+@keyframes blinkText {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.blink-text {
+    animation: blinkText 1.2s ease-in-out infinite;
+}
+
+/* success glow */
+@keyframes successGlow {
+    0% {
+        opacity: 1;
+        text-shadow: 0 0 0px #4ade80;
+    }
+    25% {
+        opacity: 0.75;
+        text-shadow: 0 0 0px #4ade80;
+    }
+    50% {
+        opacity: 0.5;
+        text-shadow: 0 0 0px #4ade80;
+    }
+    75% {
+        opacity: 0.75;
+        text-shadow: 0 0 0px #4ade80;
+    }
+    100% {
+        opacity: 1;
+        text-shadow: 0 0 8px #4ade80;
+    }
+}
+
+.success-glow {
+    animation: successGlow 1.5s ease-out infinite;
+}
+
 
 ::-webkit-scrollbar {
     width: 4px;
@@ -69,23 +116,4 @@
 
 .scrollbar-left {
     direction: rtl;
-}
-
-/* blink text */
-@keyframes blinkText {
-    0% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.25;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-.blink-text {
-    animation: blinkText 1.2s ease-in-out infinite;
 }

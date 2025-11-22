@@ -5,35 +5,43 @@ import { useState } from "react"
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import LinkModal from "./Modal/LinkModal";
+import DeleteModal from "../../components/DeleteModal";
 
 export default function LinksPage() {
-    const { links, addNewLink, updateLink, reorderLinks, removeLink, loadingLinks } = useLinks();
+    const { links, addNewLink, updateLink, reorderLinks, loadingLinks } = useLinks();
     
     
     // mở/đóng link modal
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
     const [editingLink, setEditingLink] = useState(null);
+
+    // modal xóa
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
 
     const handleOpenAdd = () => {
         setEditingLink(null);
-        setIsModalOpen(true);
+        setIsLinkModalOpen(true);
     }
 
     const handleOpenEdit = (link) => {
         setEditingLink(link);
-        setIsModalOpen(true);
+        setIsLinkModalOpen(true);
     }
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
+    const handleCloseLink = () => {
+        setIsLinkModalOpen(false);
         setEditingLink(null);
     }
     
-    const handleDelete = (id) => {
-        // TODO: fix tạo model xác nhận xóa đẹp hơn
-        if (window.confirm("Are u sure to delete this link?")) {
-            removeLink(id);
-        }
+    const handleOpenDelete = (id) => {
+        setIsDeleteModalOpen(true);
+        setDeleteId(id);
+    }
+
+    const handleCloseDelete = () => {
+        setIsDeleteModalOpen(false);
+        setDeleteId(null);
     }
 
     const handleToggleEnable = (link, isChecked) => {
@@ -71,10 +79,17 @@ export default function LinksPage() {
     return (
         <div className="w-full h-full flex flex-col">
             
-            {isModalOpen && (
+            {isLinkModalOpen && (
                 <LinkModal 
                     editingLink={editingLink}
-                    onClose={handleCloseModal}
+                    onClose={handleCloseLink}
+                />
+            )}
+
+            {isDeleteModalOpen && (
+                <DeleteModal
+                    deleteId={deleteId}
+                    onClose={handleCloseDelete}
                 />
             )}
 
@@ -198,7 +213,7 @@ export default function LinksPage() {
                                                                         <i 
                                                                             title="Delete"
                                                                             className="fa-solid fa-trash-can text-lg hover:text-red-500 cursor-pointer" title="Xóa"
-                                                                            onClick={() => handleDelete(link._id)}
+                                                                            onClick={() => handleOpenDelete(link._id)}
                                                                         ></i>
                                                                     </div>
                                                                 </div>
