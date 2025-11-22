@@ -5,13 +5,21 @@ import { useProfile } from "../../context/ProfileContext";
 import { mainMenu, tools } from "../../constants/dashboard";
 
 export default function Sidebar() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const { profile } = useProfile();
     const navigate = useNavigate();
     const location = useLocation();
     
     // lưu index của menu cha đang dc mở
     const [openIndex, setOpenIndex] = useState(0); 
+    // lưu trạng thái bật tắt của user dropdown
+    const [dropdown, setDropdown] = useState(false);
+    // lưu trạng thái đăng xuất
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+    const handleToggleDropdown = () => {
+        setDropdown(!dropdown);
+    }
 
     // Map Label sang URL 
     const getPath = (label) => {
@@ -61,11 +69,23 @@ export default function Sidebar() {
         navigate(getPath(toolLabel));
     };
 
+    const handleLogout = () => {
+        if (isLoggingOut) 
+            return;
+        setIsLoggingOut(true);
+        setTimeout(() => {
+            logout();
+        }, 1000);
+    }
+
     return (
         <div className="bg-[#ecede8] lg:w-[280px] md:w-[200px] rounded-tl-xl relative flex-shrink-0 hidden md:block h-full border-r border-[#d7d6d4]">
             {/* 1. User Info & Noti */}
             <div className="flex justify-between items-center px-[12px] py-[8px] mt-1">
-                <div className="flex items-center gap-1.5 px-2 py-2 -mx-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl">
+                <div 
+                    className="relative flex items-center gap-1.5 px-2 py-[4px] -mx-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl"
+                    onClick={handleToggleDropdown}    
+                >
                     <img
                         src={profile?.avatarUrl}
                         className="rounded-full h-[30px] w-[30px]"
@@ -74,8 +94,77 @@ export default function Sidebar() {
                     <p className="ml-[4px] text-[#37181B] font-bold">
                         {user?.displayName}
                     </p>
-                    <i className="fa-solid fa-angle-down text-[10px] pt-1 text-[#37181B]"></i>
+                    <i className={`fa-solid fa-angle-down text-[10px] pt-1 ml-auto mr-1 transition-transform duration-300 ${dropdown? "rotate-180" : ""}`}/>
+
+                    <div 
+                        className={`text-[#212529] absolute shadow-xl top-[calc(100%+4px)] w-[220px] bg-[#fff] rounded-xl flex flex-col ${dropdown ? 'scale-100' : 'scale-0'} transition duration-200`}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div className="w-full border-b border-[#e0dfde] py-[10px] flex items-center justify-center gap-[10px] pr-[20px]">
+                            <img
+                                src={profile?.avatarUrl}
+                                className="rounded-full h-[36px] w-[36px]"
+                                alt="avatar"
+                            />
+                            <div className="">
+                                <div className="font-semibold">
+                                    {profile?.username}
+                                </div>
+
+                                <div className="text-sm">
+                                    linkify.com/{profile?.username}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="border-b border-[#e0dfde]">
+                            <div className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]">
+                                <i className="fa-solid fa-shuffle mr-[6px]"></i>
+                                Switch linkify profile
+                            </div>
+
+                            <div className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]">
+                                <i className="fa-regular fa-square-plus mr-[6px]"></i>
+                                Create new linkify
+                            </div>         
+                        </div>
+
+                        <div className="border-b border-[#e0dfde]">
+                            <div className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]">
+                                <i className="fa-regular fa-user mr-[6px]"></i>
+                                Account
+                            </div>
+
+                            <div className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]">
+                                <i className="fa-regular fa-circle-question mr-[6px]"></i>
+                                Help
+                            </div>         
+                        </div>
+
+                        <div 
+                            className={`pl-[16px] py-[4px] m-[4px] rounded-md transition-all duration-200
+                                ${isLoggingOut ? 'bg-gray-100 text-gray-400 cursor-wait' : 'hover:bg-[#F1F0EE] cursor-pointer'}`}
+                            onClick={handleLogout}
+                        >
+                            {isLoggingOut ? (
+                                <div className="flex items-center">
+                                    <i className="fa-solid fa-circle-notch fa-spin mr-[6px]"></i>
+                                    <span>Logging out...</span>
+                                </div>
+                            ) : (
+                                <div className="flex items-center">
+                                    <i className="fa-solid fa-arrow-right-from-bracket mr-[6px]"></i>
+                                    <span>Log out</span>
+                                </div>
+                            )}
+                        </div> 
+
+                         
+                        
+                    </div>
                 </div>
+
+
                 <span className="px-2 py-2 -mx-2 -my-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl">
                     <i className="fa-regular fa-bell "></i>
                 </span>

@@ -16,15 +16,20 @@ const updateLink = async(linkId, data) => {
     return response.data;
 }
 
+const reorderLinks = async(links) => {
+    const response = await api.put('/links/reorder', { links });
+    return response.data;
+}
+
 const deleteLink = async(linkId) => {
     console.log('in service: ', linkId);
     const response = await api.delete(`/links/${linkId}`);
-    return response.data;
 }
 
 export const linkService = {
     addLink,
     getLinks,
     updateLink,
+    reorderLinks,
     deleteLink
 };
