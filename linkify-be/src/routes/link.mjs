@@ -10,6 +10,8 @@ router.post('/', authMiddleware, linkController.addLink);
 
 router.patch('/:linkId', authMiddleware, linkController.updateLink);
 
+router.put('/reorder', authMiddleware, linkController.reorderLinks);
+
 router.delete('/:linkId', authMiddleware, linkController.deleteLink);
 
 export default router;

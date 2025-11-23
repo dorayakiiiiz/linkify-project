@@ -212,7 +212,7 @@ export default function LinksPage() {
                                                                         ></i>
                                                                         <i 
                                                                             title="Delete"
-                                                                            className="fa-solid fa-trash-can text-lg hover:text-red-500 cursor-pointer" title="Xóa"
+                                                                            className="fa-solid fa-trash-can text-lg hover:text-red-500 cursor-pointer"
                                                                             onClick={() => handleOpenDelete(link._id)}
                                                                         ></i>
                                                                     </div>

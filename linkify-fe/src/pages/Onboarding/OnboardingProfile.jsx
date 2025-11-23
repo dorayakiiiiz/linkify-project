@@ -42,10 +42,10 @@ export default function OnboardingProfile() {
     }, [log]);
 
     useEffect(() => {
-        if (!loading && profile) {
+        if (!loading && profile && !showReady) {
             navigate('/dashboard/links', { replace: true })
         }
-    }, [profile, loading, navigate]);
+    }, [profile, loading, navigate, showReady]);
     
 
     useEffect(() => {
@@ -115,11 +115,12 @@ export default function OnboardingProfile() {
                 bio,
                 avatar
             })
+            
+            setShowReady(true);
+            setProfileId(profileId);
 
             await refreshProfile();
 
-            setShowReady(true);
-            setProfileId(profileId);
 
         } catch (err) {
             setLog({
