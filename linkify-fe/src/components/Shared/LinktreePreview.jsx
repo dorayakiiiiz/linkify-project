@@ -34,7 +34,7 @@ export default function LinkTreePreview({ profile, loading, links, loadingLinks,
                 </div>
 
                 {/* content */}
-                <div className="w-full h-full overflow-y-auto no-scrollbar flex flex-col items-center pb-">
+                <div className="w-full h-full overflow-y-auto no-scrollbar flex flex-col items-center pb-[10px]">
 
                     {loading ? (
                         <div className="w-full flex flex-col items-center animate-pulse mt-2">
@@ -158,7 +158,7 @@ export default function LinkTreePreview({ profile, loading, links, loadingLinks,
                                     )
                                 )}
 
-                                <div className="mt-auto">
+                                <div className="mt-auto mb-[10px]">
                                     <div className={`py-[12px] ${!isPreview ? 'md:py-[20px] md:mx-[20px]' : ''} font-bold bg-white text-center rounded-4xl shadow flex items-center justify-center cursor-pointer`}>
                                         Join {profile.username} on Linktree
                                     </div>
