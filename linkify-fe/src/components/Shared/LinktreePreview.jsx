@@ -20,21 +20,21 @@ export default function LinkTreePreview({ profile, loading, links, loadingLinks,
     }, [tab]);
 
     return (
-        <div className="w-full flex justify-center items-center">
+        <div className="w-full h-full flex justify-center items-center">
 
-            <div className={`relative w-full p-[30px] max-w-[580px] h-full ${!isPreview ? 'md:h-[1160px] md:rounded-4xl' : 'md:h-[580px]'} bg-[#ECEEF1] shadow-2xl overflow-hidden flex flex-col items-center`}>
+            <div className={`relative w-full p-[30px] max-w-[580px] h-screen ${!isPreview ? 'md:h-[1160px] md:rounded-4xl' : 'md:h-[580px]'} bg-[#ECEEF1] shadow-2xl overflow-y-auto no-scrollbar flex flex-col items-center`}>
 
-                <div className="w-full flex justify-between items-center">
-                    <div className={`${!isPreview ? 'w-[40px] h-[40px]' : 'w-[34px] h-[34px]'} rounded-full bg-[#fff] flex justify-center items-center`}>
-                        <i className="fa-brands fa-linktree"></i>
-                    </div>
-                    <div className={`${!isPreview ? 'w-[40px] h-[40px]' : 'w-[34px] h-[34px]'} rounded-full bg-[#fff] flex justify-center items-center`}>
-                        <i className="fa-regular fa-bell"></i>
-                    </div>
-                </div>
 
                 {/* content */}
-                <div className="w-full h-full overflow-y-auto no-scrollbar flex flex-col items-center pb-[10px]">
+                {/* <div className="w-full h-full overflow-y-auto no-scrollbar flex flex-col items-center"> */}
+                    <div className="w-full flex justify-between items-center">
+                        <div className={`${!isPreview ? 'w-[40px] h-[40px]' : 'w-[34px] h-[34px]'} rounded-full bg-[#fff] flex justify-center items-center`}>
+                            <i className="fa-brands fa-linktree"></i>
+                        </div>
+                        <div className={`${!isPreview ? 'w-[40px] h-[40px]' : 'w-[34px] h-[34px]'} rounded-full bg-[#fff] flex justify-center items-center`}>
+                            <i className="fa-regular fa-bell"></i>
+                        </div>
+                    </div>
 
                     {loading ? (
                         <div className="w-full flex flex-col items-center animate-pulse mt-2">
@@ -48,7 +48,7 @@ export default function LinkTreePreview({ profile, loading, links, loadingLinks,
                             <ListSkeleton />
                         </div>
                     ) : (
-                        <div className="w-full min-h-full flex flex-col items-center">
+                        <div className="w-full h-full flex flex-col items-center">
                             {/* avatar */}
                             <div className={`w-[80px] h-[80px] ${!isPreview ? 'md:w-[120px] md:h-[120px]' : ''} rounded-full overflow-hidden border-2 border-white shadow-sm mb-4 shrink-0`}>
                                 <img
@@ -158,8 +158,8 @@ export default function LinkTreePreview({ profile, loading, links, loadingLinks,
                                     )
                                 )}
 
-                                <div className="mt-auto mb-[10px]">
-                                    <div className={`py-[12px] ${!isPreview ? 'md:py-[20px] md:mx-[20px]' : ''} font-bold bg-white text-center rounded-4xl shadow flex items-center justify-center cursor-pointer`}>
+                                <div className="mt-auto mb-[30px]">
+                                    <div className={`py-[12px] px-[4px] ${!isPreview ? 'md:py-[20px] md:mx-[20px]' : 'text-sm'} font-bold bg-white text-center rounded-4xl shadow flex items-center justify-center cursor-pointer`}>
                                         Join {profile.username} on Linktree
                                     </div>
                                     {/* <div className="flex justify-center gap-3 text-[10px] my-2">
@@ -172,7 +172,7 @@ export default function LinkTreePreview({ profile, loading, links, loadingLinks,
                             </div>
                         </div>
                     )}
-                </div>
+                {/* </div> */}
             </div>
         </div>
     );
