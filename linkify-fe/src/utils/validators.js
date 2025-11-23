@@ -1,7 +1,7 @@
 // xử lí validation ở đây
 
 const validateUsername = (username) => {
-    if (!username) return "Please input username.";
+    if (!username || username.trim() === "") return "Please input username.";
 
     if (username.length < 5) return "Username must be at least 5 characters.";
 
@@ -9,15 +9,15 @@ const validateUsername = (username) => {
 }
 
 const validateDisplayName = (displayName) => {
-    if (!displayName) return "Please input display name.";
+    if (!displayName || displayName.trim() === "") return "Please input display name.";
 
-    if (displayName.length < 5) return "Username must be at least 5 characters.";
+    if (displayName.length < 5) return "Display name must be at least 5 characters.";
 
     return null;
 }
 
 const validateEmail = (email) => {
-    if (!email) return "Please input email.";
+    if (!email || email.trim() === "") return "Please input email.";
 
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -27,9 +27,21 @@ const validateEmail = (email) => {
 }
 
 const validatePassword = (password) => {
-    if (!password) return "Please input password.";
+    if (!password || password.trim() === "") return "Please input password.";
 
     if (password.length < 5) return "Password must be at least 5 characters.";
+
+    return null;
+}
+
+const validateUrl = (url) => {
+    if (!url || url.trim() === "") return "Please input URL.";
+
+    const pattern = /^(https?:\/\/)[^\s/$.?#].[^\s]*$/i;
+
+    if (!pattern.test(url)) {
+        return "Please enter a valid URL (must start with http:// or https://).";
+    }
 
     return null;
 }
@@ -38,5 +50,6 @@ export const Validator = {
     validateUsername,
     validateDisplayName,
     validateEmail,
-    validatePassword
+    validatePassword,
+    validateUrl
 };

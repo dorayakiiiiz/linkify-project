@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { authService } from "../../services/authService";
 import { Validator } from "../../utils/validators";
+import { useAuth } from "../../context/AuthContext";
 
 import Input from "../../components/Input";
 import Button from "../../components/Button";
@@ -13,22 +14,24 @@ export default function Register() {
     const [email, setEmail] = useState('');
     const [displayName, setDisplayName] = useState('');
     const [password, setPassword] = useState('');
-    const [log, setLog] = useState({
-        type: '',
-        content: ''
-    });
+    const [log, setLog] = useState({ type: '', content: '' });
 
     useEffect(() => {
         if (log.content) {
-            const timerId = setTimeout(() => setLog({
-                type: '',
-                content: ''
-            }), 3000);
+            const timerId = setTimeout(() => setLog({ type: '', content: ''}), 2600);
             return () => clearTimeout(timerId);
         }
     }, [log]);
 
     const navigate = useNavigate();
+    const { isLogin } = useAuth();
+
+    // đã đăng nhập rồi mà vào lại -> tự redirect về dashboard
+    useEffect(() => {
+        if (isLogin) {
+            navigate('/dashboard', { replace: true });
+        }
+    }, [isLogin, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,28 +39,19 @@ export default function Register() {
         // validate data
         const emailError = Validator.validateEmail(email);
         if (emailError) {
-            setLog({
-                type: 'error',
-                content: emailError
-            });
+            setLog({ type: 'error', content: emailError });
             return;
         }
 
         const displayNameError = Validator.validateDisplayName(displayName);
         if (displayNameError) {
-            setLog({
-                type: 'error',
-                content: displayNameError
-            });
+            setLog({ type: 'error', content: displayNameError });
             return;
         }
 
         const passwordError = Validator.validatePassword(password);
         if (passwordError) {
-            setLog({
-                type: 'error',
-                content: passwordError
-            });
+            setLog({ type: 'error', content: passwordError });
             return;
         }
         
@@ -113,7 +107,7 @@ export default function Register() {
                     Sign up for free!
                 </div>
 
-                <div
+                <form
                     className="flex flex-col justify-center items-center mt-[10px]"
                 >
 
@@ -138,7 +132,7 @@ export default function Register() {
                         setState={setPassword}
                     />
 
-                    <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+                    <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-[green] success-text' : ''} font-semibold`}>
                         {log.content}
                     </div>
 
@@ -158,7 +152,7 @@ export default function Register() {
                         onClick={handleSubmit}
                     />
 
-                </div>
+                </form>
 
                 <div className="text-[#898b8c] mt-[10px]">
                     OR
@@ -182,22 +176,6 @@ export default function Register() {
                     </button>
                 </div>
                 
-
-                {/* <button
-                    type="submit"
-                    className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
-                >
-                    <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
-                    Sign up with Google
-                </button> 
-
-                <button
-                    type="submit"
-                    className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
-                >
-                    <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
-                    Sign up with Facebook
-                </button> */}
 
                 <div className="mt-[10px] text-[#898b8c]">
                     Already have an account?

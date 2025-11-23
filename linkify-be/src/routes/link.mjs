@@ -1,21 +1,16 @@
 import { Router } from "express";
+import linkController from "../controllers/LinkController.mjs";
+import authMiddleware from "../middleware/AuthMiddleware.mjs";
 
 const router = Router();
 
+router.get('/:profileId', authMiddleware, linkController.getLinksByProfileId);
 
-//Thêm link
-router.post('/add-link', (req, res) => {
-    res.send('Add Link Page');
-});
+router.post('/', authMiddleware, linkController.addLink);
 
-//Xóa link
-router.delete('/delete-link', (req, res) => {
-    res.send(`Delete Link with ID: ${req.params.id}`);
-});
+router.patch('/:linkId', authMiddleware, linkController.updateLink);
 
-//Cập nhật link
-router.patch('/update-link', (req, res) => {
-    res.send(`Update Link with ID: ${req.params.id}`);
-});
+router.delete('/:linkId', authMiddleware, linkController.deleteLink);
 
+export default router;
 

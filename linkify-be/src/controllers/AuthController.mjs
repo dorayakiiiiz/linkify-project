@@ -17,7 +17,7 @@ class AuthController {
 
             const user = await User.findOne({ email });
             if (user) 
-                return res.status(400).json({ message: 'Username existed.'});
+                return res.status(400).json({ message: 'User existed.'});
 
             const hashPassword = await bcrypt.hash(password, saltRounds);
 
@@ -41,17 +41,14 @@ class AuthController {
 
             const user = await User.findOne({ email });
             if (!user)
-                return res.status(404).json({ message: 'Username does not exist.'});
+                return res.status(404).json({ message: 'Email does not exist.'});
 
             if (user.isLocked)
-                return res.status(403).json({ message: 'Your account has been locked.'})
+                return res.status(403).json({ message: 'Your account has been locked due to violation.'})
 
             const match = await bcrypt.compare(password, user.password);
             if (!match) 
                 return res.status(400).json({ message: 'Incorrect password.' });
-
-            const userProfile = await Profile.findOne({ userId: user._id });
-            const hasProfile = !!userProfile;
 
             const token = jwt.sign(
                 { 
@@ -64,7 +61,6 @@ class AuthController {
             res.json({
                 message: 'Login successfully!',
                 token, 
-                hasProfile
                 // user: { 
                 //     id: user._id, 
                 //     email: user.email,
