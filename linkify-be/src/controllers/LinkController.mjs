@@ -16,7 +16,7 @@ class LinkController {
     // [POST] api/links
     async addLink(req, res, next) {
         try {
-            const { title, url, profileId } = req.body;
+            const { title, url, profileId, scheduledEnable, scheduledDisable } = req.body;
             const lastLink = await Link.findOne({ profileId }).sort({ order: -1 });
             const newOrder = lastLink ? lastLink.order + 1 : 0;
 
@@ -24,7 +24,9 @@ class LinkController {
                 profileId,
                 title,
                 url,
-                order: newOrder
+                order: newOrder,
+                scheduledEnable,
+                scheduledDisable
             })
 
             res.status(201).json({ message: 'Create link successfully', link: newLink });
@@ -42,6 +44,32 @@ class LinkController {
             const updatedLink = await Link.findByIdAndUpdate(linkId, updates, { new: true });
 
             res.status(200).json({ message: 'Link updated', link: updatedLink });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    // [PUT] api/links/reorder (do thay đổi all document -> put, nếu thay đổi 1 -> patch)
+    async reorderLinks(req, res, next) {
+        try {
+            const { links } = req.body;
+
+            if (!links || !Array.isArray(links))
+                return res.status(400).json({ error: 'Invalid data' });
+
+            // bulkwrite update nhiều dòng cùng lúc -> tối ưu hóa hiệu năng
+            const bulkOps = links.map((link) => ({
+                updateOne: {
+                    filter: { _id: link._id},
+                    update: { order: link.order }
+                }
+            }));
+
+            await Link.bulkWrite(bulkOps);
+
+            res.status(200).json({ message: 'Links reorder successfully' })
+
+
         } catch (err) {
             res.status(500).json({ error: err.message });
         }

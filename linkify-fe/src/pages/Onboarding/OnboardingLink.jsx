@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
+import { useLinks } from "../../context/LinkContext"
 
 import Button from "../../components/Button"
 
@@ -14,6 +15,8 @@ export default function OnboardingLink() {
     const { profileId, fromOnboarding } = location.state || {};
 
     const navigate = useNavigate();
+
+    const { fetchLinks } = useLinks();
 
     useEffect(() => {
         if (!fromOnboarding || !profileId) {
@@ -155,8 +158,10 @@ export default function OnboardingLink() {
 
         if (linksToCreate.length > 0) {
             try {
-                // TODO: xử lí validate link...
                 await Promise.all(linksToCreate.map(link => linkService.addLink(link)));
+            
+                await fetchLinks();
+                
             } catch (err) {
                 setLog({
                     type: 'error',
