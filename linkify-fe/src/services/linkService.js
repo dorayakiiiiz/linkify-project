@@ -22,8 +22,8 @@ const reorderLinks = async(links) => {
 }
 
 const deleteLink = async(linkId) => {
-    console.log('in service: ', linkId);
     const response = await api.delete(`/links/${linkId}`);
+    return response.data;
 }
 
 export const linkService = {

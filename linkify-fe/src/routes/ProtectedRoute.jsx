@@ -10,7 +10,7 @@ export default function ProtectedRoute({ allowedRoles = [] }) {
 
     if (!user) {
         return (
-            <div className="h-screen w-full flex justify-center items-center bg-[#0060AD] text-5xl text-[#fff] font-momo">
+            <div className="h-screen w-full text-center flex justify-center items-center bg-[#0060AD] text-5xl text-[#fff] font-momo">
                 Linkify is loading...
             </div>
         )
