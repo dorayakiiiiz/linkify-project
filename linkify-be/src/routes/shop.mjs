@@ -5,22 +5,24 @@ import { shopUpload } from "../config/cloudinary.mjs";
 
 const router = Router();
 
-router.get("/:profileId", shopController.getProductsByProfile);
+router.get('/:profileId', shopController.getProductsByProfile);
 
 router.post(
-  "/",
-  authMiddleware,
-  shopUpload.single("productImage"),
-  shopController.createProduct
+    '/',
+    authMiddleware,
+    shopUpload.single("productImage"),
+    shopController.createProduct
 );
 
 router.patch(
-  "/:itemId",
-  authMiddleware,
-  shopUpload.single("productImage"),
-  shopController.updateProduct
+    '/:itemId',
+    authMiddleware,
+    shopUpload.single("productImage"),
+    shopController.updateProduct
 );
 
-router.delete("/:itemId", authMiddleware, shopController.deleteProduct);
+router.put('/reorder', authMiddleware, shopController.reorderProducts);
+
+router.delete('/:itemId', authMiddleware, shopController.deleteProduct);
 
 export default router;
