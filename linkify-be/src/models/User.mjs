@@ -12,13 +12,18 @@ const UserSchema = new Schema({
     },
     password: { 
         type: String, 
-        required: true 
+        // Chỉ bắt buộc khi đăng nhập bằng mật khẩu
+        required: function() {
+                    return this.loginMethod === 'local';
+                }
     },
     googleId: { 
         type: String, 
+        unique: true,
     },
     facebookId: { 
         type: String, 
+        unique: true,
     },
     role: {
         type: String,
@@ -29,6 +34,14 @@ const UserSchema = new Schema({
     isLocked: {
         type: Boolean,
         default: false,
+        required: true
+    },
+
+    // Để biết đăng nhập bằng password (local), GG hay FB
+    loginMethod: {
+        type:String,
+        enum : ['local', 'google', 'facebook'],
+        default: 'local',
         required: true
     }
 }, {
