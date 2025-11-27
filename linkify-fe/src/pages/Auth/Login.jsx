@@ -130,7 +130,7 @@ export default function Login() {
         window.open(fullAuthUrl, 'googleAuthPopup', 'width=600,height=600');
     }
 
-        // Hàm click vào mở pop up Auth FB
+    // Hàm click vào mở pop up Auth FB
     const handleGFacebookLogin = (e) => {
         //Chuyển hướng sang backend để xác thực GG
         const fullAuthUrl = 'http://localhost:5000/api/auth/facebook'; 

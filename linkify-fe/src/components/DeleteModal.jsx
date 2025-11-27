@@ -1,36 +1,34 @@
 import { useLinks } from "../context/LinkContext"
 import { useState } from "react"
 
-export default function DeleteModal({ onClose, deleteId }) {
+export default function DeleteModal({ onClose, deleteId, removeFunc, confirmMessage, successLog }) {
 
     const [log, setLog] = useState({ type: '', content: '' });
-    
-    const { removeLink } = useLinks();
 
     const handleDelete = () => {
-        removeLink(deleteId);
+        removeFunc(deleteId);
 
         setLog({
             type: 'success',
-            content: 'Link deleted successfully.'
+            content: successLog
         });
 
         setTimeout(() => onClose(), 1500);
     }
 
     return (
-        <div 
+        <div
             className="fixed inset-0 z-100 bg-black/50 backdrop-blur flex items-center justify-center"
-            onClick={onClose}    
+            onClick={onClose}
         >
-            <div 
+            <div
                 className="flex flex-col w-full max-w-[560px] px-[50px] py-[30px] min-h-[220px] bg-[#fff] md:rounded-3xl"
                 onClick={e => e.stopPropagation()}
             >
 
 
                 <div className="font-momo text-2xl text-[#ff3838]">
-                    Are you sure to delete this link from your profile?
+                    {confirmMessage}
                 </div>
 
                 <div className="font-quicksand mt-[10px]">
@@ -56,7 +54,7 @@ export default function DeleteModal({ onClose, deleteId }) {
                         Delete
                     </div>
                 </div>
-                    
+
 
             </div>
 

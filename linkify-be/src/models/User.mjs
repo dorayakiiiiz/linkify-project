@@ -4,11 +4,15 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
     email: { 
         type: String, 
-        required: true, 
+        // Chỉ bắt buộc với google và đăng nhập pass
+        required: function() {
+                    return this.loginMethod === 'local' || this.loginMethod === 'google';
+                }, 
         unique: true 
     },
     displayName: {
-        type: String
+        type: String,
+        required: true,
     },
     password: { 
         type: String, 
