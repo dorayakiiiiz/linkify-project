@@ -13,5 +13,5 @@ const register = async (data) => {
 
 export const authService = {
     login, 
-    register
+    register,
 };

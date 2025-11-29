@@ -44,6 +44,35 @@ export default function Login() {
         }
     }, [isLogin, justLoggedIn, navigate]);
 
+    //Lăng nghe sự kiện gửi message của cửa sổ pop up
+    useEffect(() => {
+        const receiveMessageFromPopUp = async(e) => {
+            if (e.data.type === 'login_success') {
+                const token = e.data.token
+                login(token);
+                setJustLoggedIn(true);
+                setLog({
+                    type: 'success',
+                    content: 'Login successfully! Redirecting...'
+                });
+
+                await refreshProfile();
+
+                setTimeout(() => {
+                    navigate('/dashboard', { replace: true })
+                }, 2600);
+            }
+            else {
+                setLog({
+                    type: 'error',
+                    message: 'Đăng nhập bằng Google thất bại!'
+                })
+            }
+        }
+        window.addEventListener('message', receiveMessageFromPopUp)
+        return () => window.removeEventListener('message', receiveMessageFromPopUp)
+    }, [isLogin, justLoggedIn, navigate])
+
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -67,7 +96,9 @@ export default function Login() {
                 password
             });
 
+            // Lấy token được trả về từ backend
             const { token } = res;
+            // Lưu token vào localStorage
             login(token);
             setJustLoggedIn(true);
             setLog({
@@ -90,6 +121,23 @@ export default function Login() {
         }
         
     }
+
+    // Hàm click vào mở pop up Auth GG
+    const handleGoogleLogin = (e) => {
+        //Chuyển hướng sang backend để xác thực GG
+        const fullAuthUrl = 'http://localhost:5000/api/auth/google'; 
+        // Mở pop up xác nhận GG
+        window.open(fullAuthUrl, 'googleAuthPopup', 'width=600,height=600');
+    }
+
+    // Hàm click vào mở pop up Auth FB
+    const handleGFacebookLogin = (e) => {
+        //Chuyển hướng sang backend để xác thực GG
+        const fullAuthUrl = 'http://localhost:5000/api/auth/facebook'; 
+        // Mở pop up xác nhận GG
+        window.open(fullAuthUrl, 'facebookAuthPopup', 'width=600,height=600');
+    }
+
 
     return (
         <>
@@ -160,9 +208,10 @@ export default function Login() {
                         OR
                     </div>
 
-                    <button
+                    <button                     
                         type="submit"
                         className="cursor-pointer w-full max-w-[300px] md:max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
+                        onClick={handleGoogleLogin}
                     >
                         <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
                         Continue with Google
@@ -171,6 +220,7 @@ export default function Login() {
                     <button
                         type="submit"
                         className="cursor-pointer w-full max-w-[300px] md:max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
+                        onClick={handleGFacebookLogin}
                     >
                         <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
                         Continue with Facebook

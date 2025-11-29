@@ -48,7 +48,7 @@ export default function DashboardLayout() {
 
                 {/* preview */}
                 {showPreview && (
-                    <div className="hidden xl:flex xl:w-[450px] lg:w-[250px] md:w-[200px] bg-[#f1f0ee] flex-col justify-center items-center border-l border-[#d7d6d4]">
+                    <div className="hidden md:flex xl:w-[450px] lg:w-[250px] md:w-[200px] bg-[#f1f0ee] flex-col justify-center items-center border-l border-[#d7d6d4]">
                          <MobilePreview /> 
                     </div>
                 )}
