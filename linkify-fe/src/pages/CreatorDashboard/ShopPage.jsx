@@ -1,8 +1,8 @@
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useShop } from "../../context/ShopContext";
 import { useState } from "react";
-import { UserInfo } from "../../components/CreatorDashboard/Shared/UserInfo";
-import QuickActions from "../../components/CreatorDashboard/Shared/QuickActions";
+import { UserInfo } from "../../components/CreatorDashboard/UserInfo";
+import QuickActions from "../../components/CreatorDashboard/QuickActions";
 import ShopModal from "./Modal/ShopModal";
 import DeleteModal from "../../components/DeleteModal";
 

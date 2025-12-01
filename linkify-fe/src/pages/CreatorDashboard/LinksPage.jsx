@@ -1,5 +1,5 @@
-import QuickActions from "../../components/CreatorDashboard/Shared/QuickActions";
-import { UserInfo } from "../../components/CreatorDashboard/Shared/UserInfo";
+import QuickActions from "../../components/CreatorDashboard/QuickActions";
+import { UserInfo } from "../../components/CreatorDashboard/UserInfo";
 import { useLinks } from "../../context/LinkContext";
 import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";

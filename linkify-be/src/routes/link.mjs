@@ -4,15 +4,17 @@ import authMiddleware from "../middleware/AuthMiddleware.mjs";
 
 const router = Router();
 
-router.get('/:profileId', authMiddleware, linkController.getLinksByProfileId);
+router.use(authMiddleware);
 
-router.post('/', authMiddleware, linkController.addLink);
+router.get('/:profileId', linkController.getLinksByProfileId);
 
-router.patch('/:linkId', authMiddleware, linkController.updateLink);
+router.post('/', linkController.addLink);
+
+router.patch('/:linkId', linkController.updateLink);
 
 router.put('/reorder', linkController.reorderLinks);
 
-router.delete('/:linkId', authMiddleware, linkController.deleteLink);
+router.delete('/:linkId', linkController.deleteLink);
 
 export default router;
 

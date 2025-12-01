@@ -1,4 +1,4 @@
-export const mainMenu = [
+export const creatorMenu = [
     {
         icon: "fa-layer-group",
         label: "My Linkify",
@@ -6,6 +6,18 @@ export const mainMenu = [
         subItems: [{ label: "Links" }, { label: "Shop" }, { label: "Design" }],
     },
     { icon: "fa-chart-simple", label: "Insights", hasDropdown: false },
+];
+
+export const adminMenu = [
+    { icon: "fa-solid fa-users", label: "User", hasDropdown: false },
+    {
+        icon: "fa-solid fa-link",
+        label: "Content",
+        hasDropdown: true,
+        subItems: [{ label: "Links" }, { label: "Shop" }],
+    },
+    { icon: "fa-brands fa-uikit", label: "Theme", hasDropdown: false },
+
 ];
 
 export const tools = [

@@ -1,4 +1,4 @@
-import { useProfile } from "../../../context/ProfileContext";
+import { useProfile } from "../../context/ProfileContext";
 
 export function UserInfo() {
     const { profile, loading } = useProfile();

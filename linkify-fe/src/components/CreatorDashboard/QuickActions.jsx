@@ -1,4 +1,4 @@
-import { quickActions } from "../../../constants/dashboard"; 
+import { quickActions } from "../../constants/dashboard"; 
 
 export default function QuickActions() {
     return (

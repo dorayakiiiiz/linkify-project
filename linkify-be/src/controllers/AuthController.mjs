@@ -95,6 +95,9 @@ class AuthController {
                 return res.send(generateAuthScript('login_failed', { message: 'User info not found' }));
             }
 
+            if (userInfo.isLocked)
+                return res.send(generateAuthScript('login_failed', { message: 'Your account has been locked due to violation.' }))
+
             // 2. Tạo JWT (dùng ID hoặc _id của Mongoose)
             const token = jwt.sign(
                 { id: userInfo._id },
