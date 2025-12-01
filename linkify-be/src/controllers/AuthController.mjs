@@ -7,6 +7,21 @@ import Profile from '../models/Profile.mjs';
 
 const saltRounds = 10;
 
+const generateAuthScript = (type, data) => {
+    const clientURL = process.env.CLIENT_URL || 'http://localhost:5173';
+
+    return `
+        <script>
+            const authData = { 
+                type: '${type}', 
+                payload: ${JSON.stringify(data)} 
+            };
+            window.opener.postMessage(authData, '${clientURL}'); 
+            window.close();
+        </script>
+    `;
+};
+
 class AuthController {
     // [POST] /auth/register
     // TODO: xử lí validate data ng dùng gửi lên
@@ -60,13 +75,7 @@ class AuthController {
 
             res.json({
                 message: 'Login successfully!',
-                token, 
-                // user: { 
-                //     id: user._id, 
-                //     email: user.email,
-                //     role: user.role 
-                // }
-                // này chắc ko cần thiết
+                token
             });
 
         } catch (err) {
@@ -83,7 +92,7 @@ class AuthController {
             if (!userInfo) {
                 console.log('Lỗi không có userInfo')
                 // Nếu có lỗi, chuyển hướng về trang đăng nhập của FE
-                return res.redirect('http://localhost:5173/auth/login'); 
+                return res.send(generateAuthScript('login_failed', { message: 'User info not found' }));
             }
 
             // 2. Tạo JWT (dùng ID hoặc _id của Mongoose)
@@ -102,37 +111,12 @@ class AuthController {
             // });
 
             console.log('[THÀNH CÔNG!!!]')
-            return res.send(`
-                <script>
-                    // Tạo đối tượng dữ liệu chứa Token
-                    const authData = { 
-                        type: 'login_success', 
-                        token: '${token}' 
-                    };
-                    // Gửi đối tượng này về cửa sổ chính
-                    const FE_origin = 'http://localhost:5173/auth/login'    
-                    window.opener.postMessage(authData, FE_origin);
-                    // Đóng cửa sổ Pop-up
-                    window.close();
-                </script>
-            `); 
+            return res.send(generateAuthScript('login_success', { token })); 
             
         } catch (err) {
             console.log("Google Auth Callback Error:", err);
             // Chuyển hướng về trang báo lỗi của Front-end
-            return res.send(`
-                <script>
-                    // Tạo đối tượng dữ liệu chứa Token
-                    const authData = { 
-                        type: 'login_failed', 
-                        token: '${token}' 
-                    };
-                    // Gửi đối tượng này về cửa sổ chính
-                    window.opener.postMessage(authData, '*');
-                    // Đóng cửa sổ Pop-up
-                    window.close();
-                </script>
-                `)
+            return res.send(generateAuthScript('login_failed', { message: 'Authentication failed' }));
         }
     }
 
@@ -145,7 +129,7 @@ class AuthController {
             if (!userInfo) {
                 console.log('Lỗi không có userInfo')
                 // Nếu có lỗi, chuyển hướng về trang đăng nhập của FE
-                return res.redirect('http://localhost:5173/auth/login'); 
+                return res.send(generateAuthScript('login_failed', { message: 'User info not found' }));
             }
 
             // 2. Tạo JWT (dùng ID hoặc _id của Mongoose)
@@ -164,37 +148,12 @@ class AuthController {
             // });
 
             console.log('[THÀNH CÔNG!!!]')
-            return res.send(`
-                <script>
-                    // Tạo đối tượng dữ liệu chứa Token
-                    const authData = { 
-                        type: 'login_success', 
-                        token: '${token}' 
-                    };
-                    // Gửi đối tượng này về cửa sổ chính
-                    const FE_origin = 'http://localhost:5173/auth/login'    
-                    window.opener.postMessage(authData, FE_origin);
-                    // Đóng cửa sổ Pop-up
-                    window.close();
-                </script>
-            `); 
+            return send(generateAuthScript('login_success', { token })); 
             
         } catch (err) {
             console.log("Facebook Auth Callback Error:", err);
             // Chuyển hướng về trang báo lỗi của Front-end
-            return res.send(`
-                <script>
-                    // Tạo đối tượng dữ liệu chứa Token
-                    const authData = { 
-                        type: 'login_failed', 
-                        token: '${token}' 
-                    };
-                    // Gửi đối tượng này về cửa sổ chính
-                    window.opener.postMessage(authData, '*');
-                    // Đóng cửa sổ Pop-up
-                    window.close();
-                </script>
-                `)
+            return res.send(generateAuthScript('login_failed', { message: 'Authentication failed' }));
         }
     }
 

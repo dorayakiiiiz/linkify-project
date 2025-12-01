@@ -1,5 +1,5 @@
 
-import api from "./api";
+import api, {API_URL} from "./api";
 
 const login = async (data) => {
     const response = await api.post('/auth/login', data);
@@ -11,7 +11,17 @@ const register = async (data) => {
     return response.data;
 }
 
+const getGoogleAuthUrl = () => {
+    return `${API_URL}/auth/google`;
+}
+
+const getFacebookAuthUrl = () => {
+    return `${API_URL}/auth/facebook`;
+}
+
 export const authService = {
     login, 
     register,
+    getGoogleAuthUrl,
+    getFacebookAuthUrl
 };

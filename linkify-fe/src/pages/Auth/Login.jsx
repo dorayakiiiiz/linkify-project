@@ -44,11 +44,11 @@ export default function Login() {
         }
     }, [isLogin, justLoggedIn, navigate]);
 
-    //Lăng nghe sự kiện gửi message của cửa sổ pop up
+    // Lắng nghe sự kiện gửi message của cửa sổ pop up gg/fb
     useEffect(() => {
         const receiveMessageFromPopUp = async(e) => {
             if (e.data.type === 'login_success') {
-                const token = e.data.token
+                const token = e.data.payload.token
                 login(token);
                 setJustLoggedIn(true);
                 setLog({
@@ -65,13 +65,13 @@ export default function Login() {
             else {
                 setLog({
                     type: 'error',
-                    message: 'Đăng nhập bằng Google thất bại!'
+                    content: e.data.payload?.message || 'Login failed'
                 })
             }
         }
         window.addEventListener('message', receiveMessageFromPopUp)
         return () => window.removeEventListener('message', receiveMessageFromPopUp)
-    }, [isLogin, justLoggedIn, navigate])
+    }, [login, refreshProfile, navigate])
 
     
     const handleSubmit = async (e) => {
@@ -125,7 +125,7 @@ export default function Login() {
     // Hàm click vào mở pop up Auth GG
     const handleGoogleLogin = (e) => {
         //Chuyển hướng sang backend để xác thực GG
-        const fullAuthUrl = 'http://localhost:5000/api/auth/google'; 
+        const fullAuthUrl = authService.getGoogleAuthUrl();
         // Mở pop up xác nhận GG
         window.open(fullAuthUrl, 'googleAuthPopup', 'width=600,height=600');
     }
@@ -133,7 +133,7 @@ export default function Login() {
     // Hàm click vào mở pop up Auth FB
     const handleGFacebookLogin = (e) => {
         //Chuyển hướng sang backend để xác thực GG
-        const fullAuthUrl = 'http://localhost:5000/api/auth/facebook'; 
+        const fullAuthUrl = authService.getFacebookAuthUrl();
         // Mở pop up xác nhận GG
         window.open(fullAuthUrl, 'facebookAuthPopup', 'width=600,height=600');
     }

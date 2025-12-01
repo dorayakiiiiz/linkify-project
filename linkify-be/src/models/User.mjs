@@ -5,9 +5,9 @@ const UserSchema = new Schema({
     email: { 
         type: String, 
         // Chỉ bắt buộc với google và đăng nhập pass
-        required: function() {
-                    return this.loginMethod === 'local' || this.loginMethod === 'google';
-                }, 
+        required: function() { 
+            return this.loginMethod === 'local' || this.loginMethod === 'google';
+        }, 
         unique: true 
     },
     displayName: {
@@ -18,8 +18,9 @@ const UserSchema = new Schema({
         type: String, 
         // Chỉ bắt buộc khi đăng nhập bằng mật khẩu
         required: function() {
-                    return this.loginMethod === 'local';
-                }
+            return this.loginMethod === 'local';
+        }
+                
     },
     googleId: { 
         type: String, 
