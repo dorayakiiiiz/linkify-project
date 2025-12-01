@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useProfile } from "../../context/ProfileContext";
-import { creatorMenu, tools } from "../../constants/dashboard";
+import { adminMenu, tools } from "../../constants/dashboard";
 
 export default function Sidebar() {
     const { user, logout } = useAuth();
@@ -10,7 +10,7 @@ export default function Sidebar() {
     const navigate = useNavigate();
     const location = useLocation();
     
-    // lưu index của menu cha đang dc mở (index/null)
+    // lưu index của menu cha đang dc mở
     const [openIndex, setOpenIndex] = useState(0); 
     // lưu trạng thái bật tắt của user dropdown
     const [dropdown, setDropdown] = useState(false);
@@ -24,18 +24,12 @@ export default function Sidebar() {
     // Map Label sang URL 
     const getPath = (label) => {
         const map = {
-            // Main Menu
-            'Links': '/dashboard/links',
-            'Shop': '/dashboard/shop',
-            'Design': '/dashboard/design',
-            'Insights': '/dashboard/insights',
-            
-            // Tools
-            'Post ideas': '/dashboard/tools/post-ideas',
-            'Link shortener': '/dashboard/tools/link-shortener',
-            'Instagram auto-reply': '/dashboard/tools/instagram-auto-reply'
+            'User': '/dashboard/admin/users',
+            'Links': '/dashboard/admin/links',
+            'Shop': '/dashboard/admin/shop',
+            'Theme': '/dashboard/admin/themes'
         };
-        return map[label] || '/dashboard/links';
+        return map[label] || '/dashboard/admin/users';
     };
 
 
@@ -87,8 +81,8 @@ export default function Sidebar() {
                     onClick={handleToggleDropdown}    
                 >
                     <img
-                        src={profile?.avatarUrl}
-                        className="rounded-full h-[30px] w-[30px]"
+                        src="/admin_avatar.png"
+                        className="h-[26px]"
                         alt="avatar"
                     />
                     <p className="ml-[4px] text-[#37181B] font-bold">
@@ -97,37 +91,9 @@ export default function Sidebar() {
                     <i className={`fa-solid fa-angle-down text-[10px] pt-1 ml-auto mr-1 transition-transform duration-300 ${dropdown? "rotate-180" : ""}`}/>
 
                     <div 
-                        className={`text-[#212529] absolute shadow-xl top-[calc(100%+4px)] w-[220px] bg-[#fff] rounded-xl flex flex-col ${dropdown ? 'scale-100' : 'scale-0'} transition duration-200`}
+                        className={`text-[#212529] absolute shadow-xl top-[calc(100%+4px)] w-[200px] bg-[#fff] rounded-xl flex flex-col ${dropdown ? 'scale-100' : 'scale-0'} transition duration-200`}
                         onClick={e => e.stopPropagation()}
                     >
-                        <div className="w-full border-b border-[#e0dfde] py-[10px] flex items-center justify-center gap-[10px]">
-                            <img
-                                src={profile?.avatarUrl}
-                                className="rounded-full h-[36px] w-[36px]"
-                                alt="avatar"
-                            />
-                            <div className="">
-                                <div className="font-semibold">
-                                    {profile?.username}
-                                </div>
-
-                                <div className="text-sm">
-                                    linkify.com/{profile?.username}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="border-b border-[#e0dfde]">
-                            <div className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]">
-                                <i className="fa-solid fa-shuffle mr-[6px]"></i>
-                                Switch linkify profile
-                            </div>
-
-                            <div className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]">
-                                <i className="fa-regular fa-square-plus mr-[6px]"></i>
-                                Create new linkify
-                            </div>         
-                        </div>
 
                         <div className="border-b border-[#e0dfde]">
                             <div className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]">
@@ -173,8 +139,7 @@ export default function Sidebar() {
             {/* 2. Menu Items */}
             <div className="overflow-y-auto h-[calc(100%-120px)]">
                 <div className="px-3 py-2">
-                    {creatorMenu.map((item, index) => {
-                        // check nó có active ko
+                    {adminMenu.map((item, index) => {
                         const parentActive = isParentActive(item);
                         
                         return (
@@ -219,27 +184,6 @@ export default function Sidebar() {
                             </div>
                         );
                     })}
-                </div>
-
-                {/* 3. Tools Section */}
-                <div className="px-3 py-2">
-                    <div className="text-s font-medium text-[#9c9b95] w-[32px] pb-2">
-                        Tools
-                    </div>
-                    {tools.map((t) => (
-                        <div
-                            key={t.label}
-                            onClick={() => handleToolClick(t.label)} 
-                            className={`flex items-center py-2 px-2 -mx-2 my-2 rounded-xl cursor-pointer transition-all duration-150
-                                ${isActive(t.label) 
-                                    ? "bg-[#d7d4cd] font-semibold text-black" // Style khi active
-                                    : "hover:bg-[#d7d4cd] text-black" // Style mặc định
-                                }`}
-                        >
-                            <i className={t.icon}></i>
-                            <span className="ml-1.5">{t.label}</span>
-                        </div>
-                    ))}
                 </div>
             </div>
 

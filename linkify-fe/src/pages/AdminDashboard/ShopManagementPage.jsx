@@ -31,7 +31,7 @@ export default function UserManagementPage() {
             try {
                 const { data, pagination } = await adminService.getUsers({
                     page,
-                    limit: 10,
+                    limit: 5,
                     search: debouncedSearch,
                     status
                 });

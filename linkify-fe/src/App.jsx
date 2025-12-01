@@ -17,12 +17,14 @@ import OnboardingLink from "./pages/Onboarding/OnboardingLink";
 
 import DashboardRedirector from "./pages/DashboardRedirector";
 
-import UserManagementPage from "./pages/AdminDashboard/UserManagementPage";
 import { AuthProvider } from "./context/AuthContext";
 import { ProfileProvider } from "./context/ProfileContext";
 import { LinkProvider } from "./context/LinkContext";
 import { ShopProvider } from "./context/ShopContext";
-import DashboardLayout from "./layouts/DashboardLayout";
+
+import PublicProfile from "./pages/PubicProfile";
+
+import CreatorDashboardLayout from "./layouts/CreatorDashboardLayout";
 import LinksPage from "./pages/CreatorDashboard/LinksPage";
 import DesignPage from "./pages/CreatorDashboard/DesignPage";
 import ShopPage from "./pages/CreatorDashboard/ShopPage";
@@ -31,7 +33,11 @@ import PostIdeaPage from "./pages/CreatorDashboard/Tools/PostIdeaPage";
 import InstagramAutoReplyPage from "./pages/CreatorDashboard/Tools/InstagramAutoReplyPage";
 import LinkShortenerPage from "./pages/CreatorDashboard/Tools/LinkShortenerPage";
 
-import PublicProfile from "./pages/PubicProfile";
+import AdminDashboardLayout from "./layouts/AdminDashboardLayout";
+import UserManagementPage from "./pages/AdminDashboard/UserManagementPage";
+import LinkManagementPage from "./pages/AdminDashboard/LinkManagementPage";
+import ShopManagementPage from "./pages/AdminDashboard/ShopManagementPage";
+import ThemeManagementPage from "./pages/AdminDashboard/ThemeManagementPage";
 
 // Định nghĩa các route trong này
 
@@ -64,16 +70,20 @@ function App() {
                                     </Route>
 
                                     <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-                                        <Route
-                                            path="admin/users"
-                                            element={<UserManagementPage />}
-                                        />
+                                        <Route path="admin" element={<AdminDashboardLayout />}>
+
+                                            <Route path="users" element={<UserManagementPage />} />
+                                            <Route path="links" element={<LinkManagementPage />} />
+                                            <Route path="shop" element={<ShopManagementPage />} />
+                                            <Route path="themes" element={<ThemeManagementPage />} />
+
+                                        </Route>
                                     </Route>
 
                                     <Route
                                         element={<ProtectedRoute allowedRoles={["creator"]} />}
                                     >
-                                        <Route element={<DashboardLayout />}>
+                                        <Route element={<CreatorDashboardLayout />}>
                                             <Route path="links" element={<LinksPage />} />
                                             <Route path="design" element={<DesignPage />} />
                                             <Route path="shop" element={<ShopPage />} />

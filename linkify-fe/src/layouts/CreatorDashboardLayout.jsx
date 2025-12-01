@@ -2,8 +2,9 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 import Sidebar from "../components/CreatorDashboard/Sidebar";
 import MobilePreview from "../components/CreatorDashboard/MobilePreview";
 
-export default function DashboardLayout() {
+export default function CreatorDashboardLayout() {
     const location = useLocation();
+    
     
     // Logic hiển thị Preview bên phải (chỉ hiện ở tab Links, Design...)
     // Dựa vào logic cũ: label.includes('My Linkify')

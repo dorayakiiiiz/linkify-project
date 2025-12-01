@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { designNavItems } from '../../constants/dashboard'; 
 import { HeaderDesign, TextDesign, ButtonDesign, WallPaper, ThemeDesign, ColorDesign } from '../../components/CreatorDashboard/DesignComponent'; 
-import DesignActions from '../../components/CreatorDashboard/Shared/DesignActions';
+import DesignActions from '../../components/CreatorDashboard/DesignActions';
 
 export default function DesignPage() {
     const [activeItem, setActiveItem] = useState('Header');

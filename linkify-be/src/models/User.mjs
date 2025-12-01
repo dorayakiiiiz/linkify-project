@@ -44,8 +44,8 @@ const UserSchema = new Schema({
 
     // Để biết đăng nhập bằng password (local), GG hay FB
     loginMethod: {
-        type:String,
-        enum : ['local', 'google', 'facebook'],
+        type: String,
+        enum: ['local', 'google', 'facebook'],
         default: 'local',
         required: true
     }
