@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
 import { Validator } from "../../utils/validators";
 import { useAuth } from "../../context/AuthContext";
+import { useProfile } from "../../context/ProfileContext";
 
 import Input from "../../components/Input";
 import Button from "../../components/Button";
@@ -25,6 +26,7 @@ export default function Register() {
 
     const navigate = useNavigate();
     const { login ,isLogin } = useAuth();
+    const { refreshProfile } = useProfile();
 
     // đã đăng nhập rồi mà vào lại -> tự redirect về dashboard
     useEffect(() => {
@@ -37,9 +39,8 @@ export default function Register() {
     useEffect(() => {
         const receiveMessageFromPopUp = async(e) => {
             if (e.data.type === 'login_success') {
-                const token = e.data.token
+                const token = e.data.payload.token;
                 login(token);
-                setJustLoggedIn(true);
                 setLog({
                     type: 'success',
                     content: 'Login successfully! Redirecting...'
@@ -54,7 +55,7 @@ export default function Register() {
             else {
                 setLog({
                     type: 'error',
-                    message: 'Đăng nhập bằng Google thất bại!'
+                    content: e.data.payload?.message || 'Login failed'
                 })
             }
         }
@@ -112,7 +113,7 @@ export default function Register() {
     // Hàm click vào mở pop up Auth GG
     const handleGoogleLogin = (e) => {
         //Chuyển hướng sang backend để xác thực GG
-        const fullAuthUrl = 'http://localhost:5000/api/auth/google'; 
+        const fullAuthUrl = authService.getGoogleAuthUrl();
         // Mở pop up xác nhận GG
         window.open(fullAuthUrl, 'googleAuthPopup', 'width=600,height=600');
     }
@@ -120,7 +121,7 @@ export default function Register() {
     // Hàm click vào mở pop up Auth FB
     const handleGFacebookLogin = (e) => {
         //Chuyển hướng sang backend để xác thực GG
-        const fullAuthUrl = 'http://localhost:5000/api/auth/facebook'; 
+        const fullAuthUrl = authService.getFacebookAuthUrl();
         // Mở pop up xác nhận GG
         window.open(fullAuthUrl, 'facebookAuthPopup', 'width=600,height=600');
     }

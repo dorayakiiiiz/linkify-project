@@ -4,7 +4,7 @@ import { useProfile } from "../context/ProfileContext"
 
 
 export default function DashboardRedirector() {
-    const { isLogin, user } = useAuth();
+    const { user } = useAuth();
     const { profile, loading } = useProfile();
 
     if (loading) {

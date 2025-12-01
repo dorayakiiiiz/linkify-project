@@ -21,7 +21,7 @@ import UserManagementPage from "./pages/AdminDashboard/UserManagementPage";
 import { AuthProvider } from "./context/AuthContext";
 import { ProfileProvider } from "./context/ProfileContext";
 import { LinkProvider } from "./context/LinkContext";
-import { ShopProvider } from "./context/ShopContext"; 
+import { ShopProvider } from "./context/ShopContext";
 import DashboardLayout from "./layouts/DashboardLayout";
 import LinksPage from "./pages/CreatorDashboard/LinksPage";
 import DesignPage from "./pages/CreatorDashboard/DesignPage";
@@ -53,14 +53,12 @@ function App() {
                                 <Route path="/auth/register" element={<Register />} />
 
                                 <Route element={<ProtectedRoute allowedRoles={["creator"]} />}>
-                                    <Route
-                                        path="/onboarding/profile"
-                                        element={<OnboardingProfile />}
-                                    />
+                                    <Route path="/onboarding/profile" element={<OnboardingProfile />} />
                                     <Route path="/onboarding/link" element={<OnboardingLink />} />
                                 </Route>
 
                                 <Route path="/dashboard">
+                                    {/* all route trong /dashboard phải qua dashboard redirector */}
                                     <Route element={<ProtectedRoute />}>
                                         <Route index element={<DashboardRedirector />} />
                                     </Route>

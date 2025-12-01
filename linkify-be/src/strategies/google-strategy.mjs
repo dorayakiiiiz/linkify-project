@@ -9,6 +9,10 @@ export default passport.use(
         callbackURL: process.env.GOOGLE_CALLBACK_URI,
         scope: ['profile', 'email'] // Cho phép truy cập các thông tin cơ bản trong Google và email user
     }, async (accessToken, refreshToken, profile, done) => {
+        // khi bấm login (/auth/google) -> vào passport -> gọi lên gg chứ chưa chạy hàm phía dưới này
+        // -> gg xử lí xong gọi callback về (/auth/google/redirect) -> vào passport kèm code nhận dc từ gg
+        // -> gọi lên gg để check code -> trả về profile -> vào hàm này xử lí profile (check db....)
+        // -> gọi done(null, user): gán user vào req -> qua controller auth để xử lí req (tạo jwt)
         try {
             const userEmail = profile.emails[0].value
             const googleId = profile.id;
