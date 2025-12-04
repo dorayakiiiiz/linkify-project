@@ -21,9 +21,8 @@ export const adminMenu = [
 ];
 
 export const tools = [
-    { icon: "fa-regular fa-comments", label: "Instagram auto-reply" },
-    { icon: "fa-solid fa-link", label: "Link shortener" },
     { icon: "fa-solid fa-pencil", label: "Post ideas" },
+    { icon: "fa-solid fa-link", label: "Link shortener" },
 ];
 
 export const designNavItems = [

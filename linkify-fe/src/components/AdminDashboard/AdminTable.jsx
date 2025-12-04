@@ -15,23 +15,23 @@ export default function AdminTable({ columns, data, isLoading, actions }) {
                 <thead>
                     <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 uppercase sticky top-0 z-10">
                         {columns.map((col, index) => (
-                            <th key={index} className="px-6 py-4 font-semibold">
+                            <th key={index} className="px-6 py-4 font-semibold whitespace-nowrap">
                                 {col.header}
                             </th>
                         ))}
-                        {actions && <th className="px-6 py-4 font-semibold text-left">Actions</th>}
+                        {actions && <th className="px-6 py-4 font-semibold text-left whitespace-nowrap">Actions</th>}
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                     {data.map((item, rowIndex) => (
                         <tr key={rowIndex} className="hover:bg-gray-50 transition-colors">
                             {columns.map((col, colIndex) => (
-                                <td key={colIndex} className="px-6 py-4 text-sm text-gray-700">
+                                <td key={colIndex} className="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
                                     {col.render ? col.render(item) : item[col.accessor]}
                                 </td>
                             ))}
                             {actions && (
-                                <td className="px-6 py-4 text-left">
+                                <td className="px-6 py-4 text-left whitespace-nowrap">
                                     {actions(item)}
                                 </td>
                             )}

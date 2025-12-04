@@ -25,4 +25,11 @@ router.put('/reorder', shopController.reorderProducts);
 
 router.delete('/:itemId', shopController.deleteProduct);
 
+router.get('/:profileId/trash', shopController.getTrashProducts);
+
+router.patch('/:itemId/restore', shopController.restoreProduct);
+
+router.delete('/:itemId/permanent', shopController.hardDeleteProduct);
+
+
 export default router;

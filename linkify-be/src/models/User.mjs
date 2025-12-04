@@ -36,19 +36,23 @@ const UserSchema = new Schema({
         default: 'creator',
         required: true
     },
-    isLocked: {
-        type: Boolean,
-        default: false,
-        required: true
-    },
-
-    // Để biết đăng nhập bằng password (local), GG hay FB
     loginMethod: {
         type: String,
         enum: ['local', 'google', 'facebook'],
         default: 'local',
         required: true
-    }
+    },
+
+    isLocked: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    violationCount: {
+        type: Number,
+        default: 0
+    },
+
 }, {
     timestamps: true
 })

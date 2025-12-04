@@ -33,7 +33,6 @@ export default function Sidebar() {
             // Tools
             'Post ideas': '/dashboard/tools/post-ideas',
             'Link shortener': '/dashboard/tools/link-shortener',
-            'Instagram auto-reply': '/dashboard/tools/instagram-auto-reply'
         };
         return map[label] || '/dashboard/links';
     };
