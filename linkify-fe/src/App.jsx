@@ -30,7 +30,6 @@ import DesignPage from "./pages/CreatorDashboard/DesignPage";
 import ShopPage from "./pages/CreatorDashboard/ShopPage";
 import InsightsPage from "./pages/CreatorDashboard/InsightsPage";
 import PostIdeaPage from "./pages/CreatorDashboard/Tools/PostIdeaPage";
-import InstagramAutoReplyPage from "./pages/CreatorDashboard/Tools/InstagramAutoReplyPage";
 import LinkShortenerPage from "./pages/CreatorDashboard/Tools/LinkShortenerPage";
 
 import AdminDashboardLayout from "./layouts/AdminDashboardLayout";
@@ -95,10 +94,6 @@ function App() {
                                                 <Route
                                                     path="link-shortener"
                                                     element={<LinkShortenerPage />}
-                                                />
-                                                <Route
-                                                    path="instagram-auto-reply"
-                                                    element={<InstagramAutoReplyPage />}
                                                 />
                                             </Route>
                                         </Route>

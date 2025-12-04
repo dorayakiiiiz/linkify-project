@@ -14,7 +14,15 @@ router.patch('/:linkId', linkController.updateLink);
 
 router.put('/reorder', linkController.reorderLinks);
 
+// soft delete
 router.delete('/:linkId', linkController.deleteLink);
+
+router.get('/:profileId/trash', linkController.getTrashLinks);
+
+router.patch('/:linkId/restore', linkController.restoreLink);
+
+// hard delete
+router.delete('/:linkId/permanent', linkController.hardDeleteLink);
 
 export default router;
 
