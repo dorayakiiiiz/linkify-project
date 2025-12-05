@@ -116,7 +116,7 @@ export default function ShopPage() {
                         className="flex justify-end"
                         onClick={() => setIsTrashOpen(true)}
                     >
-                        <div className="flex justify-center cursor-pointer gap-2 items-center border border-gray-300 px-4 py-2 rounded-lg mr-2 hover:bg-[#fff]">
+                        <div className="flex justify-center cursor-pointer shadow gap-2 items-center border border-gray-300 px-4 py-2 rounded-lg mr-2 bg-gray-100 hover:bg-[#fff]">
                             <div>
                                 View trash bin
                             </div>

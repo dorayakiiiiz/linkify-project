@@ -14,8 +14,10 @@ const router = Router();
 
 router.use(authMiddleware);
 
+router.get('/me', profileController.getProfiles);
 router.post('/onboarding', upload.single("avatar"), profileController.createProfile);
 router.get('/check-username/:username', profileController.checkUsername);
-router.get('/user/:userId', profileController.getProfileByUserId);
+router.patch('/', upload.single("avatar"), profileController.updateProfile);
+
 
 export default router;

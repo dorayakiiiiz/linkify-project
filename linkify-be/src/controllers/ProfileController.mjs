@@ -26,36 +26,68 @@ class ProfileController {
             res.status(500).json({ error: err.message });
         }
     }
-
-    // [GET] /api/profile/check-username/:username
-    async checkUsername(req, res, next) {
+    
+    // [GET] /api/profile/me
+    async getProfiles(req, res, next) {
         try {
-            const { username } = req.params;
 
-            if (!username) {
-                return res.status(400).json({ message: "Vui lòng nhập username " });
-            }
+            const userId = req.user.id;
+            const profiles = await Profile.find({ userId });
 
-            const profile = await Profile.findOne({ username: username.toLowerCase() });
-
-            if (profile) {
-                return res.status(200).json({ isAvailable: false });
-            } else {
-                return res.status(200).json({ isAvailable: true });
-            }
+            res.status(200).json({ profiles });
 
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
     }
 
-    // [GET] /api/profile/user/:userId
-    async getProfileByUserId(req, res, next) {
+    // [GET] /api/profile/check-username/:username
+    async checkUsername(req, res, next) {
         try {
-            const { userId } = req.params;
-            const profile = await Profile.findOne({ userId });
+            const { username } = req.params;
+            
+            const profile = await Profile.findOne({ username: username.toLowerCase() });
 
-            res.status(200).json({ profile });
+            res.status(200).json({ isAvailable: !profile });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    // [PATCH] /api/profile
+    async updateProfile(req, res, next) {
+        try {
+            const { username, bio, profileId } = req.body;
+            
+            const currentProfile = await Profile.findById(profileId);
+            if (!currentProfile) {
+                return res.status(404).json({ message: "Profile not found" });
+            }
+
+            if (username && username !== currentProfile.username) {
+                const existingProfile = await Profile.findOne({ username });
+                if (existingProfile) {
+                    return res.status(400).json({ message: "Username is already taken." });
+                }
+                currentProfile.username = username;
+            }
+
+            if (bio !== undefined) {
+                currentProfile.bio = bio;
+            }
+
+            if (req.file) {
+                currentProfile.avatarUrl = req.file.path;
+            }
+
+            await currentProfile.save();
+
+            res.status(200).json({ 
+                message: "Profile updated successfully", 
+                profile: currentProfile 
+            });
+
         } catch (err) {
             res.status(500).json({ error: err.message });
         }

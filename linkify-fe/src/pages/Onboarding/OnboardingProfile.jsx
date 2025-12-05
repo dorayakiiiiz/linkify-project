@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useState, useEffect } from "react"
 
 import Button from "../../components/Button"
@@ -10,7 +10,7 @@ import { Validator } from "../../utils/validators"
 import { profileService } from "../../services/profileService"
 
 export default function OnboardingProfile() {
-    const { refreshProfile, profile, loading } = useProfile();
+    const { fetchProfile, profile, loading, switchProfile } = useProfile();
 
     const { user } = useAuth();
 
@@ -27,6 +27,9 @@ export default function OnboardingProfile() {
     const [profileId, setProfileId] = useState(null);
     
     const navigate = useNavigate();
+    const location = useLocation();
+    
+    const isAddingNew = location.state?.isAddingNew || false;
     
     const [log, setLog] = useState({ type: '', content: '' });
     
@@ -41,10 +44,25 @@ export default function OnboardingProfile() {
         }
     }, [log]);
 
+    // chặn vào onboarding (sẽ tự redirect về dashboard)
     useEffect(() => {
-        if (!loading && profile && !showReady) {
-            navigate('/dashboard/links', { replace: true })
-        }
+        if (loading) return;
+
+        // chưa có profile thì cho tạo (chưa redirect)
+        if (!profile) return;
+
+        // đang show ready thì chưa redirect
+        if (showReady) return;
+
+        // đang thêm 1 profile mới thì cho tạo (chưa redirect)
+        if (isAddingNew) return;
+
+        navigate('/dashboard/link', { replace: true });
+
+        // nếu đã có profile thì sẽ vào dashboard
+        // if (!loading && profile && !showReady) {
+        //     navigate('/dashboard/links', { replace: true })
+        // }
     }, [profile, loading, navigate, showReady]);
     
 
@@ -58,6 +76,11 @@ export default function OnboardingProfile() {
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+             setLog({ type: 'error', content: 'Image size must be less than 5MB' });
+             return;
+        }
 
         const previewURL = URL.createObjectURL(file);
         setAvatarPreview(previewURL);
@@ -118,8 +141,11 @@ export default function OnboardingProfile() {
             
             setShowReady(true);
             setProfileId(profileId);
+            await fetchProfile();
 
-            await refreshProfile();
+            if (isAddingNew) {
+                switchProfile(profileId);
+            }
 
 
         } catch (err) {

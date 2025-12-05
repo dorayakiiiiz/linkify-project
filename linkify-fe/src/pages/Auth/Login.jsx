@@ -24,7 +24,7 @@ export default function Login() {
 
     const navigate = useNavigate();
     const { login, isLogin } = useAuth();
-    const { refreshProfile } = useProfile();
+    const { fetchProfile } = useProfile();
 
     // tự xóa log sau 3s
     useEffect(() => {
@@ -56,7 +56,7 @@ export default function Login() {
                     content: 'Login successfully! Redirecting...'
                 });
 
-                await refreshProfile();
+                await fetchProfile();
 
                 setTimeout(() => {
                     navigate('/dashboard', { replace: true })
@@ -71,7 +71,7 @@ export default function Login() {
         }
         window.addEventListener('message', receiveMessageFromPopUp)
         return () => window.removeEventListener('message', receiveMessageFromPopUp)
-    }, [login, refreshProfile, navigate])
+    }, [login, fetchProfile, navigate])
 
     
     const handleSubmit = async (e) => {
@@ -106,7 +106,7 @@ export default function Login() {
                 content: 'Login successfully! Redirecting...'
             });
 
-            await refreshProfile();
+            await fetchProfile();
 
             setTimeout(() => {
                 navigate('/dashboard', { replace: true })
