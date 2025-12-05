@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useProfile } from "../../context/ProfileContext";
 import { creatorMenu, tools } from "../../constants/dashboard";
+import SwitchProfileModal from "../../pages/CreatorDashboard/Modal/SwitchProfileModal";
 
 export default function Sidebar() {
     const { user, logout } = useAuth();
@@ -17,9 +18,30 @@ export default function Sidebar() {
     // lưu trạng thái đăng xuất
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+    
     const handleToggleDropdown = () => {
         setDropdown(!dropdown);
     }
+
+    const [isSwitchProfileModalOpen, setIsSwitchProfileModalOpen] = useState(false);
+
+    // ref cho user dropdown menu
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // nếu dropdown đang mở và click không nằm trong dropdownRef -> đóng lại
+            if (dropdown && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdown]);
+
 
     // Map Label sang URL 
     const getPath = (label) => {
@@ -68,6 +90,23 @@ export default function Sidebar() {
         navigate(getPath(toolLabel));
     };
 
+    const handleSwitchProfile = () => {
+        setIsSwitchProfileModalOpen(true);
+    }
+
+    const handleCreateProfile = () => {
+        navigate('/onboarding/profile', { state: { isAddingNew: true } });
+    }
+
+    const handleAccountSetting = () => {
+
+    }
+
+    const handleHelp = () => {
+
+    }
+
+
     const handleLogout = () => {
         if (isLoggingOut) 
             return;
@@ -79,9 +118,16 @@ export default function Sidebar() {
 
     return (
         <div className="bg-[#ecede8] lg:w-[280px] md:w-[200px] rounded-tl-xl relative flex-shrink-0 hidden md:block h-full border-r border-[#d7d6d4]">
+            {isSwitchProfileModalOpen && (
+                <SwitchProfileModal 
+                    onClose={() => setIsSwitchProfileModalOpen(false)}
+                />
+            )}
+
             {/* User Info & Noti */}
             <div className="flex justify-between items-center px-[12px] py-[8px] mt-1">
                 <div 
+                    ref={dropdownRef}
                     className="relative flex items-center gap-1.5 px-2 py-[4px] -mx-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl"
                     onClick={handleToggleDropdown}    
                 >
@@ -95,8 +141,9 @@ export default function Sidebar() {
                     </p>
                     <i className={`fa-solid fa-angle-down text-[10px] pt-1 ml-auto mr-1 transition-transform duration-300 ${dropdown? "rotate-180" : ""}`}/>
 
+                    {/* user dropdown menu */}
                     <div 
-                        className={`text-[#212529] absolute shadow-xl top-[calc(100%+4px)] w-[220px] bg-[#fff] rounded-xl flex flex-col ${dropdown ? 'scale-100' : 'scale-0'} transition duration-200`}
+                        className={`text-[#212529] absolute shadow-xl top-[calc(100%+4px)] w-[220px] bg-[#fff] rounded-xl flex flex-col ${dropdown ? 'scale-100' : 'scale-0'} transition duration-200 z-1`}
                         onClick={e => e.stopPropagation()}
                     >
                         <div className="w-full border-b border-[#e0dfde] py-[10px] flex items-center justify-center gap-[10px]">
@@ -117,24 +164,36 @@ export default function Sidebar() {
                         </div>
                         
                         <div className="border-b border-[#e0dfde]">
-                            <div className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]">
+                            <div 
+                                className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]"
+                                onClick={handleSwitchProfile}    
+                            >
                                 <i className="fa-solid fa-shuffle mr-[6px]"></i>
                                 Switch linkify profile
                             </div>
 
-                            <div className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]">
+                            <div 
+                                className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]"
+                                onClick={handleCreateProfile}    
+                            >
                                 <i className="fa-regular fa-square-plus mr-[6px]"></i>
                                 Create new linkify
                             </div>         
                         </div>
 
                         <div className="border-b border-[#e0dfde]">
-                            <div className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]">
+                            <div 
+                                className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]"
+                                onClick={handleAccountSetting}
+                            >
                                 <i className="fa-regular fa-user mr-[6px]"></i>
                                 Account
                             </div>
 
-                            <div className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]">
+                            <div 
+                                className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]"
+                                onClick={handleHelp}
+                            >
                                 <i className="fa-regular fa-circle-question mr-[6px]"></i>
                                 Help
                             </div>         

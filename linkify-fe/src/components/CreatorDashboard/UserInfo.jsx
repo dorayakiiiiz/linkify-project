@@ -1,7 +1,15 @@
 import { useProfile } from "../../context/ProfileContext";
+import { useState, useEffect } from 'react'
+import EditProfileModal from "../../pages/CreatorDashboard/Modal/EditProfileModal";
 
 export function UserInfo() {
-    const { profile, loading } = useProfile();
+    const { profile, loading, fetchProfile } = useProfile();
+
+    const [currentProfile, setCurrentProfile] = useState(null);
+
+    const handleEditProfile = () => {
+        setCurrentProfile(profile);
+    }
 
     if (loading) {
         return (
@@ -19,6 +27,15 @@ export function UserInfo() {
 
     return (
         <div className=" w-full py-4 flex gap-[20px]">
+            {currentProfile && (
+                <EditProfileModal
+                    onClose={() => setCurrentProfile(null)}
+                    profile={currentProfile}
+                    onSuccess={async () => {
+                        await fetchProfile();
+                    }}
+                />
+            )}
             <img
                 src={profile.avatarUrl}
                 alt="avatar"
@@ -26,10 +43,16 @@ export function UserInfo() {
             />
             <div className="flex flex-col">
                 <div className="text-lg font-semibold">{profile.username}</div>
-                <div className="text-gray-500 text-sm text-center">
+                <div className="text-gray-600 text-">
                     {profile.bio}
                 </div>
-                <i className="fa-solid fa-plus mt-[10px] text-xs bg-[#f1f0ee] pl-1 pr-4 py-1 rounded-full border border-[#ccc] border-solid"></i>
+                <div 
+                    className="flex items-center justify-center gap-2 mt-2 text-gray-400 hover:text-purple-600 cursor-pointer"
+                    onClick={handleEditProfile}    
+                >
+                    Edit your profile
+                    <i className="fa-solid fa-pen-to-square"></i>
+                </div>
             </div>
         </div>
     )

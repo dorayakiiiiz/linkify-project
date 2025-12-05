@@ -26,7 +26,7 @@ export default function Register() {
 
     const navigate = useNavigate();
     const { login ,isLogin } = useAuth();
-    const { refreshProfile } = useProfile();
+    const { fetchProfile } = useProfile();
 
     // đã đăng nhập rồi mà vào lại -> tự redirect về dashboard
     useEffect(() => {
@@ -46,7 +46,7 @@ export default function Register() {
                     content: 'Login successfully! Redirecting...'
                 });
 
-                await refreshProfile();
+                await fetchProfile();
 
                 setTimeout(() => {
                     navigate('/dashboard', { replace: true })
