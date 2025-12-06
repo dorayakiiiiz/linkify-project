@@ -12,6 +12,8 @@ const router = Router();
 // const storage = multer.memoryStorage(); // lưu tạm file trong RAM
 // const upload = multer({ storage });
 
+router.get('/public/:username', profileController.getPublicProfile);
+
 router.use(authMiddleware);
 
 router.get('/me', profileController.getProfiles);

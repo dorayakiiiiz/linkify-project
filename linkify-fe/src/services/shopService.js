@@ -5,6 +5,11 @@ const getProducts = async (profileId) => {
     return response.data;
 };
 
+const getPublicProducts = async(profileId) => {
+    const response = await api.get(`/shop/public/${profileId}`);
+    return response.data;
+}
+
 const addProduct = async (formData) => {
     const response = await api.post('/shop', formData, {
         headers: {
@@ -50,6 +55,7 @@ const hardDeleteProduct = async (itemId) => {
 
 export const shopService = {
     getProducts,
+    getPublicProducts,
     addProduct,
     updateProduct,
     reorderProducts,

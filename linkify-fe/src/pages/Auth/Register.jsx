@@ -99,7 +99,7 @@ export default function Register() {
 
             setTimeout(() => {
                 navigate('/auth/login');
-            }, 3000);
+            }, 2600);
 
         } catch (err) {
             setLog({

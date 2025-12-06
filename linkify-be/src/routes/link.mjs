@@ -4,6 +4,8 @@ import authMiddleware from "../middleware/AuthMiddleware.mjs";
 
 const router = Router();
 
+router.get('/public/:profileId', linkController.getPublicLinks);
+
 router.use(authMiddleware);
 
 router.get('/:profileId', linkController.getLinksByProfileId);

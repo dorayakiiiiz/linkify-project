@@ -3,6 +3,7 @@ import Groq from 'groq-sdk'
 import Link from '../models/Link.mjs'
 import Product from '../models/Product.mjs'
 import Profile from '../models/Profile.mjs'
+import User from '../models/User.mjs'
 
 // const openai = new OpenAI({
 //     apiKey: process.env.OPENAI_API_KEY
@@ -83,6 +84,7 @@ export const checkLinkContent = async (linkId, title, url) => {
             }, { new: true });
 
             if (!currentLink.isFlagged && currentLink.profileId) {
+
                 const profile = await Profile.findById(currentLink.profileId);
                 if (profile && profile.userId) {
                     await User.findByIdAndUpdate(profile.userId, {
@@ -145,7 +147,7 @@ export const checkProductContent = async (productId, name, price) => {
         if (!currentProduct) return;
     
         if (result.isViolating && result.confidence > 70) {
-            const updatedProduct = await Product.findByIdAndUpdate(productId, {
+            await Product.findByIdAndUpdate(productId, {
                 isFlagged: true,
                 violationReason: result.reason,
                 violationConfidence: result.confidence,

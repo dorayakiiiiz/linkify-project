@@ -101,7 +101,7 @@ function App() {
                                 </Route>
 
                                 {/* linkify public profile */}
-                                <Route path="/:profileId" element={<PublicProfile />} />
+                                <Route path="/:username" element={<PublicProfile />} />
                             </Route>
                         </Routes>
                         {/* SHOP FEATURE - Close ShopProvider */}

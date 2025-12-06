@@ -41,6 +41,23 @@ class ProfileController {
         }
     }
 
+    // [GET] /api/profile/public/:username
+    async getPublicProfile(req, res, next) {
+        try {
+            const { username } = req.params;
+            const profile = await Profile.findOne({ username });
+
+            if (!profile) {
+                return res.status(404).json({ message: 'Profile not found' });
+            }
+
+            res.status(200).json({ profile });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
     // [GET] /api/profile/check-username/:username
     async checkUsername(req, res, next) {
         try {

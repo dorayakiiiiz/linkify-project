@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useProfile } from "../../context/ProfileContext";
 import { creatorMenu, tools } from "../../constants/dashboard";
 import SwitchProfileModal from "../../pages/CreatorDashboard/Modal/SwitchProfileModal";
+import AccountSettingModal from "../../pages/CreatorDashboard/Modal/AccountSettingModal";
 
 export default function Sidebar() {
     const { user, logout } = useAuth();
@@ -13,9 +14,10 @@ export default function Sidebar() {
     
     // lưu index của menu cha đang dc mở (index/null)
     const [openIndex, setOpenIndex] = useState(0); 
+
     // lưu trạng thái bật tắt của user dropdown
     const [dropdown, setDropdown] = useState(false);
-    // lưu trạng thái đăng xuất
+    // lưu trạng thái đang đăng xuất (hiệu ứng spinner quay quay)
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     
@@ -24,6 +26,7 @@ export default function Sidebar() {
     }
 
     const [isSwitchProfileModalOpen, setIsSwitchProfileModalOpen] = useState(false);
+    const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
 
     // ref cho user dropdown menu
     const dropdownRef = useRef(null);
@@ -92,6 +95,7 @@ export default function Sidebar() {
 
     const handleSwitchProfile = () => {
         setIsSwitchProfileModalOpen(true);
+        setDropdown(false);
     }
 
     const handleCreateProfile = () => {
@@ -99,7 +103,8 @@ export default function Sidebar() {
     }
 
     const handleAccountSetting = () => {
-
+        setIsAccountModalOpen(true);
+        setDropdown(false);
     }
 
     const handleHelp = () => {
@@ -121,6 +126,12 @@ export default function Sidebar() {
             {isSwitchProfileModalOpen && (
                 <SwitchProfileModal 
                     onClose={() => setIsSwitchProfileModalOpen(false)}
+                />
+            )}
+
+            {isAccountModalOpen && (
+                <AccountSettingModal 
+                    onClose={() => setIsAccountModalOpen(false)}
                 />
             )}
 
