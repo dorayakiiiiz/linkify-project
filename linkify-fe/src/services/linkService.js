@@ -11,6 +11,11 @@ const getLinks = async(profileId) => {
     return response.data;
 }
 
+const getPublicLinks = async(profileId) => {
+    const response = await api.get(`/links/public/${profileId}`);
+    return response.data;
+}
+
 const updateLink = async(linkId, data) => {
     const response = await api.patch(`/links/${linkId}`, data);
     return response.data;
@@ -44,6 +49,7 @@ const hardDeleteLink = async (linkId) => {
 export const linkService = {
     addLink,
     getLinks,
+    getPublicLinks,
     updateLink,
     reorderLinks,
     deleteLink,

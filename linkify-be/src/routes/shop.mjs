@@ -5,6 +5,8 @@ import { shopUpload } from "../config/cloudinary.mjs";
 
 const router = Router();
 
+router.get('/public/:profileId', shopController.getPublicProducts);
+
 router.use(authMiddleware);
 
 router.get('/:profileId', shopController.getProductsByProfile);

@@ -18,6 +18,23 @@ class ShopController {
         }
     }
 
+    // [GET] /api/shop/public/:profileId
+    async getPublicProducts(req, res, next) {
+        try {
+            const { profileId } = req.params;
+            const products = await Product.find({ 
+                profileId,
+                deletedBy: null,
+                isEnable: true,
+                isFlagged: false
+            }).sort({ order: 1 });
+            
+            res.status(200).json({ products });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
     // [POST] /api/shop - Create new product 
     async createProduct(req, res, next) {
         try {

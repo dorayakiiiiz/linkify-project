@@ -28,6 +28,11 @@ const getProfiles = async (userId) => {
     return response.data;
 }
 
+const getPublicProfile = async (username) => {
+    const response = await api.get(`profile/public/${username}`);
+    return response.data;
+}
+
 const updateProfile = async (formData) => {
     const response = await api.patch('/profile', formData, {
         headers: { "Content-Type": "multipart/form-data" }
@@ -39,5 +44,6 @@ export const profileService = {
     createOnboardingProfile,
     checkUsername,
     getProfiles,
+    getPublicProfile,
     updateProfile
 };

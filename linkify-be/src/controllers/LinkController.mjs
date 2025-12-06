@@ -18,6 +18,23 @@ class LinkController {
         }
     }
 
+    // [GET] /api/links/public/:profileId
+    async getPublicLinks(req, res, next) {
+        try {
+            const { profileId } = req.params;
+            const links = await Link.find({ 
+                profileId,
+                deletedBy: null,
+                isEnable: true, 
+                isFlagged: false
+            }).sort({ order: 1 });
+
+            res.status(200).json({ links });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
     // [POST] api/links
     async addLink(req, res, next) {
         try {
