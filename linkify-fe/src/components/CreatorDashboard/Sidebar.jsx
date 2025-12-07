@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useProfile } from "../../context/ProfileContext";
 import { creatorMenu, tools } from "../../constants/dashboard";
 import SwitchProfileModal from "../../pages/CreatorDashboard/Modal/SwitchProfileModal";
-import AccountSettingModal from "../../pages/CreatorDashboard/Modal/AccountSettingModal";
+import AccountSettingModal from "../Modal/AccountSettingModal";
 
 export default function Sidebar() {
     const { user, logout } = useAuth();

@@ -1,4 +1,4 @@
-import { useLinks } from "../context/LinkContext"
+import { useLinks } from "../../context/LinkContext"
 import { useState } from "react"
 
 export default function DeleteModal({ onClose, deleteId, removeFunc, confirmMessage, successLog }) {

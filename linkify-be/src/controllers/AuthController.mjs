@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt"
 import User from "../models/User.mjs";
 import Profile from '../models/Profile.mjs';
-
+import Otp from '../models/Otp.mjs';
+import sendEmail from '../utils/sendEmail.mjs';
 
 const saltRounds = 10;
 
@@ -77,6 +78,76 @@ class AuthController {
                 message: 'Login successfully!',
                 token
             });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    
+    // [POST] /auth/forgot-password
+    async forgotPassword(req, res, next) {
+        try {
+
+            const { email } = req.body;
+            const user = await User.findOne({ email });
+            if (!user) 
+                return res.status(404).json({ message: 'Email does not exits' });
+
+            if (user.loginMethod !== 'local')
+                return res.status(400).json({ message: 'This account uses social login (Google/FB).' });
+
+            const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+            await Otp.deleteMany({ email });
+
+            await Otp.create({ email, otp });
+
+            await sendEmail(
+                user.email,
+                'Linkify - Reset your password',
+                `Hi,
+
+We received a request to reset your Linkify password.
+
+Your verification code is:
+${otp}
+
+This code will expire in 5 minutes.
+
+If you didn't request this, you can safely ignore this email.
+
+Linkify Team`
+            );
+
+
+            res.status(200).json({ message: 'OTP sent to your email.' });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    // [POST] /auth/reset-password
+    async resetPassword(req, res, next) {
+        try {
+
+            const { email, otp, newPassword } = req.body;
+
+            const otpRecord = await Otp.findOne({ email, otp });
+            if (!otpRecord)
+                return res.status(400).json({ message: 'Invalid or expired OTP.' });
+
+            const hashPassword = await bcrypt.hash(newPassword, saltRounds);
+
+            await User.findOneAndUpdate(
+                { email },
+                { password: hashPassword }
+            );
+
+            await Otp.deleteMany({ email });
+
+            res.status(200).json({ message: 'Password reset successfully.' });
 
         } catch (err) {
             res.status(500).json({ error: err.message });

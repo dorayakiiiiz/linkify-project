@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useProfile } from "../../context/ProfileContext";
 import { adminMenu, tools } from "../../constants/dashboard";
+import AccountSettingModal from "../Modal/AccountSettingModal";
 
 export default function Sidebar() {
     const { user, logout } = useAuth();
@@ -14,12 +15,31 @@ export default function Sidebar() {
     const [openIndex, setOpenIndex] = useState(0); 
     // lưu trạng thái bật tắt của user dropdown
     const [dropdown, setDropdown] = useState(false);
-    // lưu trạng thái đăng xuất
+    // lưu trạng thái đang đăng xuất (cho hiệu ứng spinner)
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+    const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+    
     const handleToggleDropdown = () => {
         setDropdown(!dropdown);
     }
+
+    // ref cho user dropdown menu
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // nếu dropdown đang mở và click không nằm trong dropdownRef -> đóng lại
+            if (dropdown && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdown]);
 
     // Map Label sang URL 
     const getPath = (label) => {
@@ -63,6 +83,11 @@ export default function Sidebar() {
         navigate(getPath(toolLabel));
     };
 
+    const handleAccountSetting = () => {
+        setIsAccountModalOpen(true);
+        setDropdown(false);
+    }
+
     const handleLogout = () => {
         if (isLoggingOut) 
             return;
@@ -74,15 +99,22 @@ export default function Sidebar() {
 
     return (
         <div className="bg-[#ecede8] lg:w-[280px] md:w-[200px] rounded-tl-xl relative flex-shrink-0 hidden md:block h-full border-r border-[#d7d6d4]">
+            {isAccountModalOpen && (
+                <AccountSettingModal 
+                    onClose={() => setIsAccountModalOpen(false)}
+                />
+            )}
+
             {/* User Info & Noti */}
             <div className="flex justify-between items-center px-[12px] py-[8px] mt-1">
                 <div 
-                    className="relative flex items-center gap-1.5 px-2 py-[4px] -mx-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl"
+                    ref={dropdownRef}
+                    className="relative flex items-center gap-1.5 px-3 py-[4px] -mx-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl"
                     onClick={handleToggleDropdown}    
                 >
                     <img
-                        src="/admin_avatar.png"
-                        className="h-[26px]"
+                        src="/admin_avatar.jpg"
+                        className="h-[28px]"
                         alt="avatar"
                     />
                     <p className="ml-[4px] text-[#37181B] font-bold">
@@ -95,17 +127,13 @@ export default function Sidebar() {
                         onClick={e => e.stopPropagation()}
                     >
 
-                        <div className="border-b border-[#e0dfde]">
-                            <div className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]">
-                                <i className="fa-regular fa-user mr-[6px]"></i>
-                                Account
-                            </div>
-
-                            <div className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]">
-                                <i className="fa-regular fa-circle-question mr-[6px]"></i>
-                                Help
-                            </div>         
-                        </div>
+                        <div 
+                            className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]"
+                            onClick={handleAccountSetting}
+                        >
+                            <i className="fa-regular fa-user mr-[6px]"></i>
+                            Account
+                        </div>      
 
                         <div 
                             className={`pl-[16px] py-[4px] m-[4px] rounded-md transition-all duration-200

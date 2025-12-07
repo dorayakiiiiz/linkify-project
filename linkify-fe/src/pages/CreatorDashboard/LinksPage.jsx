@@ -6,7 +6,7 @@ import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import LinkModal from "./Modal/LinkModal";
-import DeleteModal from "../../components/DeleteModal";
+import DeleteModal from "../../components/Modal/DeleteModal";
 import TrashModal from "../AdminDashboard/Modal/TrashModal";
 
 export default function LinksPage() {

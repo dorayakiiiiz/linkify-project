@@ -5,7 +5,7 @@ import { useState } from "react";
 import { UserInfo } from "../../components/CreatorDashboard/UserInfo";
 import QuickActions from "../../components/CreatorDashboard/QuickActions";
 import ShopModal from "./Modal/ShopModal";
-import DeleteModal from "../../components/DeleteModal";
+import DeleteModal from "../../components/Modal/DeleteModal";
 import TrashModal from "../AdminDashboard/Modal/TrashModal";
 
 export default function ShopPage() {
