@@ -6,6 +6,11 @@ const getAccount = async () => {
     return response.data;
 }
 
+const updateAccountInfo = async (data) => {
+    const response = await api.patch('/user/info', data);
+    return response.data;
+}
+
 const deleteAccount = async () => {
     const response = await api.delete('/user/account');
     return response.data;
@@ -18,6 +23,7 @@ const changePassword = async (data) => {
 
 export const userService = {
     getAccount, 
+    updateAccountInfo,
     deleteAccount,
     changePassword
 };

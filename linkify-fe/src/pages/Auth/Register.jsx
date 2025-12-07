@@ -8,8 +8,8 @@ import { Validator } from "../../utils/validators";
 import { useAuth } from "../../context/AuthContext";
 import { useProfile } from "../../context/ProfileContext";
 
-import Input from "../../components/Input";
-import Button from "../../components/Button";
+import Input from "../../components/Shared/Input";
+import Button from "../../components/Shared/Button";
 
 export default function Register() {
     const [email, setEmail] = useState('');

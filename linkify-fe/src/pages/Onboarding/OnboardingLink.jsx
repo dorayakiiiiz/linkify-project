@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
 import { useLinks } from "../../context/LinkContext"
 
-import Button from "../../components/Button"
+import Button from "../../components/Shared/Button"
 
 import { SOCIALS } from "../../constants/socials"
 import { linkService } from "../../services/linkService"

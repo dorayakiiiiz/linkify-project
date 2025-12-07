@@ -61,6 +61,28 @@ class UserController {
         }
     }
 
+    // [PATCH] /api/user/info
+    async updateAccountInfo(req, res, next) {
+        try {
+            const { displayName } = req.body;
+            const userId = req.user.id;
+
+            const user = await User.findByIdAndUpdate(userId, { displayName }, { new: true });
+
+            const userResponse = {
+                id: user._id,
+                email: user.email,
+                displayName: user.displayName,
+                role: user.role,
+                isLocked: user.isLocked,
+            };
+
+            res.status(200).json({ message: 'Account info updated successfully.', userResponse });
+        } catch (err) {
+            res.status(500).json({ message: err.message });
+        }
+    }
+
     // [DELETE] /api/user/account
     async deleteAccount(req, res, next) {
         try {

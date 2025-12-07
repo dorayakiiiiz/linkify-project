@@ -7,6 +7,7 @@ import {
 import Home from "./pages/Home";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
+import ResetPassword from "./pages/Auth/ResetPassword";
 import BaseLayout from "./layouts/BaseLayout";
 import BlankLayout from "./layouts/BlankLayout";
 
@@ -56,6 +57,7 @@ function App() {
                             <Route element={<BlankLayout />}>
                                 <Route path="/auth/login" element={<Login />} />
                                 <Route path="/auth/register" element={<Register />} />
+                                <Route path="/auth/reset-password" element={<ResetPassword />} />
 
                                 <Route element={<ProtectedRoute allowedRoles={["creator"]} />}>
                                     <Route path="/onboarding/profile" element={<OnboardingProfile />} />

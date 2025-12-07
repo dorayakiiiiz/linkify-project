@@ -1,13 +1,13 @@
-import { Link, useNavigate, useLocation } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-import Button from "../../components/Button"
-import Input from "../../components/Input"
+import Input from "../../components/Shared/Input";
+import Button from "../../components/Shared/Button";
 
-import { useAuth } from "../../context/AuthContext"
-import { useProfile } from "../../context/ProfileContext"
-import { Validator } from "../../utils/validators"
-import { profileService } from "../../services/profileService"
+import { useAuth } from "../../context/AuthContext";
+import { useProfile } from "../../context/ProfileContext";
+import { Validator } from "../../utils/validators";
+import { profileService } from "../../services/profileService";
 
 export default function OnboardingProfile() {
     const { fetchProfile, profile, loading, switchProfile } = useProfile();

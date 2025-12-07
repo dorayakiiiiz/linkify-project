@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Button from "../../../components/Button"
+import Button from "../../../components/Shared/Button"
 import { profileService } from "../../../services/profileService"
 import { Validator } from "../../../utils/validators"
 

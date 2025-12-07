@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
-import Input from "../../../components/Input";
-import Button from "../../../components/Button";
-import { userService } from "../../../services/userService";
-import { useAuth } from "../../../context/AuthContext";
+import Input from "../../components/Shared/Input";
+import Button from "../../components/Shared/Button";
+import { userService } from "../../services/userService";
+import { useAuth } from "../../context/AuthContext";
 
 export default function AccountSettingModal({ onClose }) {
-    const { logout, user } = useAuth();
-    const [tab, setTab] = useState('change-password');
+    const { logout, user, setUser } = useAuth();
+    const [tab, setTab] = useState('general');
+
+    const [displayName, setDisplayName] = useState(user?.displayName || '');
 
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -14,7 +16,6 @@ export default function AccountSettingModal({ onClose }) {
 
     const [loading, setLoading] = useState(false);
     const [log, setLog] = useState({ type: '', content: '' });
-
     // làm cái spinner quay chỗ button delete
     const [deleting, setDeleting] = useState(false);
 
@@ -24,6 +25,24 @@ export default function AccountSettingModal({ onClose }) {
             return () => clearTimeout(timerId);
         }
     }, [log]);
+
+    const handleUpdateInfo = async () => {
+        if (!displayName.trim()) {
+            setLog({ type: 'error', content: 'Display name cannot be empty.' });
+            return;
+        }
+        try {
+            setLoading(true);
+            
+            const { userResponse } = await userService.updateAccountInfo({ displayName });
+            setUser(userResponse);
+            setLog({ type: 'success', content: 'Account info updated successfully.' });
+        } catch (err) {
+            setLog({ type: 'error', content: err.response?.data?.message || 'Failed to update.' });
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const handleChangePassword = async () => {
         if (!currentPassword) {
@@ -36,8 +55,8 @@ export default function AccountSettingModal({ onClose }) {
             return;
         }
 
-        if (newPassword.length < 6) {
-            setLog({ type: 'error', content: 'Password must be at least 6 characters.'});
+        if (newPassword.length < 5) {
+            setLog({ type: 'error', content: 'Password must be at least 5 characters.'});
             return;
         }
 
@@ -81,9 +100,67 @@ export default function AccountSettingModal({ onClose }) {
         }
     }
 
+    const renderGeneralTab = () => (
+        <div>
+            <div className="w-full font-bold text-xl text-green-600">
+                General information
+            </div>
+            <div className="w-full mt-10 px-14">
+                <div className="ml-1">
+                    Email
+                </div>
+
+                <div className="mt-1 w-full">
+                    <input
+                        type="text"
+                        className="h-[50px] w-full rounded-xl bg-gray-100 text-gray-500 cursor-not-allowed px-5"
+                        value={user?.email}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        disabled
+                    />
+                    <div className="text-sm text-gray-400 mt-1 ml-1">Email cannot be changed.</div>
+                </div>
+            </div>
+            <div className="w-full mt-6 px-14">
+                <div className="ml-1">
+                    Display name
+                </div>
+
+                <div className="mt-1 w-full">
+                    <input
+                        type="text"
+                        className="h-[50px] w-full rounded-xl bg-[#f7f8f6] px-5"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                    />
+                </div>
+            </div>
+        
+
+            <div className="w-full mt-3 px-14 flex flex-col items-center justify-center">
+
+                <div
+                    className={`h-6 mb-2.5 ${log.type == "error" ? "text-[red]" : "text-[green] success-glow"
+                        } font-semibold`}
+                >
+                    {log.content}
+                </div>
+
+                <Button
+                    backgrond={{ normal: "#8129d9", hover: "#5D18A2 " }}
+                    color="#fff"
+                    text={loading ? "Saving..." : "Save Changes"}
+                    onClick={handleUpdateInfo}
+                />
+            </div>
+
+            
+        </div>
+    )
+
     const renderChangePasswordTab = () => (
         <div>
-            <div className="w-full font-bold text-xl">
+            <div className="w-full font-bold text-xl text-blue-600">
                 Change your password
             </div>
             <div className="w-full mt-6 px-14">
@@ -219,6 +296,14 @@ export default function AccountSettingModal({ onClose }) {
                     {/* menu */}
                     <div className="flex-1 bg-[#F9F8FD] px-6 py-3 space-y-4">
                         <div 
+                            className={`p-3 rounded-xl cursor-pointer transition ${tab === 'general' ? 'font-bold bg-white shadow-md' : ''}`}
+                            onClick={() => setTab('general')}
+                        >
+                            <i className="fa-solid fa-circle-info mr-4 text-blue-400"></i>
+                            General
+                        </div>
+
+                        <div 
                             className={`p-3 rounded-xl cursor-pointer transition ${tab === 'change-password' ? 'font-bold bg-white shadow-md' : ''}`}
                             onClick={() => setTab('change-password')}
                         >
@@ -226,17 +311,20 @@ export default function AccountSettingModal({ onClose }) {
                             Password
                         </div>
 
-                        <div 
-                            className={`p-3 rounded-xl cursor-pointer transition ${tab === 'delete-account' ? 'font-bold bg-white shadow-md' : ''}`}
-                            onClick={() => setTab('delete-account')}
-                        >
-                            <i className="fa-solid fa-triangle-exclamation mr-4 text-red-500"></i>
-                            Danger
-                        </div>
+                        {user?.role !== 'admin' && (
+                            <div 
+                                className={`p-3 rounded-xl cursor-pointer transition ${tab === 'delete-account' ? 'font-bold bg-white shadow-md' : ''}`}
+                                onClick={() => setTab('delete-account')}
+                            >
+                                <i className="fa-solid fa-triangle-exclamation mr-4 text-red-500"></i>
+                                Danger
+                            </div>
+                        )}
                     </div>
 
                     {/* content */}
                     <div className="flex-3 px-10 py-5">
+                        {tab === 'general' && renderGeneralTab()}
                         {tab === 'change-password' && renderChangePasswordTab()}
                         {tab === 'delete-account' && renderDeleteAccountTab()}
                     </div>

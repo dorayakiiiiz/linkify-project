@@ -1,11 +1,10 @@
-// code các page trong này, gọi các service xử lí API từ folder service
 
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
 import { Validator } from "../../utils/validators";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
+import Input from "../../components/Shared/Input";
+import Button from "../../components/Shared/Button";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { profileService } from "../../services/profileService";
@@ -177,19 +176,28 @@ export default function Login() {
                         className="flex flex-col w-full justify-center items-center mt-[20px]"
                     >
 
-                        <Input 
-                            type="email" 
-                            value={email} 
-                            placeholder="Input your email" 
-                            setState={setEmail}
-                        />
+                        <div>
+                            <Input 
+                                type="email" 
+                                value={email} 
+                                placeholder="Input your email" 
+                                setState={setEmail}
+                            />
 
-                        <Input 
-                            type="password" 
-                            value={password} 
-                            placeholder="Input password" 
-                            setState={setPassword}
-                        />
+                            <Input 
+                                type="password" 
+                                value={password} 
+                                placeholder="Input password" 
+                                setState={setPassword}
+                            />
+                            <Link 
+                                to="/auth/reset-password"
+                                className="block text-sm text-gray-400 ml-2 hover:text-gray-700"
+                            >
+                                Forgot password?
+                            </Link>
+                        </div>
+
 
                         <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-[green] success-text' : ''} font-semibold`}>
                             {log.content}
@@ -208,23 +216,25 @@ export default function Login() {
                         OR
                     </div>
 
-                    <button                     
-                        type="submit"
-                        className="cursor-pointer w-full max-w-[300px] md:max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
-                        onClick={handleGoogleLogin}
-                    >
-                        <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
-                        Continue with Google
-                    </button> 
-
-                    <button
-                        type="submit"
-                        className="cursor-pointer w-full max-w-[300px] md:max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
-                        onClick={handleGFacebookLogin}
-                    >
-                        <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
-                        Continue with Facebook
-                    </button> 
+                    <div className="flex md:flex-col w-full max-w-[250px] gap-[20px] mt-3">
+                        <button
+                            type="submit"
+                            className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] border bg-[#ff2821] hover:bg-[#f96666] text-[#fff] font-semibold rounded-3xl"
+                            onClick={handleGoogleLogin}
+                        >
+                            <i className="fa-brands fa-google md:mr-[10px]"></i>
+                            <div className="hidden md:block">Sign up with Google</div>
+                        </button> 
+    
+                        <button
+                            type="submit"
+                            className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] bg-[#295ff4] hover:bg-[#5683ff] text-[#fff] font-semibold rounded-3xl"
+                            onClick={handleGFacebookLogin}
+                        >
+                            <i className="fa-brands fa-facebook md:mr-[10px]"></i>
+                            <div className="hidden md:block">Sign up with Facebook</div>
+                        </button>
+                    </div>
 
                     <div className="mt-[20px] text-[#898b8c]">
                         Don't have an account?
