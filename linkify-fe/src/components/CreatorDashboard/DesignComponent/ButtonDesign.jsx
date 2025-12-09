@@ -1,5 +1,5 @@
 
-export default function HeaderDesign() {
+export default function ButtonDesign() {
     return (
         <div>
             <div className="mb-8">
@@ -30,7 +30,7 @@ export default function HeaderDesign() {
 
             {/* Corners (Slider) */}
             <div className="mb-6">
-                <div className="flex justify-around items-center gap-8">
+                <div className="flex flex-wrap  gap-8">
 
                     <span className="text-gray-700 block">Corners</span>
                     <div className="flex items-center space-x-4 flex-1">
@@ -47,7 +47,7 @@ export default function HeaderDesign() {
 
             {/* Shadow */}
             <div className="mb-8">
-                <div className="flex items-center gap-8">
+                <div className="flex flex-wrap items-center gap-8">
                     <span className="text-gray-700 block">Shadow</span>
                     <div className="flex space-x-3 flex-1">
                         <button className="flex-1 py-2 text-center text-gray-500 border border-gray-200 bg-gray-100 rounded-lg font-medium">

@@ -97,7 +97,7 @@ export default function ShopPage() {
             )}
 
 
-            <div className="flex-1 p-6 md:px-[60px]">
+            <div className="flex-1 p-6 md:px-[10px] lg:px-[20px] xl:px-[60px]">
                 <div className="max-w-3xl mx-auto w-full">
                     <UserInfo />
 

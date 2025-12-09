@@ -6,6 +6,7 @@ const groq = new Groq({
 
 export const generatePostHooks = async (topic, platform, tone, audience) => {
     try {
+        //Câu lệnh prompt cho AI
         const prompt = `
             Act as a professional social media strategist.
             Generate 4 distinct, creative content angles (hooks) for a post.
