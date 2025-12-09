@@ -31,17 +31,21 @@ export const ProfileProvider = ({ children }) => {
             setProfiles(profileList);
 
             if (profileList.length > 0) {
-                // lấy lại profile hiện tại trong localstor
                 const savedProfileId = localStorage.getItem("currentProfileId");
                 const savedProfile = profileList.find(p => p._id === savedProfileId);
 
-                // nếu state profile đang có data (refetch ko reload web) thì set tiếp cái cũ
-                if (profile) {
+                if (savedProfile) {
+                    // nếu local storage có lưu profile id -> dùng
+                    setProfile(savedProfile);
+                } else if (profile) {
+                    // nếu local storage ko có -> dùng profile hiện tại
                     const currentStillExists = profileList.find(p => p._id === profile._id);
-                    setProfile(currentStillExists || savedProfile || profileList[0]);
+                    setProfile(currentStillExists || profileList[0]);
                 } else {
-                    setProfile(savedProfile || profileList[0]);
+                    // lấy cái đầu tiên
+                    setProfile(profileList[0]);
                 }
+
             } else {
                 setProfile(null);
             }
