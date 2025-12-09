@@ -138,6 +138,8 @@ export default function OnboardingProfile() {
                 bio,
                 avatar
             })
+
+            localStorage.setItem("currentProfileId", profileId);
             
             setShowReady(true);
             setProfileId(profileId);

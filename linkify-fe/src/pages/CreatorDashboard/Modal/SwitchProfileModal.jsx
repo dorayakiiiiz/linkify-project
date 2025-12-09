@@ -35,7 +35,7 @@ export default function SwitchProfileModal({ onClose , onSuccess }) {
             onClick={onClose}
         >
             <div 
-                className="flex flex-col items-center w-full max-w-[540px] min-h-[400px] max-h-[600px] overflow-auto bg-[#fff] md:rounded-2xl"
+                className="flex flex-col items-center w-full max-w-[540px] min-h-[360px] max-h-[600px] overflow-auto bg-[#fff] md:rounded-2xl"
                 onClick={e => e.stopPropagation()}
             >
                 <div className="w-full relative flex items-center justify-center mt-6 font-momo text-2xl">

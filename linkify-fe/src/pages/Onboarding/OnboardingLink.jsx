@@ -180,7 +180,8 @@ export default function OnboardingLink() {
 
     return (
         <div className="flex justify-center items-center w-full min-h-screen md:bg-[url('/onboarding_link.jpg')] bg-cover">
-            <div className="w-[700px] h-[600px] bg-[#fff] rounded-3xl flex flex-col items-center">
+            <div className="absolute inset-0 bg-black opacity-10 backdrop-blur-lg"></div>
+            <div className="w-[700px] h-[600px] bg-[#fff] rounded-3xl flex flex-col items-center z-10">
 
                 {!showReady && (
                     <>
@@ -222,7 +223,7 @@ export default function OnboardingLink() {
                                     return (
                                         <div
                                             key={platform.id}
-                                            className={`aspect-square bg-[#fff] flex flex-col items-center gap-[4px] justify-center rounded-2xl border ${isSelected ? 'border-[#000] border-[2px]' : 'border-[#E0E2D9]'} shadow hover:translate-y-[-2px] transition`}
+                                            className={`cursor-pointer aspect-square bg-[#fff] flex flex-col items-center gap-[4px] justify-center rounded-2xl border ${isSelected ? 'border-[#000] border-[2px]' : 'border-[#E0E2D9]'} shadow hover:translate-y-[-2px] transition`}
                                             onClick={() => handleTogglePlatform(platform)}
                                         >
                                             <i className={`text-4xl ${platform.icon} text-[${platform.color}]`}></i>
