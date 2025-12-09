@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HeaderDesign, ThemeDesign, WallPaper, ButtonDesign, TextDesign, ColorDesign } from '../DesignComponent/index.js'
+import { HeaderDesign, ThemeDesign, WallPaper, ButtonDesign, TextDesign, ColorDesign } from './DesignComponent/index.js'
 
 
 // props từ DesignPage: isDesignPanelOpen, toggleDesignPanel
