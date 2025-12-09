@@ -8,9 +8,9 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
     const [activeDesign, setActiveDesign] = useState("Header"); 
     // Hàm xử lý sự kiện click
     const handleHeaderClick = (i) => {
-        // Đảo ngược trạng thái hiện tại (Toggle)
+        // Luôn mở panel khi click vào một item
         setActiveDesign(i)
-        toggleDesignPanel(prev => !prev);
+        toggleDesignPanel(true);
     };
 
     const handleClosePanel = () => {
