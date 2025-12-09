@@ -2,14 +2,16 @@ import { useState } from 'react';
 import { designNavItems } from '../../constants/dashboard'; 
 import { HeaderDesign, TextDesign, ButtonDesign, WallPaper, ThemeDesign, ColorDesign } from '../../components/CreatorDashboard/DesignComponent'; 
 import DesignActions from '../../components/CreatorDashboard/DesignActions';
+import MobilePreview from '../../components/CreatorDashboard/MobilePreview';
 
 export default function DesignPage() {
     const [activeItem, setActiveItem] = useState('Header');
-
+    // State to control whether DesignActions is shown on mobile
+    const [showHeaderDesign, setShowHeaderDesign] = useState(false);
     return (
         <div className="w-full h-full flex flex-col md:flex-row">
             {/* 1. Design Sidebar (Menu con bên trái của trang Design) */}
-            <div className="w-full md:w-[240px] p-4 bg-[#f1f0ee] border-r border-[#d7d6d4] overflow-y-auto">
+            <div className="hidden md:block w-full md:w-[80px] lg:w-[240px] p-4 bg-[#f1f0ee] overflow-y-auto">
                 <ul className="space-y-1">
                     {designNavItems.map((item) => (
                         <li key={item.name} onClick={() => setActiveItem(item.name)}>
@@ -31,7 +33,7 @@ export default function DesignPage() {
             </div>
 
             {/* 2. Main Design Content Area */}
-            <div className="flex-1 p-6 md:p-10 overflow-y-auto bg-[#f1f0ee] relative">
+            <div className="hidden md:block flex-1 p-6 md:p-2 overflow-y-auto bg-[#f1f0ee] relative">
                 <h1 className="text-3xl font-bold mb-8">{activeItem}</h1>
                 
                 {/* Render component con dựa trên activeItem */}
@@ -46,6 +48,17 @@ export default function DesignPage() {
 
                 {/* Nút Save/Preview floating */}
                 <DesignActions />
+            </div>
+
+            {/* 3. Màn hình mobile preview ở responsive mobile */}
+            <div className='md:hidden flex justify-center'>
+                <div className='h-[100px]'>
+                    <MobilePreview isDesignPanelOpen={showHeaderDesign} />
+                </div>
+                <DesignActions 
+                    isDesignPanelOpen={showHeaderDesign} 
+                    toggleDesignPanel={setShowHeaderDesign}
+                />
             </div>
         </div>
     );

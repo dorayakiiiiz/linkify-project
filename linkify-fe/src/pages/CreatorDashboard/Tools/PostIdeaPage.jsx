@@ -46,6 +46,8 @@ export default function PostIdeaPage() {
         }
     }, [log]);
     
+    //dùng để gửi yêu cầu lên server (backend) để AI tạo ra danh sách các 
+    // ý tưởng (hooks) cho nội dung bài đăng dựa trên
     const handleGenerateHooks = async () => {
         if (!topic.trim()) {
             setLog({ type: 'error', content: 'Please enter a topic!' });

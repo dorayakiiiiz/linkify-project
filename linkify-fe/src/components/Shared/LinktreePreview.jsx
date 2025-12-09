@@ -36,7 +36,7 @@ export default function LinkTreePreview({
     return (
         <div className="w-full h-full flex justify-center items-center">
             <div
-                className={`relative w-full p-[30px] max-w-[580px] h-screen ${!isPreview ? "md:h-[1160px] md:rounded-4xl" : "md:h-[580px]"
+                className={`relative w-full p-[20px] max-w-[580px] h-full ${!isPreview ? "md:h-[1160px] md:rounded-4xl" : "md:h-[580px]"
                     } bg-[#ECEEF1] shadow-2xl overflow-y-auto no-scrollbar flex flex-col items-center`}
             >
                 {/* content */}
@@ -68,10 +68,10 @@ export default function LinkTreePreview({
                         <ListSkeleton />
                     </div>
                 ) : (
-                    <div className="w-full h-full flex flex-col items-center">
+                    <div className="w-full  flex flex-col items-center">
                         {/* avatar */}
                         <div
-                            className={`w-20 h-20 ${!isPreview ? "md:w-[120px] md:h-[120px]" : ""
+                            className={`w-20 h-20 mt-2 ${!isPreview ? "md:w-[120px] md:h-[120px]" : "md:w-15 md:h-15 lg:w-20 lg:h-20"
                                 } rounded-full overflow-hidden border-2 border-white shadow-sm mb-4 shrink-0`}
                         >
                             <img
@@ -83,7 +83,7 @@ export default function LinkTreePreview({
 
                         {/* info */}
                         <h2
-                            className={`font-bold text-xl ${!isPreview ? "md:text-4xl" : ""
+                            className={`font-bold sm:text-sm lg:text-lg ${!isPreview ? "md:text-4xl" : ""
                                 } text-center mb-1`}
                         >
                             {profile?.username || "@username"}
@@ -161,7 +161,7 @@ export default function LinkTreePreview({
                                                     href={link.url}
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    className={`flex justify-center py-3 ${!isPreview ? "md:py-5 md:mx-[40px]" : ""
+                                                    className={`flex justify-center py-3 ${!isPreview ? "md:py-5 md:mx-[40px]" : "md:py-2"
                                                         } bg-white rounded-xl shadow text-center font-medium hover:scale-[1.02] transition-transform truncate`}
                                                 >
 

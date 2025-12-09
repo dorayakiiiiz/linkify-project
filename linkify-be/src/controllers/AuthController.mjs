@@ -97,27 +97,30 @@ class AuthController {
             if (user.loginMethod !== 'local')
                 return res.status(400).json({ message: 'This account uses social login (Google/FB).' });
 
+            //Tạo chuỗi OTP ngẫu nhiên 6 chữ số
             const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
+            //Xóa mã OTP cũ (nếu có)
             await Otp.deleteMany({ email });
-
+            //Lưu mã OTP mới vào DB
             await Otp.create({ email, otp });
 
             await sendEmail(
-                user.email,
-                'Linkify - Reset your password',
+                user.email, //Email
+                'Linkify - Reset your password', //Subject
+                //Text content
                 `Hi,
 
-We received a request to reset your Linkify password.
+                    We received a request to reset your Linkify password.
 
-Your verification code is:
-${otp}
+                    Your verification code is:
+                    ${otp}
 
-This code will expire in 5 minutes.
+                    This code will expire in 5 minutes.
 
-If you didn't request this, you can safely ignore this email.
+                    If you didn't request this, you can safely ignore this email.
 
-Linkify Team`
+                    Linkify Team`
             );
 
 

@@ -191,7 +191,6 @@ export default function ResetPassword() {
                         />
                     ))}
                 </div>
-
                     <Input 
                         type="password" 
                         value={newPassword} 

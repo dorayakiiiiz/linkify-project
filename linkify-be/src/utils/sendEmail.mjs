@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer'; // Thư viện gửi email
 
 const sendEmail = async (email, subject, text) => {
     try {
