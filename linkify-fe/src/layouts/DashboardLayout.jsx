@@ -21,7 +21,7 @@ export default function DashboardLayout() {
     return (
         <div className="w-full h-screen flex flex-col font-quicksand font-medium">
             {/* Header */}
-            <div className="bg-[#022c49] h-[70px] w-full flex items-center">
+            <div className="bg-[#022c49] h-[70px] w-full hidden md:flex items-center">
                 <Link to="/" className="text-[#fff] mb-[12px] ml-[20px] font-momo text-xl">
                     Linkify <i className="fa-brands fa-linktree text-[#49ff68]"></i>
                 </Link>
@@ -48,7 +48,7 @@ export default function DashboardLayout() {
 
                 {/* preview */}
                 {showPreview && (
-                    <div className="hidden md:flex xl:w-[450px] lg:w-[250px] md:w-[200px] bg-[#f1f0ee] flex-col justify-center items-center border-l border-[#d7d6d4]">
+                    <div className="hidden md:flex xl:w-[450px] lg:w-[300px] md:w-[250px] overflow-y-hidden bg-[#f1f0ee] flex-col items-center border-l border-[#d7d6d4]">
                          <MobilePreview /> 
                     </div>
                 )}
