@@ -1,15 +1,19 @@
-import QuickActions from "../../components/CreatorDashboard/Shared/QuickActions";
-import { UserInfo } from "../../components/CreatorDashboard/Shared/UserInfo";
+import QuickActions from "../../components/CreatorDashboard/QuickActions";
+import { UserInfo } from "../../components/CreatorDashboard/UserInfo";
 import { useLinks } from "../../context/LinkContext";
+import { useProfile } from "../../context/ProfileContext";
 import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import LinkModal from "./Modal/LinkModal";
-import DeleteModal from "../../components/DeleteModal";
+import DeleteModal from "../../components/Modal/DeleteModal";
+import TrashModal from "../AdminDashboard/Modal/TrashModal";
 
 export default function LinksPage() {
-    const { links, updateLink, removeLink, reorderLinks, loadingLinks } =
+    const { links, fetchLinks, updateLink, removeLink, reorderLinks, loadingLinks } =
         useLinks();
+
+    const { profile } = useProfile();
 
     // mở/đóng link modal
     const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
@@ -18,6 +22,9 @@ export default function LinksPage() {
     // modal xóa
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+
+    // modal trash
+    const [isTrashOpen, setIsTrashOpen] = useState(false);
 
     const handleOpenAdd = () => {
         setEditingLink(null);
@@ -94,7 +101,16 @@ export default function LinksPage() {
                 />
             )}
 
-            <div className="flex-1 p-6 md:px-[10px] lg:px-[20px] xl:px-[60px]">
+            {isTrashOpen && (
+                <TrashModal
+                    onClose={() => setIsTrashOpen(false)}
+                    profileId={profile?._id}
+                    type='link'
+                    onRestoreSuccess={fetchLinks}
+                />
+            )}
+
+            <div className="flex-1 p-6 md:px-[60px]">
                 <div className="max-w-3xl mx-auto w-full">
                     <UserInfo />
 
@@ -107,7 +123,23 @@ export default function LinksPage() {
                                 + Add
                             </button>
                         </div>
+                        
                     </div>
+
+                    <div 
+                        className="flex justify-end"
+                        onClick={() => setIsTrashOpen(true)}
+                    >
+                        <div className="flex justify-center cursor-pointer gap-2 items-center border border-gray-300 shadow px-4 py-2 rounded-lg mr-2 bg-gray-100 hover:bg-[#fff]">
+                            <div>
+                                View trash bin
+                            </div>
+                            <div className="flex justify-center items-center text-gray-500">
+                                <i className="fa-regular fa-trash-can text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div className="w-full my-4">
                         {loadingLinks && (
@@ -146,7 +178,7 @@ export default function LinksPage() {
                                                                     ...provided.draggableProps.style,
                                                                     opacity: snapshot.isDragging ? 0.8 : 1,
                                                                 }}
-                                                                className="bg-white px-4 py-6 rounded-3xl shadow-md flex items-center gap-4"
+                                                                className={`${link.isFlagged ? 'bg-[#fafafa]' : 'bg-white'} px-4 py-6 rounded-3xl shadow-md flex items-center gap-4`}
                                                             >
                                                                 {/* ::: */}
                                                                 <div
@@ -179,6 +211,20 @@ export default function LinksPage() {
                                                                                     {link.url}
                                                                                 </a>
                                                                             </div>
+
+                                                                            {link.isFlagged && (
+                                                                                <div className="mt-2 bg-red-50 px-3 py-2 border border-red-200 rounded-lg flex items-center gap-3">
+                                                                                    <i className="fa-solid fa-triangle-exclamation text-red-600 mt-0.5 text-sm"></i>
+                                                                                    <div>
+                                                                                        <p className="font-bold text-red-700">
+                                                                                            Violation Detected
+                                                                                        </p>
+                                                                                        <p className="text-[12px] text-red-600">
+                                                                                            Reason: {link.violationReason || 'Community Guidelines'}. This link is disable.
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            )}
                                                                         </div>
 
                                                                         {/* share + toggle enable ẩn hiện */}
@@ -194,7 +240,8 @@ export default function LinksPage() {
                                                                                 <input
                                                                                     type="checkbox"
                                                                                     className="sr-only peer"
-                                                                                    defaultChecked={link.isEnable}
+                                                                                    checked={link.isEnable}
+                                                                                    disabled={link.isFlagged}
                                                                                     onChange={() =>
                                                                                         handleToggleEnable(link)
                                                                                     }

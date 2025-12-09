@@ -5,6 +5,11 @@ const getProducts = async (profileId) => {
     return response.data;
 };
 
+const getPublicProducts = async(profileId) => {
+    const response = await api.get(`/shop/public/${profileId}`);
+    return response.data;
+}
+
 const addProduct = async (formData) => {
     const response = await api.post('/shop', formData, {
         headers: {
@@ -33,10 +38,29 @@ const deleteProduct = async (itemId) => {
     return response.data;
 };
 
+const getTrashProducts = async (profileId) => {
+    const response = await api.get(`/shop/${profileId}/trash`);
+    return response.data;
+}
+
+const restoreProduct = async (itemId) => {
+    const response = await api.patch(`/shop/${itemId}/restore`);
+    return response.data;
+}
+
+const hardDeleteProduct = async (itemId) => {
+    const response = await api.delete(`/shop/${itemId}/permanent`);
+    return response.data;
+}
+
 export const shopService = {
     getProducts,
+    getPublicProducts,
     addProduct,
     updateProduct,
     reorderProducts,
     deleteProduct,
+    getTrashProducts,
+    restoreProduct,
+    hardDeleteProduct
 };

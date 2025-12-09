@@ -3,9 +3,25 @@ import jwt from 'jsonwebtoken'
 import bcrypt from "bcrypt"
 import User from "../models/User.mjs";
 import Profile from '../models/Profile.mjs';
-
+import Otp from '../models/Otp.mjs';
+import sendEmail from '../utils/sendEmail.mjs';
 
 const saltRounds = 10;
+
+const generateAuthScript = (type, data) => {
+    const clientURL = process.env.CLIENT_URL || 'http://localhost:5173';
+
+    return `
+        <script>
+            const authData = { 
+                type: '${type}', 
+                payload: ${JSON.stringify(data)} 
+            };
+            window.opener.postMessage(authData, '${clientURL}'); 
+            window.close();
+        </script>
+    `;
+};
 
 class AuthController {
     // [POST] /auth/register
@@ -60,14 +76,78 @@ class AuthController {
 
             res.json({
                 message: 'Login successfully!',
-                token, 
-                // user: { 
-                //     id: user._id, 
-                //     email: user.email,
-                //     role: user.role 
-                // }
-                // này chắc ko cần thiết
+                token
             });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    
+    // [POST] /auth/forgot-password
+    async forgotPassword(req, res, next) {
+        try {
+
+            const { email } = req.body;
+            const user = await User.findOne({ email });
+            if (!user) 
+                return res.status(404).json({ message: 'Email does not exits' });
+
+            if (user.loginMethod !== 'local')
+                return res.status(400).json({ message: 'This account uses social login (Google/FB).' });
+
+            const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+            await Otp.deleteMany({ email });
+
+            await Otp.create({ email, otp });
+
+            await sendEmail(
+                user.email,
+                'Linkify - Reset your password',
+                `Hi,
+
+We received a request to reset your Linkify password.
+
+Your verification code is:
+${otp}
+
+This code will expire in 5 minutes.
+
+If you didn't request this, you can safely ignore this email.
+
+Linkify Team`
+            );
+
+
+            res.status(200).json({ message: 'OTP sent to your email.' });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    // [POST] /auth/reset-password
+    async resetPassword(req, res, next) {
+        try {
+
+            const { email, otp, newPassword } = req.body;
+
+            const otpRecord = await Otp.findOne({ email, otp });
+            if (!otpRecord)
+                return res.status(400).json({ message: 'Invalid or expired OTP.' });
+
+            const hashPassword = await bcrypt.hash(newPassword, saltRounds);
+
+            await User.findOneAndUpdate(
+                { email },
+                { password: hashPassword }
+            );
+
+            await Otp.deleteMany({ email });
+
+            res.status(200).json({ message: 'Password reset successfully.' });
 
         } catch (err) {
             res.status(500).json({ error: err.message });
@@ -83,8 +163,11 @@ class AuthController {
             if (!userInfo) {
                 console.log('Lỗi không có userInfo')
                 // Nếu có lỗi, chuyển hướng về trang đăng nhập của FE
-                return res.redirect('http://localhost:5173/auth/login'); 
+                return res.send(generateAuthScript('login_failed', { message: 'User info not found' }));
             }
+
+            if (userInfo.isLocked)
+                return res.send(generateAuthScript('login_failed', { message: 'Your account has been locked due to violation.' }))
 
             // 2. Tạo JWT (dùng ID hoặc _id của Mongoose)
             const token = jwt.sign(
@@ -102,37 +185,12 @@ class AuthController {
             // });
 
             console.log('[THÀNH CÔNG!!!]')
-            return res.send(`
-                <script>
-                    // Tạo đối tượng dữ liệu chứa Token
-                    const authData = { 
-                        type: 'login_success', 
-                        token: '${token}' 
-                    };
-                    // Gửi đối tượng này về cửa sổ chính
-                    const FE_origin = 'http://localhost:5173/auth/login'    
-                    window.opener.postMessage(authData, FE_origin);
-                    // Đóng cửa sổ Pop-up
-                    window.close();
-                </script>
-            `); 
+            return res.send(generateAuthScript('login_success', { token })); 
             
         } catch (err) {
             console.log("Google Auth Callback Error:", err);
             // Chuyển hướng về trang báo lỗi của Front-end
-            return res.send(`
-                <script>
-                    // Tạo đối tượng dữ liệu chứa Token
-                    const authData = { 
-                        type: 'login_failed', 
-                        token: '${token}' 
-                    };
-                    // Gửi đối tượng này về cửa sổ chính
-                    window.opener.postMessage(authData, '*');
-                    // Đóng cửa sổ Pop-up
-                    window.close();
-                </script>
-                `)
+            return res.send(generateAuthScript('login_failed', { message: 'Authentication failed' }));
         }
     }
 
@@ -145,7 +203,7 @@ class AuthController {
             if (!userInfo) {
                 console.log('Lỗi không có userInfo')
                 // Nếu có lỗi, chuyển hướng về trang đăng nhập của FE
-                return res.redirect('http://localhost:5173/auth/login'); 
+                return res.send(generateAuthScript('login_failed', { message: 'User info not found' }));
             }
 
             // 2. Tạo JWT (dùng ID hoặc _id của Mongoose)
@@ -164,37 +222,12 @@ class AuthController {
             // });
 
             console.log('[THÀNH CÔNG!!!]')
-            return res.send(`
-                <script>
-                    // Tạo đối tượng dữ liệu chứa Token
-                    const authData = { 
-                        type: 'login_success', 
-                        token: '${token}' 
-                    };
-                    // Gửi đối tượng này về cửa sổ chính
-                    const FE_origin = 'http://localhost:5173/auth/login'    
-                    window.opener.postMessage(authData, FE_origin);
-                    // Đóng cửa sổ Pop-up
-                    window.close();
-                </script>
-            `); 
+            return send(generateAuthScript('login_success', { token })); 
             
         } catch (err) {
             console.log("Facebook Auth Callback Error:", err);
             // Chuyển hướng về trang báo lỗi của Front-end
-            return res.send(`
-                <script>
-                    // Tạo đối tượng dữ liệu chứa Token
-                    const authData = { 
-                        type: 'login_failed', 
-                        token: '${token}' 
-                    };
-                    // Gửi đối tượng này về cửa sổ chính
-                    window.opener.postMessage(authData, '*');
-                    // Đóng cửa sổ Pop-up
-                    window.close();
-                </script>
-                `)
+            return res.send(generateAuthScript('login_failed', { message: 'Authentication failed' }));
         }
     }
 

@@ -10,6 +10,9 @@ const router = Router();
 router.post('/login', authController.login);
 router.post('/register', authController.register);
 
+// reset password
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/reset-password', authController.resetPassword);
 
 // Auth bằng google
 router.get('/google', 

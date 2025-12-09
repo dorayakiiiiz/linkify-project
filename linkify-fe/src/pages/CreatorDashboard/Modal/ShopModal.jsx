@@ -1,7 +1,7 @@
 import { useShop } from "../../../context/ShopContext";
 import { useState, useRef, useEffect } from "react";
 import { Validator } from "../../../utils/validators";
-import Button from "../../../components/Button";
+import Button from "../../../components/Shared/Button";
 
 export default function ShopModal({ onClose, editingProduct = null }) {
     const { addProduct, updateProduct } = useShop();

@@ -1,4 +1,4 @@
-export const mainMenu = [
+export const creatorMenu = [
     {
         icon: "fa-layer-group",
         label: "My Linkify",
@@ -8,10 +8,21 @@ export const mainMenu = [
     { icon: "fa-chart-simple", label: "Insights", hasDropdown: false },
 ];
 
+export const adminMenu = [
+    { icon: "fa-solid fa-users", label: "User", hasDropdown: false },
+    {
+        icon: "fa-solid fa-link",
+        label: "Content",
+        hasDropdown: true,
+        subItems: [{ label: "Links" }, { label: "Shop" }],
+    },
+    { icon: "fa-brands fa-uikit", label: "Theme", hasDropdown: false },
+
+];
+
 export const tools = [
-    { icon: "fa-regular fa-comments", label: "Instagram auto-reply" },
-    { icon: "fa-solid fa-link", label: "Link shortener" },
     { icon: "fa-solid fa-pencil", label: "Post ideas" },
+    { icon: "fa-solid fa-link", label: "Link shortener" },
 ];
 
 export const designNavItems = [

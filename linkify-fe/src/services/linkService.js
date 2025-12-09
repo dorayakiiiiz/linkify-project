@@ -11,6 +11,11 @@ const getLinks = async(profileId) => {
     return response.data;
 }
 
+const getPublicLinks = async(profileId) => {
+    const response = await api.get(`/links/public/${profileId}`);
+    return response.data;
+}
+
 const updateLink = async(linkId, data) => {
     const response = await api.patch(`/links/${linkId}`, data);
     return response.data;
@@ -26,10 +31,29 @@ const deleteLink = async(linkId) => {
     return response.data;
 }
 
+const getTrashLinks = async (profileId) => {
+    const response = await api.get(`/links/${profileId}/trash`);
+    return response.data;
+}
+
+const restoreLink = async (linkId) => {
+    const response = await api.patch(`/links/${linkId}/restore`);
+    return response.data;
+}
+
+const hardDeleteLink = async (linkId) => {
+    const response = await api.delete(`/links/${linkId}/permanent`);
+    return response.data;
+}
+
 export const linkService = {
     addLink,
     getLinks,
+    getPublicLinks,
     updateLink,
     reorderLinks,
-    deleteLink
+    deleteLink,
+    getTrashLinks,
+    restoreLink,
+    hardDeleteLink
 };

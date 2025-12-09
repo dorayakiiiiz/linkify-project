@@ -1,19 +1,25 @@
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useShop } from "../../context/ShopContext";
+import { useProfile } from "../../context/ProfileContext";
 import { useState } from "react";
-import { UserInfo } from "../../components/CreatorDashboard/Shared/UserInfo";
-import QuickActions from "../../components/CreatorDashboard/Shared/QuickActions";
+import { UserInfo } from "../../components/CreatorDashboard/UserInfo";
+import QuickActions from "../../components/CreatorDashboard/QuickActions";
 import ShopModal from "./Modal/ShopModal";
-import DeleteModal from "../../components/DeleteModal";
+import DeleteModal from "../../components/Modal/DeleteModal";
+import TrashModal from "../AdminDashboard/Modal/TrashModal";
 
 export default function ShopPage() {
-    const { products, updateProduct, removeProduct, reorderProducts, loadingProducts } = useShop();
+    const { products, fetchProducts, updateProduct, removeProduct, reorderProducts, loadingProducts } = useShop();
 
+    const { profile } = useProfile();
+    
     const [isShopModalOpen, setIsShopModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+
+    const [isTrashOpen, setIsTrashOpen] = useState(false); 
 
     const handleOpenAdd = () => {
         setEditingProduct(null);
@@ -80,6 +86,16 @@ export default function ShopPage() {
                 />
             )}
 
+            {isTrashOpen && (
+                <TrashModal 
+                    isOpen={isTrashOpen} 
+                    onClose={() => setIsTrashOpen(false)}
+                    profileId={profile?._id}
+                    type='shop'
+                    onRestoreSuccess={fetchProducts}
+                />
+            )}
+
 
             <div className="flex-1 p-6 md:px-[10px] lg:px-[20px] xl:px-[60px]">
                 <div className="max-w-3xl mx-auto w-full">
@@ -93,6 +109,20 @@ export default function ShopPage() {
                             >
                                 + Add product
                             </button>
+                        </div>
+                    </div>
+
+                    <div 
+                        className="flex justify-end"
+                        onClick={() => setIsTrashOpen(true)}
+                    >
+                        <div className="flex justify-center cursor-pointer shadow gap-2 items-center border border-gray-300 px-4 py-2 rounded-lg mr-2 bg-gray-100 hover:bg-[#fff]">
+                            <div>
+                                View trash bin
+                            </div>
+                            <div className="flex justify-center items-center text-gray-500">
+                                <i className="fa-regular fa-trash-can text-xl"></i>
+                            </div>
                         </div>
                     </div>
 
@@ -168,18 +198,30 @@ export default function ShopPage() {
                                                                                 <div className="flex items-center mb-1">
                                                                                     <span className="font-bold">{product.name}</span>
                                                                                 </div>
+
                                                                                 <div className="text-purple-600 font-semibold mb-1">
                                                                                     ${product.price}
                                                                                 </div>
-                                                                                {product.buyLink && (
-                                                                                    <a
-                                                                                        href={product.buyLink}
-                                                                                        target="_blank"
-                                                                                        rel="noopener noreferrer"
-                                                                                        className="text-sm text-blue-600 hover:text-blue-500 mb-3 truncate block mr-[20px]"
-                                                                                    >
-                                                                                        {product.buyLink}
-                                                                                    </a>
+
+                                                                                <a
+                                                                                    href={product.buyLink}
+                                                                                    target="_blank"
+                                                                                    rel="noopener noreferrer"
+                                                                                    className="text-sm text-blue-600 hover:text-blue-500 mb-3 truncate block mr-[20px]"
+                                                                                >
+                                                                                    {product.buyLink}
+                                                                                </a>
+
+                                                                                {product.isFlagged && (
+                                                                                    <div className="my-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2 flex items-center gap-3">
+                                                                                        <i className="fa-solid fa-triangle-exclamation text-red-600 mt-0.5 text-sm"></i>
+                                                                                        <div>
+                                                                                            <p className="font-bold text-red-700">Violation Detected</p>
+                                                                                            <p className="text-[12px] text-red-600">
+                                                                                                Reason: {product.violationReason}. This product is disabled.
+                                                                                            </p>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 )}
                                                                                 
                                                                                 <div className="flex items-center space-x-3 gap-2 text-gray-500">
@@ -206,6 +248,7 @@ export default function ShopPage() {
                                                                                     type="checkbox"
                                                                                     className="sr-only peer"
                                                                                     checked={product.isEnable}
+                                                                                    disabled={product.isFlagged}
                                                                                     onChange={() => handleToggleEnable(product)}
                                                                                 />
                                                                                 <div

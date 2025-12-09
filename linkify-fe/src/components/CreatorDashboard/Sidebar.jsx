@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useProfile } from "../../context/ProfileContext";
-import { mainMenu, tools } from "../../constants/dashboard";
+import { creatorMenu, tools } from "../../constants/dashboard";
+import SwitchProfileModal from "../../pages/CreatorDashboard/Modal/SwitchProfileModal";
+import AccountSettingModal from "../Modal/AccountSettingModal";
 
 export default function Sidebar() {
     const { user, logout } = useAuth();
@@ -10,16 +12,39 @@ export default function Sidebar() {
     const navigate = useNavigate();
     const location = useLocation();
     
-    // lưu index của menu cha đang dc mở
+    // lưu index của menu cha đang dc mở (index/null)
     const [openIndex, setOpenIndex] = useState(0); 
+
     // lưu trạng thái bật tắt của user dropdown
     const [dropdown, setDropdown] = useState(false);
-    // lưu trạng thái đăng xuất
+    // lưu trạng thái đang đăng xuất (hiệu ứng spinner quay quay)
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+    
     const handleToggleDropdown = () => {
         setDropdown(!dropdown);
     }
+
+    const [isSwitchProfileModalOpen, setIsSwitchProfileModalOpen] = useState(false);
+    const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+
+    // ref cho user dropdown menu
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // nếu dropdown đang mở và click không nằm trong dropdownRef -> đóng lại
+            if (dropdown && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdown]);
+
 
     // Map Label sang URL 
     const getPath = (label) => {
@@ -33,7 +58,6 @@ export default function Sidebar() {
             // Tools
             'Post ideas': '/dashboard/tools/post-ideas',
             'Link shortener': '/dashboard/tools/link-shortener',
-            'Instagram auto-reply': '/dashboard/tools/instagram-auto-reply'
         };
         return map[label] || '/dashboard/links';
     };
@@ -69,6 +93,25 @@ export default function Sidebar() {
         navigate(getPath(toolLabel));
     };
 
+    const handleSwitchProfile = () => {
+        setIsSwitchProfileModalOpen(true);
+        setDropdown(false);
+    }
+
+    const handleCreateProfile = () => {
+        navigate('/onboarding/profile', { state: { isAddingNew: true } });
+    }
+
+    const handleAccountSetting = () => {
+        setIsAccountModalOpen(true);
+        setDropdown(false);
+    }
+
+    const handleHelp = () => {
+
+    }
+
+
     const handleLogout = () => {
         if (isLoggingOut) 
             return;
@@ -80,9 +123,22 @@ export default function Sidebar() {
 
     return (
         <div className="bg-[#ecede8] lg:w-[280px] md:w-[200px] rounded-tl-xl relative flex-shrink-0 hidden md:block h-full border-r border-[#d7d6d4]">
+            {isSwitchProfileModalOpen && (
+                <SwitchProfileModal 
+                    onClose={() => setIsSwitchProfileModalOpen(false)}
+                />
+            )}
+
+            {isAccountModalOpen && (
+                <AccountSettingModal 
+                    onClose={() => setIsAccountModalOpen(false)}
+                />
+            )}
+
             {/* User Info & Noti */}
             <div className="flex justify-between items-center px-[12px] py-[8px] mt-1">
                 <div 
+                    ref={dropdownRef}
                     className="relative flex items-center gap-1.5 px-2 py-[4px] -mx-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl"
                     onClick={handleToggleDropdown}    
                 >
@@ -96,8 +152,9 @@ export default function Sidebar() {
                     </p>
                     <i className={`fa-solid fa-angle-down text-[10px] pt-1 ml-auto mr-1 transition-transform duration-300 ${dropdown? "rotate-180" : ""}`}/>
 
+                    {/* user dropdown menu */}
                     <div 
-                        className={`text-[#212529] absolute shadow-xl top-[calc(100%+4px)] w-[220px] bg-[#fff] rounded-xl flex flex-col ${dropdown ? 'scale-100' : 'scale-0'} transition duration-200`}
+                        className={`text-[#212529] absolute shadow-xl top-[calc(100%+4px)] w-[220px] bg-[#fff] rounded-xl flex flex-col ${dropdown ? 'scale-100' : 'scale-0'} transition duration-200 z-1`}
                         onClick={e => e.stopPropagation()}
                     >
                         <div className="w-full border-b border-[#e0dfde] py-[10px] flex items-center justify-center gap-[10px]">
@@ -118,24 +175,36 @@ export default function Sidebar() {
                         </div>
                         
                         <div className="border-b border-[#e0dfde]">
-                            <div className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]">
+                            <div 
+                                className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]"
+                                onClick={handleSwitchProfile}    
+                            >
                                 <i className="fa-solid fa-shuffle mr-[6px]"></i>
                                 Switch linkify profile
                             </div>
 
-                            <div className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]">
+                            <div 
+                                className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]"
+                                onClick={handleCreateProfile}    
+                            >
                                 <i className="fa-regular fa-square-plus mr-[6px]"></i>
                                 Create new linkify
                             </div>         
                         </div>
 
                         <div className="border-b border-[#e0dfde]">
-                            <div className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]">
+                            <div 
+                                className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]"
+                                onClick={handleAccountSetting}
+                            >
                                 <i className="fa-regular fa-user mr-[6px]"></i>
                                 Account
                             </div>
 
-                            <div className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]">
+                            <div 
+                                className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]"
+                                onClick={handleHelp}
+                            >
                                 <i className="fa-regular fa-circle-question mr-[6px]"></i>
                                 Help
                             </div>         
@@ -173,7 +242,8 @@ export default function Sidebar() {
             {/* 2. Menu Items */}
             <div className="overflow-y-auto h-[calc(100%-120px)]">
                 <div className="px-3 py-2">
-                    {mainMenu.map((item, index) => {
+                    {creatorMenu.map((item, index) => {
+                        // check nó có active ko
                         const parentActive = isParentActive(item);
                         
                         return (

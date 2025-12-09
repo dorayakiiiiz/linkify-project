@@ -145,7 +145,15 @@ export default function LinkTreePreview({
                                             )
                                                 return null;
 
-                                            const { icon, color } = SOCIALS.find((social) => social.name === link.title);
+                                            const social = SOCIALS.find((social) => social.name === link.title);
+
+                                            let icon = social?.icon;
+                                            let color = social?.color;
+
+                                            if (!icon || !color) {
+                                                icon = 'fa-solid fa-earth-asia';
+                                                color = '#48c62b';
+                                            }
 
                                             return (
                                                 <a

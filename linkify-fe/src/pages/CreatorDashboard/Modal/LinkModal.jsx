@@ -2,7 +2,7 @@ import { useLinks } from "../../../context/LinkContext";
 import { useState, useRef, useEffect } from "react";
 import { SOCIALS } from "../../../constants/socials";
 import { Validator } from "../../../utils/validators";
-import Button from "../../../components/Button";
+import Button from "../../../components/Shared/Button";
 
 export default function LinkModal({ onClose, editingLink = null }) {
 	const { addNewLink, updateLink } = useLinks();
