@@ -36,7 +36,7 @@ export default function LinkTreePreview({
     return (
         <div className="w-full h-full flex justify-center items-center">
             <div
-                className={`relative w-full p-[20px] max-w-[580px] h-full ${!isPreview ? "md:h-[1160px] md:rounded-4xl" : ""
+                className={`relative w-full p-[20px] max-w-[580px] h-full ${!isPreview ? "md:h-[1160px] md:rounded-4xl" : "md:h-[580px]"
                     } bg-[#ECEEF1] shadow-2xl overflow-y-auto no-scrollbar flex flex-col items-center`}
             >
                 {/* content */}
