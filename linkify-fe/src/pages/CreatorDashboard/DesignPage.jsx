@@ -6,7 +6,7 @@ import MobilePreview from '../../components/CreatorDashboard/MobilePreview';
 
 export default function DesignPage() {
     const [activeItem, setActiveItem] = useState('Header');
-    //state để có hiện cái DesignActions ở mobile hay không
+    // State to control whether DesignActions is shown on mobile
     const [showHeaderDesign, setShowHeaderDesign] = useState(false);
     return (
         <div className="w-full h-full flex flex-col md:flex-row">
