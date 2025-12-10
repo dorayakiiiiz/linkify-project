@@ -2,6 +2,7 @@
 
 import jwt from "jsonwebtoken"
 
+// Để xác nhận người dùng đã đăng nhập
 const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader)

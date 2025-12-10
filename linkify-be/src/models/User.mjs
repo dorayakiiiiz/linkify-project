@@ -4,15 +4,23 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
     email: { 
         type: String, 
-        required: true, 
+        // Chỉ bắt buộc với google và đăng nhập pass
+        required: function() { 
+            return this.loginMethod === 'local' || this.loginMethod === 'google';
+        }, 
         unique: true 
     },
     displayName: {
-        type: String
+        type: String,
+        required: true,
     },
     password: { 
         type: String, 
-        required: true 
+        // Chỉ bắt buộc khi đăng nhập bằng mật khẩu
+        required: function() {
+            return this.loginMethod === 'local';
+        }
+                
     },
     googleId: { 
         type: String, 
@@ -26,11 +34,23 @@ const UserSchema = new Schema({
         default: 'creator',
         required: true
     },
+    loginMethod: {
+        type: String,
+        enum: ['local', 'google', 'facebook'],
+        default: 'local',
+        required: true
+    },
+
     isLocked: {
         type: Boolean,
         default: false,
         required: true
-    }
+    },
+    violationCount: {
+        type: Number,
+        default: 0
+    },
+
 }, {
     timestamps: true
 })

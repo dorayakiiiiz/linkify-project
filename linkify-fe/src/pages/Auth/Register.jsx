@@ -5,30 +5,63 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { authService } from "../../services/authService";
 import { Validator } from "../../utils/validators";
+import { useAuth } from "../../context/AuthContext";
+import { useProfile } from "../../context/ProfileContext";
 
-import Input from "../../components/Input";
-import Button from "../../components/Button";
+import Input from "../../components/Shared/Input";
+import Button from "../../components/Shared/Button";
 
 export default function Register() {
     const [email, setEmail] = useState('');
     const [displayName, setDisplayName] = useState('');
     const [password, setPassword] = useState('');
-    const [log, setLog] = useState({
-        type: '',
-        content: ''
-    });
+    const [log, setLog] = useState({ type: '', content: '' });
 
     useEffect(() => {
         if (log.content) {
-            const timerId = setTimeout(() => setLog({
-                type: '',
-                content: ''
-            }), 3000);
+            const timerId = setTimeout(() => setLog({ type: '', content: ''}), 2600);
             return () => clearTimeout(timerId);
         }
     }, [log]);
 
     const navigate = useNavigate();
+    const { login ,isLogin } = useAuth();
+    const { fetchProfile } = useProfile();
+
+    // đã đăng nhập rồi mà vào lại -> tự redirect về dashboard
+    useEffect(() => {
+        if (isLogin) {
+            navigate('/dashboard', { replace: true });
+        }
+    }, [isLogin, navigate]);
+
+    //Lăng nghe sự kiện gửi message của cửa sổ pop up
+    useEffect(() => {
+        const receiveMessageFromPopUp = async(e) => {
+            if (e.data.type === 'login_success') {
+                const token = e.data.payload.token;
+                login(token);
+                setLog({
+                    type: 'success',
+                    content: 'Login successfully! Redirecting...'
+                });
+
+                await fetchProfile();
+
+                setTimeout(() => {
+                    navigate('/dashboard', { replace: true })
+                }, 2600);
+            }
+            else {
+                setLog({
+                    type: 'error',
+                    content: e.data.payload?.message || 'Login failed'
+                })
+            }
+        }
+        window.addEventListener('message', receiveMessageFromPopUp)
+        return () => window.removeEventListener('message', receiveMessageFromPopUp)
+    }, [isLogin, navigate])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,28 +69,19 @@ export default function Register() {
         // validate data
         const emailError = Validator.validateEmail(email);
         if (emailError) {
-            setLog({
-                type: 'error',
-                content: emailError
-            });
+            setLog({ type: 'error', content: emailError });
             return;
         }
 
         const displayNameError = Validator.validateDisplayName(displayName);
         if (displayNameError) {
-            setLog({
-                type: 'error',
-                content: displayNameError
-            });
+            setLog({ type: 'error', content: displayNameError });
             return;
         }
 
         const passwordError = Validator.validatePassword(password);
         if (passwordError) {
-            setLog({
-                type: 'error',
-                content: passwordError
-            });
+            setLog({ type: 'error', content: passwordError });
             return;
         }
         
@@ -75,7 +99,7 @@ export default function Register() {
 
             setTimeout(() => {
                 navigate('/auth/login');
-            }, 3000);
+            }, 2600);
 
         } catch (err) {
             setLog({
@@ -84,6 +108,22 @@ export default function Register() {
             });
         }
         
+    }
+
+    // Hàm click vào mở pop up Auth GG
+    const handleGoogleLogin = (e) => {
+        //Chuyển hướng sang backend để xác thực GG
+        const fullAuthUrl = authService.getGoogleAuthUrl();
+        // Mở pop up xác nhận GG
+        window.open(fullAuthUrl, 'googleAuthPopup', 'width=600,height=600');
+    }
+
+    // Hàm click vào mở pop up Auth FB
+    const handleGFacebookLogin = (e) => {
+        //Chuyển hướng sang backend để xác thực GG
+        const fullAuthUrl = authService.getFacebookAuthUrl();
+        // Mở pop up xác nhận GG
+        window.open(fullAuthUrl, 'facebookAuthPopup', 'width=600,height=600');
     }
 
     return (
@@ -113,7 +153,7 @@ export default function Register() {
                     Sign up for free!
                 </div>
 
-                <div
+                <form
                     className="flex flex-col justify-center items-center mt-[10px]"
                 >
 
@@ -138,7 +178,7 @@ export default function Register() {
                         setState={setPassword}
                     />
 
-                    <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+                    <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-[green] success-text' : ''} font-semibold`}>
                         {log.content}
                     </div>
 
@@ -158,7 +198,7 @@ export default function Register() {
                         onClick={handleSubmit}
                     />
 
-                </div>
+                </form>
 
                 <div className="text-[#898b8c] mt-[10px]">
                     OR
@@ -168,6 +208,7 @@ export default function Register() {
                     <button
                         type="submit"
                         className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] border bg-[#ff2821] hover:bg-[#f96666] text-[#fff] font-semibold rounded-3xl"
+                        onClick={handleGoogleLogin}
                     >
                         <i className="fa-brands fa-google md:mr-[10px]"></i>
                         <div className="hidden md:block">Sign up with Google</div>
@@ -176,28 +217,13 @@ export default function Register() {
                     <button
                         type="submit"
                         className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] bg-[#295ff4] hover:bg-[#5683ff] text-[#fff] font-semibold rounded-3xl"
+                        onClick={handleGFacebookLogin}
                     >
                         <i className="fa-brands fa-facebook md:mr-[10px]"></i>
                         <div className="hidden md:block">Sign up with Facebook</div>
                     </button>
                 </div>
                 
-
-                {/* <button
-                    type="submit"
-                    className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
-                >
-                    <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
-                    Sign up with Google
-                </button> 
-
-                <button
-                    type="submit"
-                    className="cursor-pointer w-full max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
-                >
-                    <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
-                    Sign up with Facebook
-                </button> */}
 
                 <div className="mt-[10px] text-[#898b8c]">
                     Already have an account?

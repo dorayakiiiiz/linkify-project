@@ -118,7 +118,7 @@ export default function Home() {
                         className="block w-full max-w-[250px] text-center py-[16px] mt-[10px] md:mt-[30px] bg-[#DE9FDE] font-semibold rounded-3xl cursor-pointer"
                     >
                         Create my page now
-                    </Link> 
+                </Link> 
             </div>
 
             

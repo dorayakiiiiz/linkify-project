@@ -1,13 +1,14 @@
-// code các page trong này, gọi các service xử lí API từ folder service
 
-import { useState, useEffect, use } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
 import { Validator } from "../../utils/validators";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
+import Input from "../../components/Shared/Input";
+import Button from "../../components/Shared/Button";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { profileService } from "../../services/profileService";
+import { useProfile } from "../../context/ProfileContext";
 
 
 export default function Login() {
@@ -19,11 +20,10 @@ export default function Login() {
     });
     // dùng trong trường hợp đang đăng nhập r ở chỗ khác mà tnhien nhảy vào trang login lại
     const [justLoggedIn, setJustLoggedIn] = useState(false);
-    // dùng để lựa chọn route khi user (creator) có profile rồi/chưa có
-    const [hasProfile, setHasProfile] = useState(false);
 
     const navigate = useNavigate();
-    const { login, user } = useAuth();
+    const { login, isLogin } = useAuth();
+    const { fetchProfile } = useProfile();
 
     // tự xóa log sau 3s
     useEffect(() => {
@@ -36,25 +36,42 @@ export default function Login() {
         }
     }, [log]);
 
-    // tự redirect qua trang tương ứng sau 2s
+    // đã đăng nhập rồi mà vào lại -> tự redirect về dashboard
     useEffect(() => {
-        if (user) {
-            const redirect = () => {
-                // nếu là creator mà chưa có profile -> onboarding
-                if (user.role === 'creator' && !hasProfile)
-                    navigate('/onboarding');
-                else 
-                    navigate('/dashboard');
+        if (isLogin && !justLoggedIn) {
+            navigate('/dashboard', { replace: true })
+        }
+    }, [isLogin, justLoggedIn, navigate]);
+
+    // Lắng nghe sự kiện gửi message của cửa sổ pop up gg/fb
+    useEffect(() => {
+        const receiveMessageFromPopUp = async(e) => {
+            if (e.data.type === 'login_success') {
+                const token = e.data.payload.token
+                login(token);
+                setJustLoggedIn(true);
+                setLog({
+                    type: 'success',
+                    content: 'Login successfully! Redirecting...'
+                });
+
+                await fetchProfile();
+
+                setTimeout(() => {
+                    navigate('/dashboard', { replace: true })
+                }, 2600);
             }
-            if (justLoggedIn) {
-                const timerId = setTimeout(redirect, 2000);
-                return () => clearTimeout(timerId);
-            } else {
-                // TODO: fix logic trùng lặp phía trên
-                redirect();
+            else {
+                setLog({
+                    type: 'error',
+                    content: e.data.payload?.message || 'Login failed'
+                })
             }
         }
-    }, [user, navigate, justLoggedIn, hasProfile]);
+        window.addEventListener('message', receiveMessageFromPopUp)
+        return () => window.removeEventListener('message', receiveMessageFromPopUp)
+    }, [login, fetchProfile, navigate])
+
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -62,19 +79,13 @@ export default function Login() {
         // validate data
         const emailError = Validator.validateEmail(email);
         if (emailError) {
-            setLog({
-                type: 'error',
-                content: emailError
-            });
+            setLog({ type: 'error', content: emailError });
             return;
         }
 
         const passwordError = Validator.validatePassword(password);
         if (passwordError) {
-            setLog({
-                type: 'error',
-                content: passwordError
-            });
+            setLog({ type: 'error', content: passwordError });
             return;
         }
 
@@ -84,18 +95,21 @@ export default function Login() {
                 password
             });
 
-            // request lên api trả về token, lấy token ra lưu vào storage
-            // const { token } = res;
-            // localStorage.setItem('token', token);
-
-            const { token, hasProfile } = res;
+            // Lấy token được trả về từ backend
+            const { token } = res;
+            // Lưu token vào localStorage
             login(token);
             setJustLoggedIn(true);
-            setHasProfile(hasProfile);
             setLog({
                 type: 'success',
                 content: 'Login successfully! Redirecting...'
             });
+
+            await fetchProfile();
+
+            setTimeout(() => {
+                navigate('/dashboard', { replace: true })
+            }, 2600);
 
 
         } catch (err) {
@@ -106,6 +120,23 @@ export default function Login() {
         }
         
     }
+
+    // Hàm click vào mở pop up Auth GG
+    const handleGoogleLogin = (e) => {
+        //Chuyển hướng sang backend để xác thực GG
+        const fullAuthUrl = authService.getGoogleAuthUrl();
+        // Mở pop up xác nhận GG
+        window.open(fullAuthUrl, 'googleAuthPopup', 'width=600,height=600');
+    }
+
+    // Hàm click vào mở pop up Auth FB
+    const handleGFacebookLogin = (e) => {
+        //Chuyển hướng sang backend để xác thực GG
+        const fullAuthUrl = authService.getFacebookAuthUrl();
+        // Mở pop up xác nhận GG
+        window.open(fullAuthUrl, 'facebookAuthPopup', 'width=600,height=600');
+    }
+
 
     return (
         <>
@@ -145,21 +176,30 @@ export default function Login() {
                         className="flex flex-col w-full justify-center items-center mt-[20px]"
                     >
 
-                        <Input 
-                            type="email" 
-                            value={email} 
-                            placeholder="Input your email" 
-                            setState={setEmail}
-                        />
+                        <div>
+                            <Input 
+                                type="email" 
+                                value={email} 
+                                placeholder="Input your email" 
+                                setState={setEmail}
+                            />
 
-                        <Input 
-                            type="password" 
-                            value={password} 
-                            placeholder="Input password" 
-                            setState={setPassword}
-                        />
+                            <Input 
+                                type="password" 
+                                value={password} 
+                                placeholder="Input password" 
+                                setState={setPassword}
+                            />
+                            <Link 
+                                to="/auth/reset-password"
+                                className="block text-sm text-gray-400 ml-2 hover:text-gray-700"
+                            >
+                                Forgot password?
+                            </Link>
+                        </div>
 
-                        <div className={`mt-[4px] mb-[10px] ${log.type == 'error' ? 'text-[red]' : 'text-[green]'} font-semibold`}>
+
+                        <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-[green] success-text' : ''} font-semibold`}>
                             {log.content}
                         </div>
 
@@ -176,21 +216,25 @@ export default function Login() {
                         OR
                     </div>
 
-                    <button
-                        type="submit"
-                        className="cursor-pointer w-full max-w-[300px] md:max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[10px] rounded-3xl"
-                    >
-                        <i className="fa-brands fa-google mr-[10px] text-[red]"></i>
-                        Continue with Google
-                    </button> 
-
-                    <button
-                        type="submit"
-                        className="cursor-pointer w-full max-w-[300px] md:max-w-[400px] py-[12px] border border-[#bfc1c9] hover:bg-[#f7f8f6] font-semibold mt-[20px] rounded-3xl"
-                    >
-                        <i className="fa-brands fa-facebook mr-[10px] text-[blue]"></i>
-                        Continue with Facebook
-                    </button> 
+                    <div className="flex md:flex-col w-full max-w-[250px] gap-[20px] mt-3">
+                        <button
+                            type="submit"
+                            className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] border bg-[#ff2821] hover:bg-[#f96666] text-[#fff] font-semibold rounded-3xl"
+                            onClick={handleGoogleLogin}
+                        >
+                            <i className="fa-brands fa-google md:mr-[10px]"></i>
+                            <div className="hidden md:block">Sign up with Google</div>
+                        </button> 
+    
+                        <button
+                            type="submit"
+                            className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] bg-[#295ff4] hover:bg-[#5683ff] text-[#fff] font-semibold rounded-3xl"
+                            onClick={handleGFacebookLogin}
+                        >
+                            <i className="fa-brands fa-facebook md:mr-[10px]"></i>
+                            <div className="hidden md:block">Sign up with Facebook</div>
+                        </button>
+                    </div>
 
                     <div className="mt-[20px] text-[#898b8c]">
                         Don't have an account?

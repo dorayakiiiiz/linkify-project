@@ -12,6 +12,14 @@ const router = Router();
 // const storage = multer.memoryStorage(); // lưu tạm file trong RAM
 // const upload = multer({ storage });
 
-router.post('/onboarding', authMiddleware, upload.single("avatar"), profileController.createProfile);
+router.get('/public/:username', profileController.getPublicProfile);
+
+router.use(authMiddleware);
+
+router.get('/me', profileController.getProfiles);
+router.post('/onboarding', upload.single("avatar"), profileController.createProfile);
+router.get('/check-username/:username', profileController.checkUsername);
+router.patch('/', upload.single("avatar"), profileController.updateProfile);
+
 
 export default router;
