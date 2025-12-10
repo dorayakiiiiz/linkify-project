@@ -5,8 +5,8 @@ import profileRouter from "./profile.mjs";
 import linkRouter from "./link.mjs";
 import shopRouter from "./shop.mjs"; 
 import adminRouter from "./admin.mjs";
-import toolRouter from "./tools.mjs";
-import analyticRouter from "./analytics.mjs";
+import toolRouter from "./tools.mjs"
+import analyticRouter from "./analytics.mjs"
 
 export default function route(app) {
   app.use("/api/admin", adminRouter);
