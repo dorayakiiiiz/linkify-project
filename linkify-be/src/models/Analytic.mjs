@@ -1,28 +1,38 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-// lưu các sự kiện như click... của 1 profile
 const AnalyticSchema = new Schema({
     profileId: { 
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId, 
+        ref: "Profile",
+        required: true 
     },
-    linkId: { 
-        type: Schema.Types.ObjectId,
-        ref: "Link",
-        default: null
-    },
-    type: { 
+    type: {
         type: String,
-        enum: ['profileView', 'linkClick']
+        enum: ['view', 'link_click', 'shop_click'], // Loại sự kiện
+        required: true
     },
-    ipHash: {
-        type: String
+    targetId: {
+        type: Schema.Types.ObjectId, // ID của Link hoặc Product (nếu là click)
+        refPath: 'targetModel'
     },
-    userAgent: {
-        type: String
+    targetModel: {
+        type: String,
+        enum: ['Link', 'Product']
+    },
+    device: {
+        type: String,
+        enum: ['mobile', 'desktop', 'tablet', 'unknown'],
+        default: 'unknown'
+    },
+    referrer: {
+        type: String, // Nguồn truy cập (Instagram, Facebook...)
+        default: 'direct'
     }
-}, {
-    timestamps: true
-})
+}, { timestamps: true });
+
+// Index để query nhanh theo profile và thời gian
+AnalyticSchema.index({ profileId: 1, createdAt: -1 });
+AnalyticSchema.index({ profileId: 1, type: 1 });
 
 export default mongoose.model('Analytic', AnalyticSchema);
