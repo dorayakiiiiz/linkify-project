@@ -15,7 +15,7 @@ export default function CreatorDashboardLayout() {
         if (location.pathname.includes('links')) return 'Links';
         if (location.pathname.includes('design')) return 'Design';
         if (location.pathname.includes('shop')) return 'Shop';
-        if (location.pathname.includes('analytics')) return 'Insights';
+        if (location.pathname.includes('insights')) return 'Insights';
         if (location.pathname.includes('post-ideas')) return 'Post Ideas';
         return 'Dashboard';
     };

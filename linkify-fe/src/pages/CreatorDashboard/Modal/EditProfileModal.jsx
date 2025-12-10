@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Button from "../../../components/Shared/Button"
 import { profileService } from "../../../services/profileService"
 import { Validator } from "../../../utils/validators"
+import DeleteModal from "../../../components/Modal/DeleteModal"
+import { useProfile } from "../../../context/ProfileContext"
 
 export default function EditProfileModal({ onClose, profile, onSuccess }) {
-    
+
+    const { profiles, switchProfile, fetchProfile } = useProfile();
+    const navigate = useNavigate();
+
     const [username, setUsername] = useState(profile.username);
     const [bio, setBio] = useState(profile.bio || '');
     const [avatarPreview, setAvatarPreview] = useState(profile.avatarUrl);
@@ -13,8 +19,15 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
 
     const [log, setLog] = useState({ type: '', content: '' });
 
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    // Check xem có phải profile duy nhất không
+    const isSingleProfile = profiles.length === 1;
+
+    const [isActive, setIsActive] = useState(profile.isActive);
+
     useEffect(() => {
-        if (log.content && log.type === 'error') {
+        if (log.content) {
             const timerId = setTimeout(() => setLog({ type: '', content: '' }), 2000);
             return () => clearTimeout(timerId);
         }
@@ -40,6 +53,57 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
             avatar && URL.revokeObjectURL(avatarPreview);
         }
     }, [avatar, avatarPreview]);
+
+    const handleDeactiveProfile = async (id) => {
+        try {
+            await profileService.deactivateProfile(profile._id);
+            setLog({ type: 'success', content: 'Profile deactivated successfully.' });
+            
+            setTimeout(async () => {
+                setIsActive(false);
+                await fetchProfile();
+            }, 1500);
+            
+        } catch (error) {
+            setLog({ type: 'error', content: 'Failed to deactivate.' });
+        }
+    }
+
+    const handleReactiveProfile = async () => {
+        try {
+            await profileService.reactivateProfile(profile._id);
+            setLog({ type: 'success', content: 'Profile reactivated successfully.' });
+            
+            setTimeout(async () => {
+                setIsActive(true);
+                await fetchProfile();
+            }, 1500);
+
+        } catch (error) {
+            setLog({ type: 'error', content: 'Failed to activate.' });
+        }
+    }
+
+    const handleDeleteProfile = async () => {
+        try {
+           
+            await profileService.deleteProfile(profile._id);
+
+            // tìm đại profile khác thay thế
+            const otherProfile = profiles.find(p => p._id !== profile._id);
+
+            setTimeout(async () => {
+                if (otherProfile) {
+                    await fetchProfile();
+                    switchProfile(otherProfile._id);
+                }
+                onClose();
+            }, 1500);
+
+        } catch (error) {
+            setLog({ type: 'error', content: 'Failed to delete.' });
+        }
+    }
 
     const handleSubmit = async () => {
 
@@ -75,10 +139,6 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
 
             if (onSuccess) onSuccess();
 
-            setTimeout(() => {
-                onClose();
-            }, 2000);
-
         } catch (err) {
             setLog({ 
                 type: 'error', 
@@ -95,8 +155,18 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
             className="fixed inset-0 z-100 bg-black/50 backdrop-blur flex items-center justify-center"
             onClick={onClose}
         >
+            {isDeleteModalOpen && (
+                <DeleteModal 
+                    deleteId={profile._id}
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    removeFunc={handleDeleteProfile}
+                    confirmMessage="Delete this profile permanently?"
+                    successLog="Profile deleted."
+                />
+            )}
+
             <div 
-                className="flex flex-col items-center w-full max-w-[600px] h-full max-h-[560px] bg-[#fff] md:rounded-2xl"
+                className="flex flex-col items-center w-full max-w-[600px] min-h-[600px] max-h-[700px] bg-[#fff] md:rounded-2xl"
                 onClick={e => e.stopPropagation()}
             >
                 <div className="w-full relative flex items-center justify-center mt-6 font-momo text-2xl">
@@ -145,12 +215,12 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                     </label>
                 </div>
 
-                <div className="w-full px-[40px] md:px-[100px]">
+                <div className="w-full px-[40px] md:px-[90px]">
                     <div className="font-bold ml-1 text-lg">
                         Username
                     </div>
 
-                    <div className="mt-4 w-full">
+                    <div className="mt-2 w-full">
                         <input
                             type="text"
                             className="h-[50px] w-full rounded-xl bg-[#f7f8f6] px-5"
@@ -160,12 +230,12 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                     </div>
                 </div>
 
-                <div className="w-full px-[40px] md:px-[100px] mt-4">
+                <div className="w-full px-[40px] md:px-[90px] mt-3">
                     <div className="font-bold ml-1 text-lg">
                         Bio
                     </div>
 
-                    <div className="mt-4 w-full">
+                    <div className="mt-2 w-full">
                         <input
                             type="text"
                             className="h-[50px] w-full rounded-xl bg-[#f7f8f6] px-5"
@@ -175,7 +245,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                     </div>
                 </div>
 
-                <div className="w-full text-center mt-2">
+                <div className="w-full text-center mt-1">
                     <div
                         className={`h-6 my-2.5 ${log.type == "error" ? "text-[red]" : "text-[green] success-glow"
                             } font-semibold`}
@@ -189,6 +259,56 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                         text={loading ? "Saving..." : "Save Changes"}
                         onClick={handleSubmit}
                     />
+                </div>
+
+                <div className="w-full px-20 md:px-10 pt-4 pb-8">
+                    <div className="flex flex-col items-center">
+                        {!isActive ? (
+                            <>
+                                <div className="text-gray-500 text-sm mb-3 hover:text-gray-800">
+                                    This profile is currently deactivated.
+                                </div>
+                                <button
+                                    onClick={handleReactiveProfile}
+                                    className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-lg transition-colors bg-blue-400 hover:bg-blue-300"
+                                >
+                                    <i className="fa-regular fa-trash-can mr-2"></i>
+                                    Active profile
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <div className="text-gray-500 text-sm mb-3 hover:text-gray-800">
+                                    No longer need this profile?
+                                </div>
+
+                                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2">
+
+                                    <button
+                                        onClick={handleDeactiveProfile}
+                                        className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-lg transition-colors bg-gray-400 hover:bg-gray-300"
+                                    >
+                                        <i className="fa-regular fa-trash-can mr-2"></i>
+                                        Deactive profile
+                                    </button>
+                                    {!isSingleProfile && (
+                                        <>
+                                            <div className="text-gray-500 text-sm hover:text-gray-800">
+                                                OR
+                                            </div>
+                                            <button
+                                                onClick={() => setIsDeleteModalOpen(true)}
+                                                className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-lg transition-colors bg-red-500 hover:bg-red-400"
+                                            >
+                                                <i className="fa-regular fa-trash-can mr-2"></i>
+                                                Delete your profile
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
 
             </div>

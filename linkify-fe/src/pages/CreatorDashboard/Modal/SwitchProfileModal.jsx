@@ -67,7 +67,7 @@ export default function SwitchProfileModal({ onClose , onSuccess }) {
                                 />
                             </div>
 
-                            <div className="">
+                            <div className={`${p.isActive ? '' : 'text-gray-300'}`}>
                                 <div className="font-bold text-lg">
                                     {p.username}
                                 </div>
@@ -78,7 +78,7 @@ export default function SwitchProfileModal({ onClose , onSuccess }) {
 
                             {!switching && p._id === currentProfile?._id && (
                                 <div className="ml-auto font-bold text-green-600 bg-green-100 px-3 py-1 rounded-full text-sm">
-                                    Active
+                                    Current
                                 </div>
                             )}
 

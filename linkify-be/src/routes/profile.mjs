@@ -20,6 +20,8 @@ router.get('/me', profileController.getProfiles);
 router.post('/onboarding', upload.single("avatar"), profileController.createProfile);
 router.get('/check-username/:username', profileController.checkUsername);
 router.patch('/', upload.single("avatar"), profileController.updateProfile);
-
+router.patch('/:profileId/deactivate', profileController.deactivateProfile);
+router.patch('/:profileId/activate', profileController.reactivateProfile);
+router.delete('/:profileId', profileController.deleteProfile);
 
 export default router;

@@ -23,7 +23,7 @@ const checkUsername = async(username) => {
     return response.data;
 }
 
-const getProfiles = async (userId) => {
+const getProfiles = async () => {
     const response = await api.get('/profile/me');
     return response.data;
 }
@@ -40,10 +40,28 @@ const updateProfile = async (formData) => {
     return response.data;
 }
 
+const deactivateProfile = async (profileId) => {
+    const response = await api.patch(`/profile/${profileId}/deactivate`);
+    return response.data;
+}
+
+const reactivateProfile = async (profileId) => {
+    const response = await api.patch(`/profile/${profileId}/activate`);
+    return response.data;
+}
+
+const deleteProfile = async (profileId) => {
+    const response = await api.delete(`/profile/${profileId}`);
+    return response.data;
+}
+
 export const profileService = {
     createOnboardingProfile,
     checkUsername,
     getProfiles,
     getPublicProfile,
-    updateProfile
+    updateProfile,
+    deactivateProfile,
+    reactivateProfile,
+    deleteProfile
 };

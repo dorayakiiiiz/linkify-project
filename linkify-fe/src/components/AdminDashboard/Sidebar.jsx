@@ -47,7 +47,7 @@ export default function Sidebar() {
             'User': '/dashboard/admin/users',
             'Links': '/dashboard/admin/links',
             'Shop': '/dashboard/admin/shop',
-            'Theme': '/dashboard/admin/themes'
+            'Analytics': '/dashboard/admin/analytics'
         };
         return map[label] || '/dashboard/admin/users';
     };
