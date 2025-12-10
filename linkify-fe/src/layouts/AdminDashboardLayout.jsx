@@ -9,7 +9,7 @@ export default function AdminDashboardLayout() {
         if (location.pathname.includes('links')) return 'Links Management';
         if (location.pathname.includes('shop')) return 'Shop Management';
         if (location.pathname.includes('users')) return 'Users Management';
-        if (location.pathname.includes('themes')) return 'Theme Management';
+        if (location.pathname.includes('analytics')) return 'Analytics';
         return 'Dashboard';
     };
 

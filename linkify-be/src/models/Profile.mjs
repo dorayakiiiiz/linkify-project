@@ -21,6 +21,12 @@ const ProfileSchema = new Schema({
     donateLink: {
         type: String
     },
+
+    // khóa/hiển thị profile ra public
+    isActive: {
+        type: Boolean,
+        default: true
+    },
     
     design: {
         themeId: { type: String, default: 'custom' },

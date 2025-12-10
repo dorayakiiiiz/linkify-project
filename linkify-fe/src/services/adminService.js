@@ -39,6 +39,11 @@ const resolveProduct = async (productId, decision) => {
     return response.data;
 }
 
+const getSystemAnalytics = async () => {
+    const response = await api.get('/admin/analytics');
+    return response.data;
+}
+
 export const adminService = {
     getUsers,
     getUserDetails,
@@ -46,5 +51,6 @@ export const adminService = {
     getLinks,
     resolveLink,
     getProducts,    
-    resolveProduct
+    resolveProduct,
+    getSystemAnalytics
 };

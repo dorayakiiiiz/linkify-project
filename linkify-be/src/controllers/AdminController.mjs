@@ -1,7 +1,8 @@
 import User from "../models/User.mjs";
 import Link from "../models/Link.mjs";
 import Product from "../models/Product.mjs";
-import Profile from "../models/Profile.mjs"
+import Profile from "../models/Profile.mjs";
+import Analytic from "../models/Analytic.mjs";
 
 class AdminController {
     // [GET] /api/admin/users
@@ -316,6 +317,100 @@ class AdminController {
                 return res.json({ message: 'Product removed and User locked successfully.' });
             }
             res.json({ message: 'Product status updated.', product })
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    // [GET] /api/admin/analytics
+    async getSystemAnalytics(req, res, next) {
+        try {
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            sevenDaysAgo.setHours(0, 0, 0, 0);
+
+            // 1. TỔNG QUAN (LIFETIME COUNTS)
+            const [totalUsers, totalProfiles, totalLinks, totalProducts] = await Promise.all([
+                User.countDocuments({}),
+                Profile.countDocuments({}),
+                Link.countDocuments({}),
+                Product.countDocuments({})
+            ]);
+
+            // 2. TRAFFIC TOÀN HỆ THỐNG (7 NGÀY QUA)
+            // Gom nhóm theo ngày và loại (view/click)
+            const trafficStats = await Analytic.aggregate([
+                {
+                    $match: {
+                        createdAt: { $gte: sevenDaysAgo }
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                            type: "$type"
+                        },
+                        count: { $sum: 1 }
+                    }
+                },
+                { $sort: { "_id.date": 1 } }
+            ]);
+
+            // 3. TĂNG TRƯỞNG USER MỚI (7 NGÀY QUA)
+            const userGrowth = await User.aggregate([
+                {
+                    $match: {
+                        createdAt: { $gte: sevenDaysAgo }
+                    }
+                },
+                {
+                    $group: {
+                        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                        count: { $sum: 1 }
+                    }
+                },
+                { $sort: { _id: 1 } }
+            ]);
+
+            // 4. TOP 5 CREATOR CÓ NHIỀU VIEW NHẤT (LIFETIME)
+            // Phức tạp hơn xíu: Group Analytic theo profileId -> Đếm -> Sort -> Lookup Profile info
+            const topProfiles = await Analytic.aggregate([
+                { $match: { type: 'view' } },
+                { $group: { _id: "$profileId", views: { $sum: 1 } } },
+                { $sort: { views: -1 } },
+                { $limit: 5 },
+                {
+                    $lookup: {
+                        from: "profiles", // Tên collection trong DB (thường là số nhiều chữ thường)
+                        localField: "_id",
+                        foreignField: "_id",
+                        as: "profileInfo"
+                    }
+                },
+                { $unwind: "$profileInfo" }, // Bung mảng ra object
+                {
+                    // project đùng dể chỉ lựa ra những thuộc tính này để trả về
+                    $project: {
+                        username: "$profileInfo.username",
+                        avatarUrl: "$profileInfo.avatarUrl",
+                        views: 1 // giữ nguyên
+                    }
+                }
+            ]);
+
+            res.status(200).json({
+                counts: {
+                    users: totalUsers,
+                    profiles: totalProfiles,
+                    links: totalLinks,
+                    products: totalProducts
+                },
+                trafficStats,
+                userGrowth,
+                topProfiles
+            });
+
         } catch (err) {
             res.status(500).json({ error: err.message });
         }

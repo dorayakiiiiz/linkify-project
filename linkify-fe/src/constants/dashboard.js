@@ -16,7 +16,7 @@ export const adminMenu = [
         hasDropdown: true,
         subItems: [{ label: "Links" }, { label: "Shop" }],
     },
-    { icon: "fa-brands fa-uikit", label: "Theme", hasDropdown: false },
+    { icon: "fa-solid fa-chart-line", label: "Analytics", hasDropdown: false },
 
 ];
 
