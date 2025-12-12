@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HeaderDesign, ThemeDesign, WallPaper, ButtonDesign, TextDesign, ColorDesign } from './DesignComponent/index.js'
+import { HeaderDesign, ThemeDesign, Background, ButtonDesign, TextDesign, ColorDesign } from './DesignComponent/index.js'
 
 
 // props từ DesignPage: isDesignPanelOpen, toggleDesignPanel
@@ -42,9 +42,9 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
                     <i className="fas fa-th-large text-3xl text-gray-700 mb-1"></i>
                     <span className="text-sm font-medium text-gray-700">Theme</span>
                 </div>
-                <div className="flex flex-col items-center mx-4" onClick={() => handleHeaderClick('Wallpaper')}>
+                <div className="flex flex-col items-center mx-4" onClick={() => handleHeaderClick('Background')}>
                     <i className="fas fa-border-style text-3xl text-gray-700 mb-1"></i>
-                    <span className="text-sm font-medium text-gray-700">Wallpaper</span>
+                    <span className="text-sm font-medium text-gray-700">Background</span>
                 </div>
                 <div className="flex flex-col items-center mx-4" onClick={() => handleHeaderClick('Text')}>
                     <i className="fa-solid fa-font text-3xl text-gray-700 mb-1"></i>
@@ -74,7 +74,7 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
                 {/* Nội dung chính của HeaderDesign */}
                 {activeDesign === 'Header' && <HeaderDesign />}
                 {activeDesign === 'Theme' && <ThemeDesign />}
-                {activeDesign === 'Wallpaper' && <WallPaper />}
+                {activeDesign === 'Background' && <Background />}
                 {activeDesign === 'Text' && <TextDesign />}
                 {activeDesign === 'Buttons' && <ButtonDesign />}
                 {activeDesign === 'Colors' && <ColorDesign />}

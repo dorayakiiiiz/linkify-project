@@ -1,25 +1,81 @@
+import ColorPickerItem from "./ColorPickerItem"
+import { useProfile } from "../../../context/ProfileContext"; // Import context
 
 export default function ButtonDesign() {
+    const { profile, updateDesign } = useProfile(); // Lấy hàm updateDesign
+
+    //[LOGIC SHAPE BUTTON]
+    // Lấy giá trị hiện tại từ profile, mặc định là 'rounded'
+    const currentShape = profile?.design?.buttons?.shape || 'medium';
+    // Hàm xử lý thay đổi shape
+    const handleShapeChange = (shape) => {
+        updateDesign({
+            buttons: {
+                ...profile?.design?.buttons,
+                shape: shape
+            }
+        });
+    };
+
+    //[LOGIC STYLE BUTTON]
+    //Lấy giá trị hiện tại từ profile, mặc định là 'solid'
+    const currentStyle = profile?.design?.buttons?.style || 'solid';
+    const handleStyleChange = (style) => {
+        updateDesign({
+            buttons: { ...profile?.design?.buttons, style }
+        });
+    };
+
+    // --- SHADOW LOGIC ---
+    const currentShadow = profile?.design?.buttons?.shadowStyle || 'none';
+    const handleShadowChange = (shadowStyle) => {
+        updateDesign({
+            buttons: { ...profile?.design?.buttons, shadowStyle }
+        });
+    };
+
     return (
         <div>
             <div className="mb-8">
                 <h3 className="text-gray-700 text-lg font-semibold mb-3">Button style</h3>
+                {/* Button style */}
                 <div className="flex space-x-3">
-                {/* Solid Button (Selected) */}
-                <button className="flex-1 py-3 px-4 text-center text-gray-900 border-2 border-gray-900 bg-white rounded-lg shadow-sm font-medium">
-                    Solid
-                </button>
+                    {/* Solid Button */}
+                    <button 
+                        onClick={() => handleStyleChange('solid')}
+                        className={`flex-1 py-3 px-4 text-center border-2 rounded-lg shadow-sm font-medium transition-colors
+                            ${currentStyle === 'solid' 
+                                ? 'text-gray-900 border-gray-900 bg-white' 
+                                : 'text-gray-500 border-gray-200 bg-gray-100 hover:bg-gray-200'
+                            }`}
+                    >
+                        Solid
+                    </button>
 
-                {/* Glass Button (with lightning icon) */}
-                <button className="flex-1 py-3 px-4 text-center text-gray-500 border border-gray-200 bg-gray-100 rounded-lg font-medium relative">
-                    Glass
-                    <i className="fas fa-bolt absolute top-1 right-2 text-yellow-500 text-sm"></i>
-                </button>
+                    {/* Glass Button */}
+                    <button 
+                        onClick={() => handleStyleChange('glass')}
+                        className={`flex-1 py-3 px-4 text-center border-2 rounded-lg font-medium relative transition-colors
+                            ${currentStyle === 'glass' 
+                                ? 'text-gray-900 border-gray-900 bg-white' 
+                                : 'text-gray-500 border-gray-200 bg-gray-100 hover:bg-gray-200'
+                            }`}
+                    >
+                        Glass
+                        <i className="fas fa-bolt absolute top-1 right-2 text-yellow-500 text-sm"></i>
+                    </button>
 
-                {/* Outline Button */}
-                <button className="flex-1 py-3 px-4 text-center text-gray-500 border border-gray-200 bg-gray-100 rounded-lg font-medium">
-                    Outline
-                </button>
+                    {/* Outline Button */}
+                    <button 
+                        onClick={() => handleStyleChange('outline')}
+                        className={`flex-1 py-3 px-4 text-center border-2 rounded-lg font-medium transition-colors
+                            ${currentStyle === 'outline' 
+                                ? 'text-gray-900 border-gray-900 bg-white' 
+                                : 'text-gray-500 border-gray-200 bg-gray-100 hover:bg-gray-200'
+                            }`}
+                    >
+                        Outline
+                    </button>
                 </div>
             </div>
             
@@ -28,19 +84,46 @@ export default function ButtonDesign() {
             {/* Button Options */}
             <h3 className="text-gray-700 text-lg font-semibold mb-4">Button Options</h3>
 
-            {/* Corners (Slider) */}
+            {/* Corners (3 Buttons: Square, Medium, Round) */}
             <div className="mb-6">
-                <div className="flex flex-wrap  gap-8">
+                <div className="flex flex-wrap items-center gap-8">
+                    <span className="text-gray-700 block w-20">Corners</span>
+                    <div className="flex space-x-3 flex-1">
+                        {/* Square Button */}
+                        <button 
+                            onClick={() => handleShapeChange('square')}
+                            className={`flex-1 py-2 text-center border rounded-lg font-medium transition-colors
+                                ${currentShape === 'square' 
+                                    ? 'text-gray-900 border-gray-900 bg-white shadow-sm ring-1 ring-gray-900' 
+                                    : 'text-gray-500 border-gray-200 bg-gray-100 hover:bg-gray-200'
+                                }`}
+                        >
+                            Square
+                        </button>
 
-                    <span className="text-gray-700 block">Corners</span>
-                    <div className="flex items-center space-x-4 flex-1">
-                        <span className="text-gray-500">Square</span>
-                        {/* Mô phỏng Slider */}
-                        <div className="flex-1 relative">
-                            <input type="range" min="0" max="3" step="1" value="0" className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
-                            {/* Nút tròn ở vị trí 35% */}
-                        </div>
-                        <span className="text-gray-500">Round</span>
+                        {/* Medium Button (Rounded) */}
+                        <button 
+                            onClick={() => handleShapeChange('medium')}
+                            className={`flex-1 py-2 text-center border rounded-lg font-medium transition-colors
+                                ${currentShape === 'medium' 
+                                    ? 'text-gray-900 border-gray-900 bg-white shadow-sm ring-1 ring-gray-900' 
+                                    : 'text-gray-500 border-gray-200 bg-gray-100 hover:bg-gray-200'
+                                }`}
+                        >
+                            Medium
+                        </button>
+
+                        {/* Round Button (Pill) */}
+                        <button 
+                            onClick={() => handleShapeChange('round')}
+                            className={`flex-1 py-2 text-center border rounded-lg font-medium transition-colors
+                                ${currentShape === 'round' 
+                                    ? 'text-gray-900 border-gray-900 bg-white shadow-sm ring-1 ring-gray-900' 
+                                    : 'text-gray-500 border-gray-200 bg-gray-100 hover:bg-gray-200'
+                                }`}
+                        >
+                            Round
+                        </button>
                     </div>
                 </div>
             </div>
@@ -48,19 +131,53 @@ export default function ButtonDesign() {
             {/* Shadow */}
             <div className="mb-8">
                 <div className="flex flex-wrap items-center gap-8">
-                    <span className="text-gray-700 block">Shadow</span>
+                    <span className="text-gray-700 block w-20">Shadow</span>
                     <div className="flex space-x-3 flex-1">
-                        <button className="flex-1 py-2 text-center text-gray-500 border border-gray-200 bg-gray-100 rounded-lg font-medium">
+                        {/* None */}
+                        <button 
+                            onClick={() => handleShadowChange('none')}
+                            className={`flex-1 py-2 text-center border rounded-lg font-medium transition-colors
+                                ${currentShadow === 'none' 
+                                    ? 'text-gray-900 border-gray-900 bg-white shadow-sm ring-1 ring-gray-900' 
+                                    : 'text-gray-500 border-gray-200 bg-gray-100 hover:bg-gray-200'
+                                }`}
+                        >
                             None
                         </button>
-                        <button className="flex-1 py-2 text-center text-gray-500 border border-gray-200 bg-gray-100 rounded-lg font-medium">
+
+                        {/* Subtle */}
+                        <button 
+                            onClick={() => handleShadowChange('subtle')}
+                            className={`flex-1 py-2 text-center border rounded-lg font-medium transition-colors
+                                ${currentShadow === 'subtle' 
+                                    ? 'text-gray-900 border-gray-900 bg-white shadow-sm ring-1 ring-gray-900' 
+                                    : 'text-gray-500 border-gray-200 bg-gray-100 hover:bg-gray-200'
+                                }`}
+                        >
                             Subtle
                         </button>
-                        {/* Strong Button (Selected) */}
-                        <button className="flex-1 py-2 text-center text-gray-900 border-2 border-gray-900 bg-white rounded-lg shadow-sm font-medium">
+
+                        {/* Strong */}
+                        <button 
+                            onClick={() => handleShadowChange('strong')}
+                            className={`flex-1 py-2 text-center border rounded-lg font-medium transition-colors
+                                ${currentShadow === 'strong' 
+                                    ? 'text-gray-900 border-gray-900 bg-white shadow-sm ring-1 ring-gray-900' 
+                                    : 'text-gray-500 border-gray-200 bg-gray-100 hover:bg-gray-200'
+                                }`}
+                        >
                             Strong
                         </button>
-                        <button className="flex-1 py-2 text-center text-gray-500 border border-gray-200 bg-gray-100 rounded-lg font-medium">
+
+                        {/* Hard */}
+                        <button 
+                            onClick={() => handleShadowChange('hard')}
+                            className={`flex-1 py-2 text-center border rounded-lg font-medium transition-colors
+                                ${currentShadow === 'hard' 
+                                    ? 'text-gray-900 border-gray-900 bg-white shadow-sm ring-1 ring-gray-900' 
+                                    : 'text-gray-500 border-gray-200 bg-gray-100 hover:bg-gray-200'
+                                }`}
+                        >
                             Hard
                         </button>
                     </div>
@@ -74,22 +191,18 @@ export default function ButtonDesign() {
             <h3 className="text-gray-700 text-lg font-semibold mb-4">Colors</h3>
 
             {/* Button color */}
-            <div className="mb-4 bg-[#e6e5e3] p-2 rounded-2xl hover:cursor-pointer">
-                <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                    <span className="text-gray-700">Button color</span>
-                    {/* Màu Vàng nhạt/Xanh lá nhạt */}
-                    <div className="w-6 h-6 border border-gray-300 rounded-full bg-yellow-100 cursor-pointer"></div>
-                </div>
-            </div>
+            <ColorPickerItem 
+                label="Button color" 
+                designSection="buttons" 
+                colorKey="color" 
+            />
 
             {/* Text color */}
-            <div className="mb-4 bg-[#e6e5e3] p-2 rounded-2xl hover:cursor-pointer">
-                <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                    <span className="text-gray-700">Text color</span>
-                    {/* Màu Tím đậm */}
-                    <div className="w-6 h-6 border border-gray-300 rounded-full bg-purple-700 cursor-pointer"></div>
-                </div>
-            </div>
+            <ColorPickerItem 
+                label="Button text color" 
+                designSection="buttons" 
+                colorKey="textColor" 
+            />
         </div>
     )
 }

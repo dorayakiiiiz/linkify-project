@@ -23,7 +23,7 @@ const checkUsername = async(username) => {
     return response.data;
 }
 
-const getProfiles = async (userId) => {
+const getProfiles = async () => {
     const response = await api.get('/profile/me');
     return response.data;
 }
@@ -40,10 +40,32 @@ const updateProfile = async (formData) => {
     return response.data;
 }
 
+//DesignData là object chứa thông tin design cần update
+const updateDesign = async (profileId, designData) => {
+    // Gửi JSON body thay vì FormData
+    const response = await api.patch('/profile/design', { 
+        profileId, 
+        design: designData 
+    });
+    return response.data;
+}
+
+//Upload background image và trả về URL
+const uploadBackground = async (formData) => {
+    const response = await api.post('/profile/upload-background', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return response.data;
+}
+
 export const profileService = {
     createOnboardingProfile,
     checkUsername,
     getProfiles,
     getPublicProfile,
-    updateProfile
+    updateProfile,
+    updateDesign,
+    uploadBackground,
 };

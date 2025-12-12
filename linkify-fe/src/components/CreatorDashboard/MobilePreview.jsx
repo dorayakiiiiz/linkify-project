@@ -1,7 +1,7 @@
 import { useProfile } from "../../context/ProfileContext";
 import { useLinks } from "../../context/LinkContext";
 import { useShop } from "../../context/ShopContext";
-import LinkTreePreview from "../Shared/LinkTreePreview";
+import LinkTreePreview from "../Shared/LinktreePreview";
 import { useLocation } from "react-router-dom";
 
 export default function MobilePreview({ isDesignPanelOpen }) {

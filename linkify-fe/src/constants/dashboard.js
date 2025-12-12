@@ -28,7 +28,7 @@ export const tools = [
 export const designNavItems = [
     { name: "Header", iconClass: "fa-solid fa-user" },
     { name: "Theme", iconClass: "fa-solid fa-table-cells" },
-    { name: "Wallpaper", iconClass: "fa-regular fa-square-full" },
+    { name: "Background", iconClass: "fa-regular fa-square-full" },
     { name: "Text", iconClass: "fa-solid fa-font" },
     { name: "Buttons", iconClass: "fa-solid fa-bars-staggered" },
     { name: "Colors", iconClass: "fa-solid fa-palette" },

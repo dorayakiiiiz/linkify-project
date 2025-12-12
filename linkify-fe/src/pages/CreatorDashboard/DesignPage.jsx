@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { designNavItems } from '../../constants/dashboard'; 
-import { HeaderDesign, TextDesign, ButtonDesign, WallPaper, ThemeDesign, ColorDesign } from '../../components/CreatorDashboard/DesignComponent'; 
+import { HeaderDesign, TextDesign, ButtonDesign, Background, ThemeDesign, ColorDesign } from '../../components/CreatorDashboard/DesignComponent'; 
 import DesignActions from '../../components/CreatorDashboard/DesignActions';
 import MobilePreview from '../../components/CreatorDashboard/MobilePreview';
 
@@ -41,7 +41,7 @@ export default function DesignPage() {
                     {activeItem === 'Header' && <HeaderDesign />}
                     {activeItem === 'Text' && <TextDesign />}
                     {activeItem === 'Buttons' && <ButtonDesign />}
-                    {activeItem === 'Wallpaper' && <WallPaper />}
+                    {activeItem === 'Background' && <Background />}
                     {activeItem === 'Theme' && <ThemeDesign />}
                     {activeItem === 'Colors' && <ColorDesign />}
                 </div>

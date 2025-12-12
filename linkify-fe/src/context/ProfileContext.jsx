@@ -23,11 +23,13 @@ export const ProfileProvider = ({ children }) => {
             return;
         }
         try {
-
+            
+            // Lấy tất cả profile của user (Gọi API từ BE)
             const data = await profileService.getProfiles().catch(() => null);
             
             const profileList = data?.profiles || [];
             
+            //ProfileList là mảng các profile của user hiện tại
             setProfiles(profileList);
 
             if (profileList.length > 0) {
@@ -54,13 +56,36 @@ export const ProfileProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    }, [user?.id, profile]);
+    }, [user?.id]);
 
     const switchProfile = (profileId) => {
+        // Chuyển profile hiện tại
         const target = profiles.find(p => p._id === profileId);
         if (target) {
             setProfile(target);
             localStorage.setItem("currentProfileId", profileId);
+        }
+    }
+
+    // Cập nhật design (dùng trong CreatorDashboard)
+    const updateDesign = async (newDesignData) => {
+        if (!profile) return;
+
+        // 1. Cập nhật ngay lập tức ở Client (Optimistic Update)
+        setProfile(prev => ({
+            ...prev, //Các thuộc tính khác giữ nguyên
+            design: {
+                ...prev.design, // Giữ design cũ
+                ...newDesignData // Gộp với design mới
+            }
+        }));
+
+        // 2. Gọi API lưu ngầm
+        try {
+            //Gọi API từ profileService để update design
+            await profileService.updateDesign(profile._id, newDesignData);
+        } catch (err) {
+            console.error("Failed to save design:", err);
         }
     }
 
@@ -83,7 +108,7 @@ export const ProfileProvider = ({ children }) => {
     }
 
     return (
-        <ProfileContext.Provider value={{ profile, profiles, loading, setProfile, fetchProfile, switchProfile }}>
+        <ProfileContext.Provider value={{ profile, profiles, loading, setProfile, fetchProfile, switchProfile, updateDesign }}>
             {children}
         </ProfileContext.Provider>
     )

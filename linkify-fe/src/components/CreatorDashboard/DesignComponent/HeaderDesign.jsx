@@ -1,5 +1,41 @@
-
+import ColorPickerItem from "./ColorPickerItem"
+import { useState } from "react"
+import { useProfile } from "../../../context/ProfileContext";
+import FontPickerModal from "../../../pages/CreatorDashboard/Modal/FontModal"
 export default function HeaderDesign() {
+    const { profile, updateDesign } = useProfile();
+    //Có đang mở Modal chọn font hay không
+    const [isFontModalOpen, setIsFontModalOpen] = useState(false);
+    const [targetSection, setTargetSection] = useState(null); // 'header' hoặc 'text'
+
+    const openFontModal = (section) => {
+        setTargetSection(section);
+        setIsFontModalOpen(true);
+    };
+
+    // Hàm xử lý khi chọn font
+    const handleFontSelect = (fontName) => {
+        updateDesign({
+            //Gán font đã chọn vào đúng section
+            [targetSection]: {
+                ...profile?.design?.[targetSection],
+                font: fontName
+            }
+        });
+    };
+
+    // Hàm xử lý thay đổi size username
+    const handleUsernameSizeChange = (size) => {
+        updateDesign({
+            header: {
+                ...profile?.design?.header,
+                sizeUsername: size
+            }
+        });
+    };
+    // Lấy size hiện tại (mặc định là medium)
+    const currentSize = profile?.design?.header?.sizeUsername || 'medium';
+
     return (
         <div>
 
@@ -61,49 +97,56 @@ export default function HeaderDesign() {
                     </div>
                 </div>
 
-                {/* Title Text Input */}
-                <div>
-                    <h3 className="text-md font-semibold mb-4">Title text</h3>
-                    <input 
-                        type="text" 
-                        defaultValue="otis275" 
-                        className="w-full px-4 py-4 border border-gray-300 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-800 transition duration-150"
-                    />
-                </div>
 
                 {/* Title Font */}
                 <div className="flex justify-between items-center py-3 bg-[#e6e5e3] rounded-2xl">
                     <h3 className="ml-3 text-md font-semibold text-gray-800">Title font</h3>
                     <div className="flex items-center space-x-2 cursor-pointer">
-                        <span className="text-base font-semibold text-gray-800">IBM Plex Sans</span>
+                        <span className="text-base font-semibold text-gray-800" onClick={() => openFontModal('header')}>{profile?.design?.header?.font || 'Inter'}</span>
                         <i className="fa-solid fa-chevron-right text-gray-500 text-xs ml-1 mr-3"></i>
                     </div>
                 </div>
 
-                {/* Title Color */}
-                <div className="flex justify-between items-center py-3 bg-[#e6e5e3] rounded-2xl">
-                    <h3 className="ml-3 text-md font-semibold text-gray-800">Title color</h3>
-                    {/* Color Toggle/Indicator */}
-                    <div className="w-5 h-5 border border-gray-400 rounded-full cursor-pointer relative p-0.5 mr-3">
-                        <div className="w-full h-full bg-black rounded-full"></div>
-                    </div>
-                </div>
+                <ColorPickerItem
+                    label="Title color"
+                    designSection="header"
+                    colorKey="color"
+                />
+                <FontPickerModal 
+                    isOpen={isFontModalOpen}
+                    onClose={() => setIsFontModalOpen(false)}
+                    onSelect={handleFontSelect}
+                    currentFont={profile?.design?.[targetSection]?.font}
+                    title={targetSection === 'header' ? 'Title Font' : 'Page Font'}
+                />
                 
                 {/* Title Size */}
                 <div>
                     <h3 className="text-md font-semibold mb-4">Title size</h3>
                     <div className="flex space-x-4">
-                        {/* Small - Active (Viền đen đậm, nền trắng) */}
-                        <button className="flex-1 flex flex-col items-center justify-center py-4 h-14 border-2 border-black bg-white shadow-md rounded-xl transition duration-150 cursor-pointer">
-                            <span className="text-base font-medium text-gray-600">Small</span>
+                        {/* Small Button */}
+                        <button 
+                            onClick={() => handleUsernameSizeChange('small')}
+                            className={`flex-1 py-3 px-4 text-center border rounded-lg shadow-sm font-medium transition-colors
+                                ${currentSize === 'small' 
+                                    ? 'text-gray-900 border-gray-400 bg-white ring-2 ring-gray-200' 
+                                    : 'text-gray-500 border-gray-200 bg-gray-50 hover:bg-gray-100'
+                                }`}
+                        >
+                            Small
                         </button>
-                        {/* Large - Inactive (Viền xám, nền xám nhạt) */}
-                        <button className="flex-1 flex flex-col items-center justify-center py-4 h-14 border border-gray-300 bg-gray-100 rounded-xl transition duration-150 relative cursor-pointer group">
-                            <span className="text-base font-medium text-gray-600">Large</span>
-                            {/* Icon Bolt (Pro/Plus) nhỏ ở góc */}
-                            <div className="absolute top-2 right-2 text-gray-500">
-                                <i className="fa-solid fa-bolt text-sm"></i>
-                            </div>
+
+                        {/* Large Button */}
+                        <button 
+                            onClick={() => handleUsernameSizeChange('large')}
+                            className={`flex-1 py-3 px-4 text-center border rounded-lg font-medium relative transition-colors
+                                ${currentSize === 'large' 
+                                    ? 'text-gray-900 border-gray-400 bg-white ring-2 ring-gray-200' 
+                                    : 'text-gray-500 border-gray-200 bg-gray-50 hover:bg-gray-100'
+                                }`}
+                        >
+                            Large
+                            {/* <i className="fas fa-bolt absolute top-1 right-2 text-yellow-500 text-sm"></i> */}
                         </button>
                     </div>
                 </div>
