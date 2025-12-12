@@ -5,6 +5,7 @@ import { profileService } from '../services/profileService';
 import { linkService } from '../services/linkService';
 import { shopService } from '../services/shopService';
 import { analyticService } from '../services/analyticService';
+import ShareQRCode from '../components/Shared/ShareQRCode';
 
 export default function PublicProfile() {
     const { username } = useParams();
@@ -70,15 +71,18 @@ export default function PublicProfile() {
     }
 
     return (
-    <div className="w-full flex justify-center items-center bg-[#A6A8AA] md:py-10">
-        <LinkTreePreview
-            profile={profile}
-            links={links}
-            loading={loading}
-            loadingLinks={loading}
-            products={products}
-            loadingProducts={loading}
-        />
-    </div>
+        <div className="w-full flex justify-center items-center bg-[#A6A8AA] md:py-10 relative">
+            <LinkTreePreview
+                profile={profile}
+                links={links}
+                loading={loading}
+                loadingLinks={loading}
+                products={products}
+                loadingProducts={loading}
+            />
+
+            {!loading && profile && <ShareQRCode />}
+        </div>
+
     );
 }
