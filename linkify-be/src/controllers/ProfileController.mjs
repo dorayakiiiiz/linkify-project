@@ -77,7 +77,7 @@ class ProfileController {
     // [PATCH] /api/profile
     async updateProfile(req, res, next) {
         try {
-            const { username, bio, profileId } = req.body;
+            const { username, bio, profileId, donation } = req.body;
             
             const currentProfile = await Profile.findById(profileId);
             if (!currentProfile) {
@@ -94,6 +94,15 @@ class ProfileController {
 
             if (bio !== undefined) {
                 currentProfile.bio = bio;
+            }
+
+            if (donation) {
+                const donationData = JSON.parse(donation);
+
+                currentProfile.donation = {
+                    ...currentProfile.donation,
+                    ...donationData
+                };
             }
 
             if (req.file) {

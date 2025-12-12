@@ -109,6 +109,30 @@ export default function LinkTreePreview({
                             {profile?.bio}
                         </p>
 
+
+                        {!loading && profile?.donation?.isEnabled && (
+                            <div className="mb-10 animate-fade-in-up">
+
+                                <a 
+                                    href={profile.donation.url.match(/^https?:\/\//)
+                                            ? profile.donation.url
+                                            : "https://" + profile.donation.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`
+                                        py-3 ${!isPreview ? "md:py-5 md:mx-[50px]" : ""} px-6 rounded-full cursor-pointer transition-all duration-300 transform hover:scale-[1.02] active:scale-95
+                                        flex items-center justify-center gap-2.5 font-bold ${!isPreview ? 'md:text-xl lg:text-2xl' : ''} shadow-md
+                                        bg-white whitespace-nowrap text-gray-800 border-2 border-pink-100 hover:border-pink-300 hover:shadow-pink-100
+                                    `}
+                                >
+                                    <div className={`w-8 h-8 rounded-full bg-pink-50 flex items-center justify-center ${isPreview ? 'hidden lg:flex' : ''}`}>
+                                        <i className="fa-solid fa-heart text-pink-500 text-sm animate-pulse"></i>
+                                    </div>
+
+                                    {profile.donation.text || "Support Me"}
+                                </a>
+                            </div>
+                        )}
                         {/* toggle đổi giữa link và shop */}
                         <div className="relative flex items-center justify-center bg-[#8D8F90] font-bold font-quicksand p-1 rounded-full mb-[30px]">
                             {/* lớp trắng che trượt qua lại */}
