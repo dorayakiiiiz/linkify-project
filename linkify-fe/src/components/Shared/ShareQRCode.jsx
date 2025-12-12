@@ -57,7 +57,7 @@ export default function ShareQRCode() {
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center text-green-600">
-                        <i class="fa-brands fa-linktree"></i>  
+                        <i className="fa-brands fa-linktree"></i>  
                     </div>
                 </div>
 
