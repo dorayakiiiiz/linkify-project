@@ -18,8 +18,10 @@ const ProfileSchema = new Schema({
     bio: { 
         type: String, 
     },
-    donateLink: {
-        type: String
+    donation: {
+        isEnabled: { type: Boolean, default: false },
+        url: { type: String, default: '' },
+        text: { type: String, default: 'Support Me' } // Text hiển thị trên nút
     },
 
     // khóa/hiển thị profile ra public
