@@ -64,7 +64,7 @@ export default function ThemeDesign() {
         <div>
             <h3 className="text-lg font-semibold mb-4">Themes</h3>
             
-            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {THEMES.map((theme) => {
                     const isSelected = profile?.design?.themeId === theme.id;
                     const { design } = theme;

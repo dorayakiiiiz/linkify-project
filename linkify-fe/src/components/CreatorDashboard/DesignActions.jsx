@@ -54,11 +54,7 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
                 <div className="flex flex-col items-center mx-4" onClick={() => handleHeaderClick('Buttons')}>
                     <i className="fa-solid fa-bars-staggered text-3xl text-gray-700 mb-1"></i>
                     <span className="text-sm font-medium text-gray-700">Buttons</span>
-                </div>
-                <div className="flex flex-col items-center mx-4" onClick={() => handleHeaderClick('Colors')}>
-                    <i className="fas fa-palette text-3xl text-gray-700 mb-1"></i>
-                    <span className="text-sm font-medium text-gray-700">Colors</span>
-                </div>                                              
+                </div>                                            
             </div>
 
 

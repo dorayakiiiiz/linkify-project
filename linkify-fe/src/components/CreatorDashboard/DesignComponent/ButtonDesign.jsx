@@ -39,7 +39,7 @@ export default function ButtonDesign() {
             <div className="mb-8">
                 <h3 className="text-gray-700 text-lg font-semibold mb-3">Button style</h3>
                 {/* Button style */}
-                <div className="flex space-x-3">
+                <div className="flex space-x-3 flex-wrap">
                     {/* Solid Button */}
                     <button 
                         onClick={() => handleStyleChange('solid')}
@@ -131,7 +131,7 @@ export default function ButtonDesign() {
             <div className="mb-8">
                 <div className="flex flex-wrap items-center gap-8">
                     <span className="text-gray-700 block w-20">Shadow</span>
-                    <div className="flex space-x-3 flex-1">
+                    <div className="flex space-x-2 flex-1 ">
                         {/* None */}
                         <button 
                             onClick={() => handleShadowChange('none')}

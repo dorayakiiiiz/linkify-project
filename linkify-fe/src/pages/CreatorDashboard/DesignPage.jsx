@@ -11,7 +11,7 @@ export default function DesignPage() {
     return (
         <div className="w-full h-full flex flex-col md:flex-row">
             {/* 1. Design Sidebar (Menu con bên trái của trang Design) */}
-            <div className="hidden md:block w-full md:w-[80px] lg:w-[240px] p-4 bg-[#f1f0ee] overflow-y-auto">
+            <div className="hidden md:block md:w-[80px] xl:w-[240px] p-4 bg-[#f1f0ee] overflow-y-auto">
                 <ul className="space-y-1">
                     {designNavItems.map((item) => (
                         <li key={item.name} onClick={() => setActiveItem(item.name)}>
@@ -25,7 +25,7 @@ export default function DesignPage() {
                                 `}
                             >
                                 <i className={`${item.iconClass} w-5 h-5 mr-4 text-xl`}></i>
-                                <span className='hidden lg:block'>{item.name}</span>
+                                <span className='hidden xl:block'>{item.name}</span>
                             </div>
                         </li>
                     ))}

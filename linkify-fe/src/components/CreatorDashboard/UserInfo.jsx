@@ -44,13 +44,13 @@ export function UserInfo() {
                 <DonationModal onClose={() => setIsDonationModalOpen(false)} />
             )}
 
-            <div className=" w-full py-4 flex gap-[20px]">
+            <div className=" w-full py-4 flex gap-[20px] items-center">
                 
-                <div className={`relative rounded-full p-[2px] ${profile.isActive ? 'bg-green-400' : 'bg-gray-300'}`}>
+                <div className={`relative flex-shrink-0 rounded-full p-[2px] ${profile.isActive ? 'bg-green-400' : 'bg-gray-300'}`}>
                     <img
                         src={profile.avatarUrl}
                         alt="avatar"
-                        className="rounded-full w-20 h-20 border-4 border-white object-cover"
+                        className="rounded-full w-16 h-16 md:w-20 md:h-20 border-4 border-white object-cover"
                     />
                 </div>
                 <div className="flex flex-col">
