@@ -23,5 +23,7 @@ router.get('/products', adminController.getAllProducts);
 // safe/banned/ban_user (có thao tác xóa trong này)
 router.patch('/products/:id/resolve', adminController.resolveProductViolation);
 
+router.get('/analytics', adminController.getSystemAnalytics);
+
 
 export default router;

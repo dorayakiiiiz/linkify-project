@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import LinkTreePreview from '../components/Shared/LinktreePreview';
 import { profileService } from '../services/profileService';
 import { linkService } from '../services/linkService';
 import { shopService } from '../services/shopService';
+import { analyticService } from '../services/analyticService';
+import ShareQRCode from '../components/Shared/ShareQRCode';
 
 export default function PublicProfile() {
     const { username } = useParams();
@@ -15,6 +17,9 @@ export default function PublicProfile() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
+    // Dùng ref để lưu lại ID profile đã track, tránh track trùng lặp do React.StrictMode
+    const trackedProfileRef = useRef(null);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -24,6 +29,15 @@ export default function PublicProfile() {
                 setProfile(publicProfile);
 
                 if (publicProfile) {
+                    if (trackedProfileRef.current !== publicProfile._id) {
+                        analyticService.trackEvent({
+                            profileId: publicProfile._id,
+                            type: 'view',
+                            referrer: document.referrer 
+                        });
+                        trackedProfileRef.current = publicProfile._id;
+                    }
+
                     const [{ links: publicLinks }, { products: publicProducts }] = await Promise.all([
                         linkService.getPublicLinks(publicProfile._id),
                         shopService.getPublicProducts(publicProfile._id)
@@ -57,15 +71,18 @@ export default function PublicProfile() {
     }
 
     return (
-    <div className="w-full flex justify-center items-center bg-[#A6A8AA] md:py-10">
-        <LinkTreePreview
-            profile={profile}
-            links={links}
-            loading={loading}
-            loadingLinks={loading}
-            products={products}
-            loadingProducts={loading}
-        />
-    </div>
+        <div className="w-full flex justify-center items-center bg-[#A6A8AA] md:py-10 relative">
+            <LinkTreePreview
+                profile={profile}
+                links={links}
+                loading={loading}
+                loadingLinks={loading}
+                products={products}
+                loadingProducts={loading}
+            />
+
+            {!loading && profile && <ShareQRCode />}
+        </div>
+
     );
 }

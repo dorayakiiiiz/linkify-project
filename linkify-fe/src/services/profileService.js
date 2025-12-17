@@ -56,7 +56,19 @@ const uploadBackground = async (formData) => {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
-    });
+    })};
+const deactivateProfile = async (profileId) => {
+    const response = await api.patch(`/profile/${profileId}/deactivate`);
+    return response.data;
+}
+
+const reactivateProfile = async (profileId) => {
+    const response = await api.patch(`/profile/${profileId}/activate`);
+    return response.data;
+}
+
+const deleteProfile = async (profileId) => {
+    const response = await api.delete(`/profile/${profileId}`);
     return response.data;
 }
 
@@ -68,4 +80,7 @@ export const profileService = {
     updateProfile,
     updateDesign,
     uploadBackground,
+    deactivateProfile,
+    reactivateProfile,
+    deleteProfile
 };

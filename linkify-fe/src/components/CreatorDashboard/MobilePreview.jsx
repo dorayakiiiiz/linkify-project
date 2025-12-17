@@ -25,7 +25,7 @@ export default function MobilePreview({ isDesignPanelOpen }) {
     return (
         <div className={`flex flex-col h-screen ${previewClasses}`}>
             {/* Link ở trên */}
-            <div className="hidden h-[65px] md:flex items-center">
+            <div className="hidden mt-3 md:flex items-center">
                 <div className="bg-white py-2 px-[26px] rounded-3xl xl:w-[280px] lg:w-[240px] md:w-[200px] mx-auto flex items-center justify-between">
                     {!loading ? (
                         <>
@@ -48,7 +48,7 @@ export default function MobilePreview({ isDesignPanelOpen }) {
             
             {/* Điện thoại preview */}
             <div className="flex-1 flex items-center">
-                <div className=" xl:w-[300px] lg:w-[280px] md:w-[200px] relative w-auto aspect-[9/19] border-[8px] border-black rounded-[3rem] bg-black shadow-2xl overflow-hidden max-h-[88%]">              
+                <div className="xl:w-[300px] lg:w-[280px] md:w-[200px] relative w-auto aspect-[9/19] border-[8px] border-black rounded-[3rem] bg-black shadow-2xl overflow-hidden max-h-[88%]">              
                     {/* tai thỏ */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-[18px] bg-black rounded-b-xl z-10"></div>
 

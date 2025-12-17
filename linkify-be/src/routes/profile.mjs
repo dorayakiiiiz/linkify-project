@@ -25,6 +25,8 @@ router.patch('/design', profileController.updateDesign);
 // Route upload background image
 router.post('/upload-background', backgroundUpload.single("image"), profileController.uploadBackground);
 router.patch('/', upload.single("avatar"), profileController.updateProfile);
-
+router.patch('/:profileId/deactivate', profileController.deactivateProfile);
+router.patch('/:profileId/activate', profileController.reactivateProfile);
+router.delete('/:profileId', profileController.deleteProfile);
 
 export default router;

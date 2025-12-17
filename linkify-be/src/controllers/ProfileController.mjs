@@ -1,5 +1,7 @@
 
 import Profile from "../models/Profile.mjs";
+import Link from "../models/Link.mjs";
+import Product from "../models/Product.mjs";
 
 class ProfileController {
     // [POST] /api/profile/onboarding
@@ -45,10 +47,10 @@ class ProfileController {
     async getPublicProfile(req, res, next) {
         try {
             const { username } = req.params;
-            const profile = await Profile.findOne({ username });
+            const profile = await Profile.findOne({ username, isActive: true });
 
             if (!profile) {
-                return res.status(404).json({ message: 'Profile not found' });
+                return res.status(404).json({ message: 'Profile not found or deactivated/' });
             }
 
             res.status(200).json({ profile });
@@ -76,7 +78,7 @@ class ProfileController {
     async updateProfile(req, res, next) {
         try {
             //Ở đây design là object chứa thông tin design cần update
-            const { username, bio, profileId, design } = req.body;
+            const { username, bio, profileId, design, donation } = req.body;
             
             //Tìm profile theo profileId
             const currentProfile = await Profile.findById(profileId);
@@ -109,6 +111,16 @@ class ProfileController {
                 currentProfile.design = {
                     ...currentProfile.design,
                     ...designData
+                }
+            }
+
+            //Cập nhật donation nếu có
+            if (donation) {
+                const donationData = JSON.parse(donation);
+
+                currentProfile.donation = {
+                    ...currentProfile.donation,
+                    ...donationData
                 };
             }
 
@@ -272,6 +284,51 @@ class ProfileController {
         }
     }
     
+    // [PATCH] /api/profile/:profileId/deactivate
+    async deactivateProfile(req, res, next) {
+        try {
+            const { profileId } = req.params;
+            
+            // cập nhật isActive thành false để khóa profile
+            await Profile.findByIdAndUpdate(profileId, { isActive: false });
+
+            res.status(200).json({ message: 'Profile deactivated successfully.' });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    // [PATCH] /api/profile/:profileId/activate
+    async reactivateProfile(req, res, next) {
+        try {
+            const { profileId } = req.params;
+            await Profile.findByIdAndUpdate(profileId, { isActive: true });
+            res.status(200).json({ message: 'Profile reactivated successfully.' });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    // [DELETE] /api/profile/:profileId
+    async deleteProfile(req, res, next) {
+        try {
+
+            const { profileId } = req.params;
+
+            // xóa các link và product của profile trước
+            await Promise.all([
+                Link.deleteMany({ profileId }),
+                Product.deleteMany({ profileId })
+            ]);
+                        
+            await Profile.findByIdAndDelete(profileId);
+
+            res.status(200).json({ message: 'Profile deleted successfully.' });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
 }
 
 export default new ProfileController();

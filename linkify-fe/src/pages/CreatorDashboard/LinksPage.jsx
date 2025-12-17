@@ -258,10 +258,6 @@ export default function LinksPage() {
                                                                     <div className="flex items-center justify-between mt-4 text-gray-500 text-sm">
                                                                         <div className="flex items-center space-x-3 flex-wrap gap-2">
                                                                             <i
-                                                                                className="fa-regular fa-image text-base hover:text-gray-700 cursor-pointer"
-                                                                                title="Thumbnal"
-                                                                            ></i>
-                                                                            <i
                                                                                 className="fa-solid fa-star text-base hover:text-gray-700 cursor-pointer"
                                                                                 title="Favourite"
                                                                             ></i>
@@ -269,10 +265,14 @@ export default function LinksPage() {
                                                                                 className="fa-solid fa-lock text-base hover:text-gray-700 cursor-pointer"
                                                                                 title="Lock"
                                                                             ></i>
-                                                                            <i
-                                                                                className="fa-regular fa-chart-bar text-base hover:text-gray-700 cursor-pointer"
+
+                                                                            <div 
+                                                                                className=" text-base hover:text-gray-700 cursor-pointer"
                                                                                 title="Analytics"
-                                                                            ></i>
+                                                                            >
+                                                                            <i className="fa-regular fa-chart-bar mr-2"></i>
+                                                                            {link.clickCount} clicks.
+                                                                            </div>
                                                                         </div>
 
                                                                         <div>

@@ -38,7 +38,7 @@ import AdminDashboardLayout from "./layouts/AdminDashboardLayout";
 import UserManagementPage from "./pages/AdminDashboard/UserManagementPage";
 import LinkManagementPage from "./pages/AdminDashboard/LinkManagementPage";
 import ShopManagementPage from "./pages/AdminDashboard/ShopManagementPage";
-import ThemeManagementPage from "./pages/AdminDashboard/ThemeManagementPage";
+import AnalyticsPage from "./pages/AdminDashboard/AnalyticsPage";
 
 // Định nghĩa các route trong này
 
@@ -77,7 +77,7 @@ function App() {
                                             <Route path="users" element={<UserManagementPage />} />
                                             <Route path="links" element={<LinkManagementPage />} />
                                             <Route path="shop" element={<ShopManagementPage />} />
-                                            <Route path="themes" element={<ThemeManagementPage />} />
+                                            <Route path="analytics" element={<AnalyticsPage />} />
 
                                         </Route>
                                     </Route>

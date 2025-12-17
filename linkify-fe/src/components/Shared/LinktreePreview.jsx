@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { analyticService } from "../../services/analyticService";
+
 import { SOCIALS } from "../../constants/socials";
 
 
@@ -99,6 +101,18 @@ export default function LinkTreePreview({
     useEffect(() => {
         setIsLinkTab(tab === "link");
     }, [tab]);
+
+    const handleItemClick = (item, type) => {
+        // Nếu đang là chế độ xem trước (trong dashboard) thì KHÔNG track
+        if (isPreview) return;
+
+        analyticService.trackEvent({
+            profileId: profile._id,
+            type: type === 'link' ? 'link_click' : 'shop_click',
+            targetId: item._id,
+            referrer: document.referrer
+        });
+    }
 
     //dùng profile để update khi có thay đổi
     const design = profile?.design || {};
@@ -246,7 +260,7 @@ export default function LinkTreePreview({
     return (
         <div className="w-full h-full flex justify-center items-center">
             <div
-                className={`relative w-full p-[20px] max-w-[580px] h-full ${!isPreview ? "md:h-[1160px] md:rounded-4xl" : "md:h-[580px]"
+                className={`relative w-full p-[30px] max-w-[580px] h-screen ${!isPreview ? "md:h-[1160px] md:rounded-4xl" : "md:h-[580px]"
                     } bg-[#ECEEF1] shadow-2xl overflow-y-auto no-scrollbar flex flex-col items-center`}
                     style={pageBackgroundStyle} 
             >
@@ -279,7 +293,7 @@ export default function LinkTreePreview({
                         <ListSkeleton />
                     </div>
                 ) : (
-                    <div className="w-full  flex flex-col items-center">
+                    <div className="w-full h-full flex flex-col items-center">
                         {/* avatar */}
                         <div
                             className={`w-20 h-20 mt-2 ${!isPreview ? "md:w-[120px] md:h-[120px]" : "md:w-15 md:h-15 lg:w-20 lg:h-20"
@@ -308,6 +322,30 @@ export default function LinkTreePreview({
                             {profile?.bio}
                         </p>
 
+
+                        {!loading && profile?.donation?.isEnabled && (
+                            <div className="mb-10 animate-fade-in-up">
+
+                                <a 
+                                    href={profile.donation.url.match(/^https?:\/\//)
+                                            ? profile.donation.url
+                                            : "https://" + profile.donation.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`
+                                        py-3 ${!isPreview ? "md:py-5 md:mx-[50px]" : ""} px-6 rounded-full cursor-pointer transition-all duration-300 transform hover:scale-[1.02] active:scale-95
+                                        flex items-center justify-center gap-2.5 font-bold ${!isPreview ? 'md:text-xl lg:text-2xl' : ''} shadow-md
+                                        bg-white whitespace-nowrap text-gray-800 border-2 border-pink-100 hover:border-pink-300 hover:shadow-pink-100
+                                    `}
+                                >
+                                    <div className={`w-8 h-8 rounded-full bg-pink-50 flex items-center justify-center ${isPreview ? 'hidden lg:flex' : ''}`}>
+                                        <i className="fa-solid fa-heart text-pink-500 text-sm animate-pulse"></i>
+                                    </div>
+
+                                    {profile.donation.text || "Support Me"}
+                                </a>
+                            </div>
+                        )}
                         {/* toggle đổi giữa link và shop */}
                         <div className="relative flex items-center justify-center bg-[#8D8F90] font-bold font-quicksand p-1 rounded-full mb-[30px]">
                             {/* lớp trắng che trượt qua lại */}
@@ -372,7 +410,8 @@ export default function LinkTreePreview({
                                                     key={link._id}
                                                     href={link.url}
                                                     target="_blank"
-                                                    rel="noreferrer"
+                                                    rel="noopener noreferrer"
+                                                    onClick={() => handleItemClick(link, 'link')}
                                                     className={`flex justify-center py-3 ${!isPreview ? "md:py-5 md:mx-[40px]" : "md:py-2"
                                                         } ${buttonShapeClass} shadow text-center font-medium hover:scale-[1.02] transition-transform truncate ${pageFontClass}`}
                                                     // SỬA Ở ĐÂY: Dùng style inline cho background và color
@@ -423,7 +462,8 @@ export default function LinkTreePreview({
                                                     key={product._id}
                                                     href={product.buyLink}
                                                     target="_blank"
-                                                    rel="noreferrer"
+                                                    rel="noopener noreferrer"
+                                                    onClick={() => handleItemClick(product, 'shop')}
                                                     className={`py-3 ${!isPreview ? "md:py-5 md:mx-[50px]" : ""
                                                         } bg-white rounded-xl shadow text-center font-medium hover:scale-[1.02] transition-transform block`}
                                                 >
@@ -464,11 +504,6 @@ export default function LinkTreePreview({
                                 >
                                     Join {profile.username} on Linktree
                                 </div>
-                                {/* <div className="flex justify-center gap-3 text-[10px] my-2">
-                                        <span>Report</span>
-                                        <span>.</span>
-                                        <span>Privacy</span>
-                                    </div> */}
                             </div>
                         </div>
                     </div>
