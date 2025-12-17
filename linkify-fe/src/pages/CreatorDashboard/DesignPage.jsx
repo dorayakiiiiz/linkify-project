@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { designNavItems } from '../../constants/dashboard'; 
-import { HeaderDesign, TextDesign, ButtonDesign, Background, ThemeDesign, ColorDesign } from '../../components/CreatorDashboard/DesignComponent'; 
+import { HeaderDesign, TextDesign, ButtonDesign, Background, ThemeDesign } from '../../components/CreatorDashboard/DesignComponent'; 
 import DesignActions from '../../components/CreatorDashboard/DesignActions';
 import MobilePreview from '../../components/CreatorDashboard/MobilePreview';
 
@@ -43,7 +43,6 @@ export default function DesignPage() {
                     {activeItem === 'Buttons' && <ButtonDesign />}
                     {activeItem === 'Background' && <Background />}
                     {activeItem === 'Theme' && <ThemeDesign />}
-                    {activeItem === 'Colors' && <ColorDesign />}
                 </div>
 
                 {/* Nút Save/Preview floating */}

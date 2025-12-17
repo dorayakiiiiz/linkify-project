@@ -57,7 +57,6 @@ export default function Sidebar() {
             
             // Tools
             'Post ideas': '/dashboard/tools/post-ideas',
-            'Link shortener': '/dashboard/tools/link-shortener',
         };
         return map[label] || '/dashboard/links';
     };
@@ -234,9 +233,7 @@ export default function Sidebar() {
                 </div>
 
 
-                <span className="px-2 py-2 -mx-2 -my-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl">
-                    <i className="fa-regular fa-bell "></i>
-                </span>
+                            
             </div>
 
             {/* 2. Menu Items */}
@@ -312,11 +309,7 @@ export default function Sidebar() {
                 </div>
             </div>
 
-            {/* 4. Bottom Actions  */}
-            <div className="px-3 py-3 mb-3 flex justify-between w-full absolute bottom-0 bg-[#ecede8]">
-                <i className="fa-regular fa-circle-question pl-2 pr-7 py-2 -mx-2 -my-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-full text-lg"></i>
-                <i className="fa-solid fa-bullhorn pl-2 pr-7 py-2 -mx-2 -my-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-full text-lg"></i>
-            </div>
+
         </div>
     );
 }

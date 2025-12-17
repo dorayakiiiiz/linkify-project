@@ -21,7 +21,7 @@ export default function InsightsPage() {
                         // w-full h-32: Chiều rộng bằng nhau, chiều cao cố định
                         // bg-gray-100: Màu nền xám nhạt
                         // rounded-xl: Bo góc lớn
-                        className="flex-1 h-28 bg-[#dedcdc] rounded-xl p-4 flex flex-col"
+                        className="flex-1 h-30 min-w-40 bg-[#dedcdc] rounded-xl p-4 flex flex-col"
                     >
                         {/* Icon và Value (Hàng trên) */}
                         <div className="flex flex-col justify-between items-start gap-1">
@@ -133,7 +133,7 @@ export default function InsightsPage() {
 
                     {/* Nút Call to Action */}
                     <button className="px-8 py-3 bg-black text-white font-semibold rounded-full flex items-center space-x-2 shadow-lg hover:bg-gray-800 transition duration-150">
-                        <i class="fa-solid fa-link"></i>
+                        <i className="fa-solid fa-link"></i>
                         <span>Connect your socials</span>
                     </button>
                 </div>

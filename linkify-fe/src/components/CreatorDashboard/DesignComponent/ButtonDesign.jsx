@@ -62,7 +62,6 @@ export default function ButtonDesign() {
                             }`}
                     >
                         Glass
-                        <i className="fas fa-bolt absolute top-1 right-2 text-yellow-500 text-sm"></i>
                     </button>
 
                     {/* Outline Button */}

@@ -1,10 +1,10 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../components/CreatorDashboard/Sidebar";
 import MobilePreview from "../components/CreatorDashboard/MobilePreview";
 
 export default function CreatorDashboardLayout() {
     const location = useLocation();
-    
+    const navigate = useNavigate();
     
     // Logic hiển thị Preview bên phải (chỉ hiện ở tab Links, Design...)
     // Dựa vào logic cũ: label.includes('My Linkify')
@@ -18,6 +18,19 @@ export default function CreatorDashboardLayout() {
         if (location.pathname.includes('analytics')) return 'Insights';
         if (location.pathname.includes('post-ideas')) return 'Post Ideas';
         return 'Dashboard';
+    };
+
+    // Kiểm tra xem có phải trang con cần nút back không (ví dụ Design)
+    // Mặc định trang chính là Links, các trang khác coi như trang con khi ở mobile
+    // Logic xử lý nút Back
+    const handleBack = () => {
+        if (location.pathname.includes('/dashboard/links')) {
+            // Nếu đang ở Links -> Back về Dashboard Home (Mobile)
+            navigate('/dashboard');
+        } else {
+            // Nếu đang ở các trang con khác (Design, Shop...) -> Back về Links
+            navigate('/dashboard/links');
+        }
     };
 
     return (
@@ -38,8 +51,16 @@ export default function CreatorDashboardLayout() {
                 <div className="flex-1 flex flex-col border-r border-[#d7d6d4] overflow-hidden bg-[#f1f0ee]">
                     {/* header */}
                     <div className="h-[65px] flex justify-between items-center border-b border-[#dedcdc] w-full px-4 shrink-0">
-                        <span className="font-bold text-2xl py-4 ml-[10px]">{getTitle()}</span>
-                        <i className="cursor-pointer fa-solid fa-gear bg-[#fff] pl-2 pr-6 py-2 rounded-3xl border border-[#ccc] border-solid"></i>
+                        <div className="flex items-center gap-3">
+                            {/* Nút Back chỉ hiện trên mobile và khi ở trang con */}
+                                <button 
+                                    onClick={handleBack}
+                                    className="md:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"
+                                >
+                                    <i className="fa-solid fa-arrow-left text-xl text-gray-700"></i>
+                                </button>
+                            <span className="font-bold text-2xl py-4 ml-[10px]">{getTitle()}</span>
+                        </div>
                     </div>
 
                     {/* content */}

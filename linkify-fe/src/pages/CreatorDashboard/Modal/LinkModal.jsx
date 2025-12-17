@@ -94,7 +94,7 @@ export default function LinkModal({ onClose, editingLink = null }) {
 			onClick={onClose}
 		>
 			<div
-				className="flex flex-col w-full max-w-[750px] px-10 py-[26px] min-h-[460px] bg-white md:rounded-3xl"
+				className="flex flex-col w-full max-w-[750px] px-10 py-[26px] min-h-[460px] bg-white md:rounded-3xl animate-slide-up"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<div className="w-full flex justify-between items-center">

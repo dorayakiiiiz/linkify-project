@@ -330,7 +330,7 @@ export default function PostIdeaPage() {
     );
 
     return (
-        <div className="w-full h-full p-6 md:px-[60px] overflow-y-auto">
+        <div className="w-full h-full p-2 md:px-[60px] overflow-y-auto">
             {step === 1 && renderStep1()}
             {step === 2 && renderStep2()}
             {step === 3 && renderStep3()}

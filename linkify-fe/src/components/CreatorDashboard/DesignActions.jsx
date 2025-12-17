@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HeaderDesign, ThemeDesign, Background, ButtonDesign, TextDesign, ColorDesign } from './DesignComponent/index.js'
+import { HeaderDesign, ThemeDesign, Background, ButtonDesign, TextDesign } from './DesignComponent/index.js'
 
 
 // props từ DesignPage: isDesignPanelOpen, toggleDesignPanel
@@ -77,7 +77,6 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
                 {activeDesign === 'Background' && <Background />}
                 {activeDesign === 'Text' && <TextDesign />}
                 {activeDesign === 'Buttons' && <ButtonDesign />}
-                {activeDesign === 'Colors' && <ColorDesign />}
 
             </div>
         </>

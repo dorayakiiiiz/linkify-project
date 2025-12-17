@@ -1,64 +1,156 @@
-import { sampleThemes } from "../../../constants/dashboard"
+
+import { useProfile } from "../../../context/ProfileContext";
+import { THEMES } from "../../../constants/themes";
 
 export default function ThemeDesign() {
+    const { profile, updateDesign } = useProfile();
+
+    const handleSelectTheme = (theme) => {
+        if (!theme.design) return;
+        updateDesign(theme.design);
+    };
+
+    // Helper: Tạo style cho nền (Background)
+    const getBackgroundStyle = (bg) => {
+        if (bg.type === 'image' && bg.imageUrl) {
+            return { 
+                backgroundImage: `url(${bg.imageUrl})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+            };
+        }
+        if (bg.type === 'gradient') {
+            return { background: `linear-gradient(${bg.direction}, ${bg.value}, ${bg.toColor})` };
+        }
+        // Mặc định là màu đơn (fill)
+        return { backgroundColor: bg.value };
+    };
+
+    // Helper: Tạo style cho nút (Button)
+    const getButtonStyle = (btn) => {
+        const style = {
+            backgroundColor: btn.color,
+            color: btn.textColor,
+            border: 'none',
+            boxShadow: 'none'
+        };
+
+        // 1. Hình dáng (Shape)
+        if (btn.shape === 'round') style.borderRadius = '9999px';
+        else if (btn.shape === 'medium') style.borderRadius = '12px';
+        else style.borderRadius = '0px'; // square
+
+        // 2. Kiểu (Style)
+        if (btn.style === 'outline') {
+            style.backgroundColor = 'transparent';
+            style.border = `1px solid ${btn.color}`;
+            // Với outline, thường màu chữ sẽ giống màu viền nếu không có chỉ định khác
+            // style.color = btn.color; 
+        } else if (btn.style === 'glass') {
+            style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+            style.backdropFilter = 'blur(4px)';
+            style.border = '1px solid rgba(255, 255, 255, 0.3)';
+        }
+
+        // 3. Bóng đổ (Shadow) - Giả lập nhẹ cho preview
+        if (btn.shadowStyle && btn.shadowStyle !== 'none') {
+             style.boxShadow = `0 2px 4px ${btn.shadowColor}66`;
+        }
+
+        return style;
+    };
 
     return (
         <div>
-            {/* Bố cục Lưới cho các Chủ đề (5 cột) */}
-            <div className="grid grid-cols-5 gap-4">
-                {sampleThemes.map((theme) => (
-                    <div key={theme.id} className="flex flex-col items-center cursor-pointer">
-                        {/* Container Thẻ Xem trước (Theme Card) */}
+            <h3 className="text-lg font-semibold mb-4">Themes</h3>
+            
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
+                {THEMES.map((theme) => {
+                    const isSelected = profile?.design?.themeId === theme.id;
+                    const { design } = theme;
+                    
+                    return (
                         <div 
-                            // Dùng class 'aspect-w-4 aspect-h-5' để giữ tỷ lệ 4:5 nếu bạn dùng @tailwindcss/aspect-ratio
-                            // Nếu không dùng plugin, ta dùng padding-top trick bằng arbitrary values:
-                            className="
-                                relative w-full pt-[125%] 
-                                mb-2
-                                group
-                            "
+                            key={theme.id} 
+                            className="flex flex-col items-center cursor-pointer group"
+                            onClick={() => handleSelectTheme(theme)}
                         >
-                            {/* Nội dung Thẻ */}
-                            <div 
-                                className={`
-                                    absolute inset-0 
-                                    ${theme.color} 
-                                    rounded-xl 
-                                    flex flex-col items-center justify-center 
-                                    text-4xl font-bold 
-                                    transition duration-150 ease-in-out
-                                    ${theme.text || 'text-gray-800'}
-                                    ${theme.border ? 'border' : ''}
-                                    
-                                    /* Hiệu ứng Viền Đã chọn */
-                                    ${theme.selected 
-                                        ? 'shadow-[0_0_0_2px_black]' 
-                                        : 'hover:shadow-md'
-                                    }
-                                `}
-                                // Lưu ý: bgClass sẽ cần CSS tùy chỉnh nếu đó là ảnh/gradient phức tạp
-                            >
-                                {/* Hiển thị nội dung: Icon hoặc Text 'Aa' */}
-                                {theme.type === 'icon' ? (
-                                    /* Icon Cọ (Brush) */
-                                    <svg className="w-6 h-6 text-gray-700 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                                ) : (
-                                    theme.content
-                                )}
-                                
-                                {/* Icon Sét (Premium) */}
-                                {theme.premium && (
-                                    <div className="absolute top-2 right-2 bg-white p-0.5 rounded-full shadow-sm">
-                                        <svg className="w-3 h-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M11.9 14.7a.8.8 0 01-.6.3.8.8 0 01-.6-.3L7 9.3v-2a.8.8 0 01.8-.8h1.4l.2-2a.8.8 0 011.6 0l.2 2h1.4a.8.8 0 01.8.8v2l-4.7 5.4z" /></svg>
-                                    </div>
-                                )}
+                            {/* Khung Preview (Tỷ lệ 2:3 hoặc 3:4 tùy ý, ở đây dùng pt-[150%] cho dáng điện thoại) */}
+                            <div className="relative w-full pt-[150%] mb-2">
+                                <div 
+                                    className={`
+                                        absolute inset-0 
+                                        rounded-xl 
+                                        border-2 
+                                        overflow-hidden
+                                        transition-all duration-200
+                                        ${isSelected 
+                                            ? 'border-black ring-1 ring-black shadow-md' 
+                                            : 'border-transparent hover:shadow-lg hover:-translate-y-1'
+                                        }
+                                    `}
+                                >
+                                    {/* --- LỚP 1: NỀN (BACKGROUND) --- */}
+                                    <div 
+                                        className="absolute inset-0 w-full h-full"
+                                        style={getBackgroundStyle(design.background)}
+                                    />
+
+                                    {/* --- LỚP 2: NỘI DUNG PREVIEW (Aa + Button) --- */}
+                                    {/* Chỉ hiển thị nếu không phải là icon (Custom) */}
+                                    {theme.type !== 'icon' && (
+                                        <div className="absolute inset-0 p-3 flex flex-col justify-between">
+                                            
+                                            {/* Phần trên: Chữ Aa (Preview Font & Màu chữ) */}
+                                            <div className="flex justify-between items-start">
+                                                <span 
+                                                    className="text-3xl font-bold leading-none"
+                                                    style={{ 
+                                                        color: design.header.color,
+                                                        fontFamily: design.header.font 
+                                                    }}
+                                                >
+                                                    Aa
+                                                </span>
+
+                                                {/* Icon Premium (nếu có) */}
+                                                {theme.premium && (
+                                                    <div className="bg-black/40 backdrop-blur-sm text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                                                        <i className="fa-solid fa-bolt"></i>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Phần dưới: Button Preview */}
+                                            <div 
+                                                className="w-full h-10 flex items-center justify-center"
+                                                style={getButtonStyle(design.buttons)}
+                                            >
+                                                {/* Vạch giả text bên trong nút */}
+                                                <div 
+                                                    className="h-1.5 w-1/2 rounded-full opacity-60"
+                                                    style={{ backgroundColor: design.buttons.textColor }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* --- LỚP 3: ICON (Cho theme Custom) --- */}
+                                    {theme.type === 'icon' && (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                                            <i className="fa-solid fa-palette text-2xl text-gray-600"></i>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
+                            
+                            {/* Tên Theme */}
+                            <span className={`text-sm font-medium text-center ${isSelected ? 'text-black' : 'text-gray-500'}`}>
+                                {theme.name}
+                            </span>
                         </div>
-                        
-                        {/* Tên Chủ đề */}
-                        <span className="text-sm text-center text-gray-700">{theme.name}</span>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     )
