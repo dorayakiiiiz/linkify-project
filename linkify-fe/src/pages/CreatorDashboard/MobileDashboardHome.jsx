@@ -126,7 +126,7 @@ export default function MobileDashboardHome() {
             </div>
 
             {/* Footer Menu - Fixed */}
-            <div className="h-[60px] bg-white border-t border-gray-200 px-4 flex justify-between items-center shrink-0 z-[100] relative">
+            <div className="fixed bottom-0 left-0 w-full h-[60px] bg-white border-t border-gray-200 px-4 flex justify-between items-center z-[100]">
                 <div 
                     onClick={() => setActiveTab('home')}
                     className={`flex flex-col items-center gap-1 cursor-pointer w-1/4 ${activeTab === 'home' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
