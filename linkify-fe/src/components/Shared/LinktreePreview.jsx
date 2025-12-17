@@ -3,8 +3,75 @@ import { analyticService } from "../../services/analyticService";
 
 import { SOCIALS } from "../../constants/socials";
 
+
+// Map tên font sang class Tailwind (khớp với index.css)
+const getFontClass = (fontName) => {
+    switch (fontName) {
+        case 'Momo Trust': return 'font-momo';
+        case 'Quicksand': return 'font-quicksand';
+        case 'Roboto': return 'font-roboto';
+        case 'Poppins': return 'font-poppins';
+        case 'Lato': return 'font-lato';
+        case 'Montserrat': return 'font-montserrat';
+        case 'Open Sans': return 'font-opensans';
+        case 'Playfair': return 'font-playfair';
+        // Các font mới
+        case 'Merriweather': return 'font-merriweather';
+        case 'Nunito': return 'font-nunito';
+        case 'Raleway': return 'font-raleway';
+        case 'Ubuntu': return 'font-ubuntu';
+        case 'PT Serif': return 'font-ptserif';
+        case 'Oswald': return 'font-oswald';
+        
+        case 'Inter': 
+        default: return 'font-inter';
+    }
+};
+
+// Hàm helper lấy class size
+const getUsernameSizeClass = (size, isPreview) => {
+    // Nếu không phải preview (màn hình desktop thật), ta nhân đôi size lên cho đẹp
+    if (!isPreview) {
+        switch (size) {
+            case 'small': return 'md:text-2xl';
+            case 'large':
+            default: return 'md:text-4xl';
+        }
+    }
+    
+    // Size cho mobile preview
+    switch (size) {
+        case 'small': return 'text-xl font-semibold';
+        case 'large':
+        default: return 'text-4xl font-bold';
+    }
+};
+
+// Hàm helper lấy class bo góc cho button
+const getButtonShapeClass = (shape) => {
+    switch (shape) {
+        case 'square': return 'rounded-none'; // Vuông
+        case 'medium': return 'rounded-xl';  // Tròn 2 đầu
+        case 'round': 
+        default: return 'rounded-full';        // Bo nhẹ (Medium)
+    }
+};
+
+// Helper chuyển Hex sang RGBA để làm mờ màu
+const hexToRgba = (hex, alpha = 1) => {
+    let c;
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+        c= hex.substring(1).split('');
+        if(c.length== 3){
+            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c= '0x'+c.join('');
+        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+alpha+')';
+    }
+    return hex;
+}
 export default function LinkTreePreview({
-    profile,
+    profile, // lấy được cái profile hiện tại từ ProfileContext
     loading,
     links,
     loadingLinks,
@@ -13,6 +80,7 @@ export default function LinkTreePreview({
     isPreview = false,
     tab = "link",
 }) {
+
     // Component Skeleton cho các nút Link
     const ListSkeleton = () => (
         <div className="w-full flex flex-col gap-3 animate-pulse">
@@ -46,11 +114,155 @@ export default function LinkTreePreview({
         });
     }
 
+    //dùng profile để update khi có thay đổi
+    const design = profile?.design || {};
+
+    //[LẤY TỪ DESIGN ĐỂ RENDER]
+    //Background
+    const backgroundColor = design.background?.value || '#FFFFFF';
+    const backgroundToColor = design.background?.toColor || '#FFFFFF';
+    const backgroundType = design.background?.type || 'fill';
+    const backgroundImage = design.background?.imageUrl; // Lấy URL ảnh riêng
+
+    //Màu chữ
+    const headerColor = design.header?.color || '#000000';
+    const pageTextColor = design.text?.color || '#000000';
+
+    //Màu chữ của nút và màu nền nút
+    const buttonTextColor = design.buttons?.textColor || '#ffffff';
+    const buttonColor = design.buttons?.color || '#000000';
+    const buttonStyleType = design.buttons?.style || 'solid'; // Lấy style type
+    // Lấy thông tin Shadow
+    const shadowStyle = design.buttons?.shadowStyle || 'none';
+    const shadowColor = design.buttons?.shadowColor || '#000000';
+
+    //Lấy font class từ design
+    const headerFontClass = getFontClass(design.header?.font);
+    const pageFontClass = getFontClass(design.text?.font); // Dùng cho body text và buttons
+
+    // Lấy size class
+    const usernameSizeClass = getUsernameSizeClass(design.header?.sizeUsername, isPreview);
+
+    // Lấy shape class
+    const buttonShapeClass = getButtonShapeClass(design.buttons?.shape);
+
+    
+    // TÍNH TOÁN STYLE CHO BACKGROUND
+    const getPageBackground = () => {
+
+
+        if (backgroundType === 'image') {
+            // Ưu tiên dùng imageUrl
+            if (backgroundImage) {
+                return {
+                    backgroundImage: `url(${backgroundImage})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundColor: backgroundColor // Fallback color
+                };
+            }
+            // Nếu type=image nhưng không có imageUrl (lỗi data cũ), thử dùng value nếu nó là URL
+            if (backgroundColor.startsWith('http')) {
+                 return {
+                    backgroundImage: `url(${backgroundColor})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                };
+            }
+             // Fallback cuối cùng
+            return { backgroundColor: backgroundColor };
+        }
+        
+        if (backgroundType === 'gradient') {
+            // Gradient: Từ màu chọn -> Trắng (để thấy rõ hiệu ứng dải màu)
+            return {
+                background: `linear-gradient(180deg, ${backgroundColor} 0%, ${backgroundToColor} 100%)`,
+            };
+        }
+        if (backgroundType === 'blur') {
+            // Blur (giả lập bằng Radial Gradient): Màu chọn ở tâm -> Trắng ở viền
+            return {
+                background: `radial-gradient(circle, ${backgroundColor} 0%, ${backgroundToColor} 100%)`,
+            };
+        }
+        // Default Fill: Chỉ màu nền đặc
+        return {
+            backgroundColor: backgroundColor
+        };
+    };
+
+    const pageBackgroundStyle = getPageBackground();
+
+    // TÍNH TOÁN STYLE CHO BUTTON
+    const getButtonStyle = () => {
+        const baseStyle = {
+            color: buttonTextColor,
+            transition: 'all 0.3s ease',
+        };
+
+        // Tính toán Box Shadow
+        let boxShadow = 'none';
+        switch (shadowStyle) {
+            case 'subtle':
+                boxShadow = `0 4px 6px -1px ${hexToRgba(shadowColor, 0.1)}, 0 2px 4px -1px ${hexToRgba(shadowColor, 0.06)}`;
+                break;
+            case 'strong':
+                boxShadow = `0 10px 15px -3px ${hexToRgba(shadowColor, 0.3)}, 0 4px 6px -2px ${hexToRgba(shadowColor, 0.15)}`;
+                break;
+            case 'hard':
+                // Hard shadow kiểu retro/brutalism (đổ bóng cứng, không mờ)
+                boxShadow = `4px 4px 0px 0px ${shadowColor}`;
+                break;
+            case 'none':
+            default:
+                boxShadow = 'none';
+                break;
+        }
+
+        // Tính toán Background & Border cho button (Logic cũ)
+        let styleProps = {};
+        switch (buttonStyleType) {
+            case 'glass':
+                styleProps = {
+                    backgroundColor: hexToRgba(buttonColor, 0.5),
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)'
+                };
+                break;
+            case 'outline':
+                styleProps = {
+                    backgroundColor: hexToRgba(buttonColor, 0.2),
+                    border: '2px solid white'
+                };
+                break;
+            case 'solid':
+            default:
+                styleProps = {
+                    backgroundColor: buttonColor,
+                    border: '2px solid transparent'
+                };
+                break;
+        }
+
+        return {
+            ...baseStyle,
+            ...styleProps,
+            boxShadow: boxShadow // Áp dụng shadow
+        };
+    };
+
+
+    const dynamicButtonStyle = getButtonStyle();
+
     return (
         <div className="w-full h-full flex justify-center items-center">
             <div
                 className={`relative w-full p-[30px] max-w-[580px] h-screen ${!isPreview ? "md:h-[1160px] md:rounded-4xl" : "md:h-[580px]"
                     } bg-[#ECEEF1] shadow-2xl overflow-y-auto no-scrollbar flex flex-col items-center`}
+                    style={pageBackgroundStyle} 
             >
                 {/* content */}
                 {/* <div className="w-full h-full overflow-y-auto no-scrollbar flex flex-col items-center"> */}
@@ -96,15 +308,16 @@ export default function LinkTreePreview({
 
                         {/* info */}
                         <h2
-                            className={`font-bold sm:text-sm lg:text-lg ${!isPreview ? "md:text-4xl" : ""
-                                } text-center mb-1`}
+                            className={`font-bold ${usernameSizeClass} text-center mb-1 ${headerFontClass}`}
+                            style={{ color: headerColor }} // <--- SỬA Ở ĐÂY: Dùng style inline
                         >
                             {profile?.username || "@username"}
                         </h2>
                         <p
                             className={`${!isPreview ? "md:text-xl" : ""
-                                } text-center text-gray-600 ${!isPreview ? "mb-[30px]" : "mb-5"
-                                } px-2`}
+                                } text-center ${!isPreview ? "mb-[30px]" : "mb-5"
+                                } px-2 ${pageFontClass}`}
+                            style={{ color: pageTextColor }} // <--- SỬA Ở ĐÂY: Dùng style inline (hoặc pageTextColor nếu muốn)
                         >
                             {profile?.bio}
                         </p>
@@ -200,13 +413,17 @@ export default function LinkTreePreview({
                                                     rel="noopener noreferrer"
                                                     onClick={() => handleItemClick(link, 'link')}
                                                     className={`flex justify-center py-3 ${!isPreview ? "md:py-5 md:mx-[40px]" : "md:py-2"
-                                                        } bg-white rounded-xl shadow text-center font-medium hover:scale-[1.02] transition-transform truncate`}
+                                                        } ${buttonShapeClass} shadow text-center font-medium hover:scale-[1.02] transition-transform truncate ${pageFontClass}`}
+                                                    // SỬA Ở ĐÂY: Dùng style inline cho background và color
+                                                    style={dynamicButtonStyle}
                                                 >
 
                                                     <div className={`${!isPreview ? 'text-xl md:text-2xl lg:text-3xl' : ''} mr-[10px]`}>
-                                                        {icon && <i className={`${icon} text-[${color}]`} />}
+                                                        {/* SỬA Ở ĐÂY: Xóa class text-${buttonTextColor} vì thẻ cha (<a>) đã có color rồi */}
+                                                        {icon && <i className={`${icon}`} />}
                                                     </div>
-                                                    <div className={`${!isPreview ? 'md:text-xl lg:text-2xl' : ''}`}>
+                                                    <div className={`${!isPreview ? `md:text-xl lg:text-2xl` : ''}`}>
+                                                        {/* SỬA Ở ĐÂY: Xóa class text-${buttonTextColor} */}
                                                         {link.title}
                                                     </div>
                                                 </a>

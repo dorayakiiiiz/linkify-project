@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import LinkTreePreview from "../components/Shared/LinkTreePreview";
+import LinkTreePreview from '../components/Shared/LinktreePreview';
 import { profileService } from '../services/profileService';
 import { linkService } from '../services/linkService';
 import { shopService } from '../services/shopService';

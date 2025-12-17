@@ -32,6 +32,7 @@ import ShopPage from "./pages/CreatorDashboard/ShopPage";
 import InsightsPage from "./pages/CreatorDashboard/InsightsPage";
 import PostIdeaPage from "./pages/CreatorDashboard/Tools/PostIdeaPage";
 import LinkShortenerPage from "./pages/CreatorDashboard/Tools/LinkShortenerPage";
+import MobilePreview from "./components/CreatorDashboard/MobilePreview";
 
 import AdminDashboardLayout from "./layouts/AdminDashboardLayout";
 import UserManagementPage from "./pages/AdminDashboard/UserManagementPage";
@@ -89,14 +90,11 @@ function App() {
                                             <Route path="design" element={<DesignPage />} />
                                             <Route path="shop" element={<ShopPage />} />
                                             <Route path="insights" element={<InsightsPage />} />
+                                            <Route path="preview" element={<MobilePreview />} />
 
                                             {/* Tools */}
                                             <Route path="tools">
                                                 <Route path="post-ideas" element={<PostIdeaPage />} />
-                                                <Route
-                                                    path="link-shortener"
-                                                    element={<LinkShortenerPage />}
-                                                />
                                             </Route>
                                         </Route>
                                     </Route>
