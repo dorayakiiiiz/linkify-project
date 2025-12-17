@@ -1,6 +1,5 @@
 export { default as ButtonDesign } from './ButtonDesign.jsx'
 export { default as HeaderDesign } from './HeaderDesign.jsx'
 export { default as TextDesign } from './TextDesign.jsx'
-export { default as WallPaper } from './WallPaper.jsx'
+export { default as Background } from './Background.jsx'
 export { default as ThemeDesign } from './ThemeDesign.jsx'
-export { default as ColorDesign } from './ColorDesign.jsx'

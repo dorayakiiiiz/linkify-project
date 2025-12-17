@@ -37,6 +37,20 @@ const shopStorage = new CloudinaryStorage({
   },
 });
 
-export const shopUpload = multer({ storage: shopStorage });
 
+// BACKGROUND FEATURE - Cloudinary storage config for background images
+const backgroundStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "linkify/backgrounds",
+    allowed_formats: ["jpg", "png", "jpeg", "gif"],
+    public_id: (req, file) => {
+      const userId = req.user.id;
+      return `bg_${userId}_${Date.now()}`;
+    },
+  },
+});
+
+export const backgroundUpload = multer({ storage: backgroundStorage });
+export const shopUpload = multer({ storage: shopStorage });
 export default upload;

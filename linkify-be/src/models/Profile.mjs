@@ -34,31 +34,33 @@ const ProfileSchema = new Schema({
         themeId: { type: String, default: 'custom' },
 
         background: {
-            type: { type: String, enum: ['flat', 'gradient', 'image'], default: 'flat' }, // flat là màu đơn
-            value: { type: String, default: '#ffffff' }, // Màu hoặc URL ảnh
-            direction: { type: String, default: 'to bottom' } // Cho gradient
+            type: { type: String, enum: ['fill', 'gradient', 'blur', 'image'], default: 'fill' }, 
+            value: { type: String, default: '#ccc' }, // màu nền hoặc URL ảnh
+            imageUrl: { type: String }, // Chỉ lưu màu
+            toColor: { type: String, default: '#ffffff' }, // màu đích cho gradient và blue
+            direction: { type: String, default: 'to bottom' } 
         },
 
         header: {
-            color: { type: String, default: '#000000' }, // Màu chữ username/bio
+            color: { type: String, default: '#000000' }, 
             font: { type: String, default: 'Inter' },
-            sizeUsername: { type: String, enum: ['small', 'medium', 'large'], default: 'medium' },
-            sizeBio: { type: String, enum: ['small', 'medium', 'large'], default: 'small' },
-            // 2 cái size này ko biết nên tách riêng hay gộp chung á
+            sizeUsername: { type: String, enum: ['small', 'large'], default: 'small' },
+            sizeBio: { type: String, enum: ['small', 'large'], default: 'small' },
         },
 
         buttons: {
-            shape: { type: String, enum: ['sharp', 'rounded', 'pill'], default: 'rounded' },
-            style: { type: String, enum: ['fill', 'outline', 'hard-shadow', 'soft-shadow'], default: 'fill' },
-            color: { type: String, default: '#000000' }, // Màu nền nút
-            textColor: { type: String, default: '#ffffff' }, // Màu chữ nút
-            shadowColor: { type: String, default: '#000000' } // Màu viền/bóng
+            shape: { type: String, enum: ['square', 'medium', 'round'], default: 'medium' },
+            style: { type: String, enum: ['solid', 'glass', 'outline'], default: 'solid' },
+            color: { type: String, default: '#000000' }, 
+            textColor: { type: String, default: '#ffffff' }, 
+            shadowColor: { type: String, default: '#000000' } ,
+            shadowStyle: { type: String, enum: ['none', 'subtle', 'strong', 'hard'], default: 'subtle' }
         },
 
-        text: {
-            color: { type: String, default: '#000000' }, // Màu chữ toàn cục (trừ header/button)
+        text: { 
+            color: { type: String, default: '#000000' }, 
             font: { type: String, default: 'Inter' },
-            size: { type: String, enum: ['small', 'medium', 'large'], default: 'medium' } // size chung cho cả button
+            size: { type: String, enum: ['small', 'large'], default: 'small' } 
         }
 
     }

@@ -40,6 +40,23 @@ const updateProfile = async (formData) => {
     return response.data;
 }
 
+//DesignData là object chứa thông tin design cần update
+const updateDesign = async (profileId, designData) => {
+    // Gửi JSON body thay vì FormData
+    const response = await api.patch('/profile/design', { 
+        profileId, 
+        design: designData 
+    });
+    return response.data;
+}
+
+//Upload background image và trả về URL
+const uploadBackground = async (formData) => {
+    const response = await api.post('/profile/upload-background', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })};
 const deactivateProfile = async (profileId) => {
     const response = await api.patch(`/profile/${profileId}/deactivate`);
     return response.data;
@@ -61,6 +78,8 @@ export const profileService = {
     getProfiles,
     getPublicProfile,
     updateProfile,
+    updateDesign,
+    uploadBackground,
     deactivateProfile,
     reactivateProfile,
     deleteProfile

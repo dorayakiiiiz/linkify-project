@@ -110,7 +110,7 @@ export default function LinksPage() {
                 />
             )}
 
-            <div className="flex-1 p-6 md:px-[60px]">
+            <div className="flex-1 p-6 md:px-[10px] lg:px-10">
                 <div className="max-w-3xl mx-auto w-full">
                     <UserInfo />
 
