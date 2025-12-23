@@ -40,7 +40,7 @@ const updateProfile = async (formData) => {
     return response.data;
 }
 
-//DesignData là object chứa thông tin design cần update
+// DesignData là object chứa thông tin design cần update
 const updateDesign = async (profileId, designData) => {
     // Gửi JSON body thay vì FormData
     const response = await api.patch('/profile/design', { 

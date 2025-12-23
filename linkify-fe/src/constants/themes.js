@@ -14,34 +14,52 @@ export const THEMES = [
             background: {
                 type: 'image',           // Loại: 'fill' (màu đơn), 'gradient', 'blur', 'image'
                 value: '#F3F4F6',       // Màu chính (hoặc màu bắt đầu gradient)
-                imageUrl: '../../public/dark-tree-in-the-middle-of-a-purple-lake-wallpaper.jpg',           // Link ảnh nền (chỉ dùng khi type='image')
+                imageUrl: '/bg_demo.jpg',           // Link ảnh nền (chỉ dùng khi type='image')
                 toColor: '#ffffff',     // Màu phụ (dùng cho gradient/blur)
                 direction: 'to bottom'  // Hướng gradient
             },
 
             // 2. Cấu hình Header (Username & Bio)
             header: {
-                color: '#1F2937',       // Màu chữ
+                color: '#fff',       // Màu chữ
                 font: 'Inter',          // Font chữ (phải khớp với danh sách font hỗ trợ)
-                sizeUsername: 'large',  // Kích thước tên: 'small', 'large'
+                sizeUsername: 'small',  // Kích thước tên: 'small', 'large'
                 sizeBio: 'small',       // Kích thước bio: 'small', 'large'
             },
 
             // 3. Cấu hình Nút (Buttons)
             buttons: {
                 shape: 'medium',        // Hình dáng: 'square' (vuông), 'medium' (bo nhẹ), 'round' (tròn)
-                style: 'solid',         // Kiểu: 'solid' (đặc), 'glass' (kính), 'outline' (viền)
-                color: '#000000',       // Màu nền nút
-                textColor: '#ffffff',   // Màu chữ trong nút
+                style: 'glass',         // Kiểu: 'solid' (đặc), 'glass' (kính), 'outline' (viền)
+                color: '#fff',       // Màu nền nút
+                textColor: '#000',   // Màu chữ trong nút
                 shadowColor: '#000000', // Màu bóng đổ
-                shadowStyle: 'none'     // Kiểu bóng: 'none', 'subtle', 'strong', 'hard'
+                shadowStyle: 'subtle'     // Kiểu bóng: 'none', 'subtle', 'strong', 'hard'
             },
 
             // 4. Cấu hình Text chung (nếu có dùng cho các thành phần khác)
             text: {
-                color: '#1F2937',
+                color: '#fff',
                 font: 'Inter',
                 size: 'small'           // 'small', 'large'
+            },
+
+            donationButton: {
+                useGlobal: true,
+                shape: 'medium',
+                style: 'solid',
+                color: '#ff4081',
+                textColor: '#fff',
+                icon: 'fa-solid fa-heart',
+                size: 'medium'
+            },
+
+            footer: {
+                enabledStyle: false,
+                background: '#ffffff',
+                textColor: '#6b7280',
+                linkColor: '#2563eb',
+                font: 'Inter'
             }
         }
     },

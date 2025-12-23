@@ -1,23 +1,16 @@
 export const creatorMenu = [
-    {
-        icon: "fa-layer-group",
-        label: "My Linkify",
-        hasDropdown: true,
-        subItems: [{ label: "Links" }, { label: "Shop" }, { label: "Design" }],
-    },
-    { icon: "fa-chart-simple", label: "Insights", hasDropdown: false },
+    { icon: "fa-link", label: "Links" },
+    { icon: "fa-bag-shopping", label: "Shop" },
+    { icon: "fa-palette", label: "Design" },
+    { icon: "fa-sack-dollar", label: "Donation" },
+    { icon: "fa-chart-simple", label: "Insights" },
 ];
 
 export const adminMenu = [
-    { icon: "fa-solid fa-users", label: "User", hasDropdown: false },
-    {
-        icon: "fa-solid fa-link",
-        label: "Content",
-        hasDropdown: true,
-        subItems: [{ label: "Links" }, { label: "Shop" }],
-    },
-    { icon: "fa-solid fa-chart-line", label: "Analytics", hasDropdown: false },
-
+    { icon: "fa-solid fa-users", label: "User" },
+    { icon: "fa-solid fa-link", label: "Links" },
+    { icon: "fa-solid fa-bag-shopping", label: "Shop" },
+    { icon: "fa-solid fa-chart-line", label: "Analytics" },
 ];
 
 export const tools = [
@@ -30,6 +23,7 @@ export const designNavItems = [
     { name: "Background", iconClass: "fa-regular fa-square-full" },
     { name: "Text", iconClass: "fa-solid fa-font" },
     { name: "Buttons", iconClass: "fa-solid fa-bars-staggered" },
+    { name: "Footer & Donation", iconClass: "fa-solid fa-window-maximize" },
 ];
 
 export const sampleThemes = [

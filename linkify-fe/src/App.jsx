@@ -29,6 +29,7 @@ import CreatorDashboardLayout from "./layouts/CreatorDashboardLayout";
 import LinksPage from "./pages/CreatorDashboard/LinksPage";
 import DesignPage from "./pages/CreatorDashboard/DesignPage";
 import ShopPage from "./pages/CreatorDashboard/ShopPage";
+import DonationPage from "./pages/CreatorDashboard/DonationPage";
 import InsightsPage from "./pages/CreatorDashboard/InsightsPage";
 import PostIdeaPage from "./pages/CreatorDashboard/Tools/PostIdeaPage";
 import LinkShortenerPage from "./pages/CreatorDashboard/Tools/LinkShortenerPage";
@@ -89,6 +90,7 @@ function App() {
                                             <Route path="links" element={<LinksPage />} />
                                             <Route path="design" element={<DesignPage />} />
                                             <Route path="shop" element={<ShopPage />} />
+                                            <Route path="donation" element={<DonationPage />} />
                                             <Route path="insights" element={<InsightsPage />} />
                                             <Route path="preview" element={<MobilePreview />} />
 

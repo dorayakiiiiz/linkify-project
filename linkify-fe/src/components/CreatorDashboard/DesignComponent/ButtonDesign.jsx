@@ -1,8 +1,9 @@
 import ColorPickerItem from "./ColorPickerItem"
 import { useProfile } from "../../../context/ProfileContext"; // Import context
-
+import { profileService } from "../../../services/profileService";
+import { useState } from 'react';
 export default function ButtonDesign() {
-    const { profile, updateDesign } = useProfile(); // Lấy hàm updateDesign
+    const { profile, updateDesign, setProfile } = useProfile(); // Lấy hàm updateDesign
 
     //[LOGIC SHAPE BUTTON]
     // Lấy giá trị hiện tại từ profile, mặc định là 'rounded'
@@ -202,6 +203,7 @@ export default function ButtonDesign() {
                 designSection="buttons" 
                 colorKey="textColor" 
             />
+
         </div>
     )
 }

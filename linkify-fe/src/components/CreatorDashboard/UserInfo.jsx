@@ -1,7 +1,6 @@
 import { useProfile } from "../../context/ProfileContext";
 import { useState, useEffect } from 'react';
 import EditProfileModal from "../../pages/CreatorDashboard/Modal/EditProfileModal";
-import DonationModal from "../../pages/CreatorDashboard/Modal/DonationModal";
 // todo ngày mai: hiển thị trạng thái khi deactive (switch profile, user info)
 export function UserInfo() {
     const { profile, loading, fetchProfile } = useProfile();
@@ -11,8 +10,6 @@ export function UserInfo() {
     const handleEditProfile = () => {
         setCurrentProfile(profile);
     }
-
-    const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
     if (loading) {
         return (
@@ -38,10 +35,6 @@ export function UserInfo() {
                         await fetchProfile();
                     }}
                 />
-            )}
-
-            {isDonationModalOpen && (
-                <DonationModal onClose={() => setIsDonationModalOpen(false)} />
             )}
 
             <div className=" w-full py-4 flex gap-[20px] items-center">
@@ -83,17 +76,6 @@ export function UserInfo() {
                     </div>
                 </div>
             </div>
-
-            <button
-                className={`cursor-pointer flex-none font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-2 border-2 
-                ${profile?.donation?.isEnabled 
-                    ? 'bg-pink-50 border-pink-200 text-pink-600 hover:bg-pink-100' 
-                    : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}
-                onClick={() => setIsDonationModalOpen(true)}
-            >
-                <i className={`fa-solid fa-heart ${profile?.donation?.isEnabled ? 'text-pink-500' : 'text-gray-400'}`}></i>
-                <span className="hidden sm:inline">Donation</span>
-            </button>
         </>
     )
 }
