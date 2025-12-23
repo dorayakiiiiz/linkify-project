@@ -152,17 +152,14 @@ class ProfileController {
     // [PATCH] /api/profile/design
     async updateDesign(req, res, next) {
         try {
-            console.log("========== [DEBUG START] UPDATE DESIGN ==========");
             const { profileId, design } = req.body;
             
             if (!profileId) {
-                console.log("Error: Missing Profile ID");
                 return res.status(400).json({ message: "Profile ID is required" });
             }
             
             const currentProfile = await Profile.findById(profileId);
             if (!currentProfile) {
-                console.log("Error: Profile not found in DB");
                 return res.status(404).json({ message: "Profile not found" });
             }
 
@@ -171,7 +168,6 @@ class ProfileController {
                 try { designObj = JSON.parse(design); } catch (e) { /* keep as-is */ }
             }
 
-            // console.log("2. Current DB Design:", JSON.stringify(currentProfile.design, null, 2));
 
             if (designObj) {
                 // Helper function để sanitize size (chuyển medium -> small)
@@ -183,9 +179,6 @@ class ProfileController {
                 // Merge thủ công từng phần
                 // 1. Header
                 if (design.header) {
-                    // Log để check xem header gửi lên có gì
-                    // console.log("-> Merging Header:", design.header);
-                    
                     const oldHeader = currentProfile.design.header || {};
                     
                     currentProfile.design.header = {
@@ -244,10 +237,7 @@ class ProfileController {
                 currentProfile.markModified('design'); 
             }
 
-            console.log("3. Design After Merge (Ready to Save):", JSON.stringify(currentProfile.design, null, 2));
-
             await currentProfile.save();
-            console.log("========== [DEBUG SUCCESS] SAVED TO DB ==========");
 
             res.status(200).json({ 
                 message: "Design updated successfully", 
@@ -255,7 +245,6 @@ class ProfileController {
             });
 
         } catch (err) {
-            console.error("========== [DEBUG ERROR] ==========");
             console.error("Error Message:", err.message);
             
             // In chi tiết lỗi Validation nếu có
