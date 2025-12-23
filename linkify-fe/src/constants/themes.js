@@ -64,11 +64,11 @@ export const THEMES = [
         name: 'Sky',
         design: {
             themeId: 'theme2',
-
             // 1. Cấu hình Nền (Background)
             background: {
-                type: 'gradient',           // Loại: 'fill' (màu đơn), 'gradient', 'blur', 'image'
+                type: 'image',           // Loại: 'fill' (màu đơn), 'gradient', 'blur', 'image'
                 value: '#3469FC',       // Màu chính (hoặc màu bắt đầu gradient)
+                imageUrl: '/theme_2.jpg',
                 toColor: '#95DBFF',     // Màu phụ (dùng cho gradient/blur)
                 direction: 'to bottom'  // Hướng gradient
             },
