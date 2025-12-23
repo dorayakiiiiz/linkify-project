@@ -78,7 +78,7 @@ class ProfileController {
     async updateProfile(req, res, next) {
         try {
             //Ở đây design là object chứa thông tin design cần update
-            const { username, bio, profileId, design, donation } = req.body;
+            const { username, bio, profileId, design, donation, footerEnable } = req.body;
             
             //Tìm profile theo profileId
             const currentProfile = await Profile.findById(profileId);
@@ -99,28 +99,35 @@ class ProfileController {
                 currentProfile.bio = bio;
             }
 
+            if (footerEnable !== undefined) {
+                currentProfile.footerEnable = footerEnable === "true" || footerEnable === true;
+            }
+
             //Updata design nếu có
             if (design) {
-                let designData = design;
+                let designObj = design;
                 // Nếu gửi qua FormData (dạng string), cần parse lại thành object
                 if (typeof design === 'string') {
-                    try { designData = JSON.parse(design); } catch (e) {}
+                    try { designObj = JSON.parse(design); } catch (e) { designObj = design; }
                 }
                 
                 // Merge design mới vào design cũ
                 currentProfile.design = {
                     ...currentProfile.design,
-                    ...designData
-                }
+                    ...designObj
+                };
             }
 
             //Cập nhật donation nếu có
             if (donation) {
-                const donationData = JSON.parse(donation);
+                let donationObj = donation;
+                if (typeof donation === 'string') {
+                    try { donationObj = JSON.parse(donation); } catch(e) { donationObj = donation; }
+                }
 
                 currentProfile.donation = {
                     ...currentProfile.donation,
-                    ...donationData
+                    ...donationObj
                 };
             }
 
@@ -148,8 +155,6 @@ class ProfileController {
             console.log("========== [DEBUG START] UPDATE DESIGN ==========");
             const { profileId, design } = req.body;
             
-            console.log("1. Received Body:", JSON.stringify(req.body, null, 2));
-
             if (!profileId) {
                 console.log("Error: Missing Profile ID");
                 return res.status(400).json({ message: "Profile ID is required" });
@@ -161,9 +166,14 @@ class ProfileController {
                 return res.status(404).json({ message: "Profile not found" });
             }
 
+            let designObj = design;
+            if (design && typeof design === 'string') {
+                try { designObj = JSON.parse(design); } catch (e) { /* keep as-is */ }
+            }
+
             // console.log("2. Current DB Design:", JSON.stringify(currentProfile.design, null, 2));
 
-            if (design) {
+            if (designObj) {
                 // Helper function để sanitize size (chuyển medium -> small)
                 const sanitizeSize = (val) => {
                     if (!val) return 'small'; // Nếu null/undefined -> về small
@@ -210,6 +220,23 @@ class ProfileController {
                     currentProfile.design.background = {
                         ...currentProfile.design.background,
                         ...design.background
+                    };
+                }
+
+                // 5. Donation Button (Mới thêm)
+                if (design.donationButton) {
+                    // Merge sâu để không mất các field con như shape, style, color
+                    currentProfile.design.donationButton = {
+                        ...currentProfile.design.donationButton,
+                        ...design.donationButton
+                    };
+                }
+
+                // 6. Footer Style (Mới thêm)
+                if (design.footer) {
+                    currentProfile.design.footer = {
+                        ...currentProfile.design.footer,
+                        ...design.footer
                     };
                 }
                 

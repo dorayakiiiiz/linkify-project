@@ -8,13 +8,14 @@ export default function CreatorDashboardLayout() {
     
     // Logic hiển thị Preview bên phải (chỉ hiện ở tab Links, Design...)
     // Dựa vào logic cũ: label.includes('My Linkify')
-    const showPreview = ['/dashboard/links', '/dashboard/design', '/dashboard/shop'].includes(location.pathname);
+    const showPreview = ['/dashboard/links', '/dashboard/design', '/dashboard/shop', '/dashboard/donation'].includes(location.pathname);
 
     // Lấy Title cho Header (thay thế activeItem/activeSubItem cũ)
     const getTitle = () => {
         if (location.pathname.includes('links')) return 'Links';
         if (location.pathname.includes('design')) return 'Design';
         if (location.pathname.includes('shop')) return 'Shop';
+        if (location.pathname.includes('donation')) return 'Donation';
         if (location.pathname.includes('insights')) return 'Insights';
         if (location.pathname.includes('post-ideas')) return 'Post Ideas';
         return 'Dashboard';

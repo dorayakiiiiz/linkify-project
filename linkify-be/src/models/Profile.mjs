@@ -23,6 +23,10 @@ const ProfileSchema = new Schema({
         url: { type: String, default: '' },
         text: { type: String, default: 'Support Me' } // Text hiển thị trên nút
     },
+    footerEnable: {
+        type: Boolean, 
+        default: true 
+    },
 
     // khóa/hiển thị profile ra public
     isActive: {
@@ -61,6 +65,24 @@ const ProfileSchema = new Schema({
             color: { type: String, default: '#000000' }, 
             font: { type: String, default: 'Inter' },
             size: { type: String, enum: ['small', 'large'], default: 'small' } 
+        },
+
+        donationButton: {
+            useGlobal: { type: Boolean, default: true }, // if true -> use design.buttons
+            shape: { type: String, enum: ['square','medium','round'], default: 'medium' },
+            style: { type: String, enum: ['solid','glass','outline'], default: 'solid' },
+            color: { type: String, default: '#ff4081' },
+            textColor: { type: String, default: '#ffffff' },
+            icon: { type: String, default: 'fa-solid fa-heart' },
+            size: { type: String, enum: ['small','medium','large'], default: 'medium' }
+        },
+
+        footer: {
+            enabledStyle: { type: Boolean, default: false }, // allow footer style custom
+            background: { type: String, default: '#ffffff' },
+            textColor: { type: String, default: '#6b7280' },
+            linkColor: { type: String, default: '#2563eb' },
+            font: { type: String, default: 'Inter' }
         }
 
     }
