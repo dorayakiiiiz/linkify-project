@@ -29,7 +29,7 @@ app.use(
 
 const allowedOrigins = [
     "http://localhost:5173", // frontend dev
-    'https://linkify-web.vercel.app'
+    'https://my-linkify.vercel.app'
 ];
 
 const corsOptions = {
