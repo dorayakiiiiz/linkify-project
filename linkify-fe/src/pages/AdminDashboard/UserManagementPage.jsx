@@ -4,7 +4,6 @@ import { useAuth } from "../../context/AuthContext";
 import { adminService } from "../../services/adminService";
 import AdminTable from "../../components/AdminDashboard/AdminTable";
 import UserDetailModal from './Modal/UserDetailModal';
-import User from '../../../../linkify-be/src/models/User.mjs';
 
 // hàm debounce set state chậm hơn để giảm tải khi search
 const useDebounce = (value, delay) => {
