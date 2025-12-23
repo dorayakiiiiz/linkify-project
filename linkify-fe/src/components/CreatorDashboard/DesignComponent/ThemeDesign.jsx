@@ -97,50 +97,33 @@ export default function ThemeDesign() {
                                     />
 
                                     {/* --- LỚP 2: NỘI DUNG PREVIEW (Aa + Button) --- */}
-                                    {/* Chỉ hiển thị nếu không phải là icon (Custom) */}
-                                    {theme.type !== 'icon' && (
-                                        <div className="absolute inset-0 p-3 flex flex-col justify-between">
-                                            
-                                            {/* Phần trên: Chữ Aa (Preview Font & Màu chữ) */}
-                                            <div className="flex justify-between items-start">
-                                                <span 
-                                                    className="text-3xl font-bold leading-none"
-                                                    style={{ 
-                                                        color: design.header.color,
-                                                        fontFamily: design.header.font 
-                                                    }}
-                                                >
-                                                    Aa
-                                                </span>
-
-                                                {/* Icon Premium (nếu có) */}
-                                                {theme.premium && (
-                                                    <div className="bg-black/40 backdrop-blur-sm text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
-                                                        <i className="fa-solid fa-bolt"></i>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Phần dưới: Button Preview */}
-                                            <div 
-                                                className="w-full h-10 flex items-center justify-center"
-                                                style={getButtonStyle(design.buttons)}
+                                    <div className="absolute inset-0 p-3 flex flex-col justify-between">
+                                        
+                                        {/* Phần trên: Chữ Aa (Preview Font & Màu chữ) */}
+                                        <div className="flex justify-between items-start">
+                                            <span 
+                                                className="text-3xl font-bold leading-none"
+                                                style={{ 
+                                                    color: design.header.color,
+                                                    fontFamily: design.header.font 
+                                                }}
                                             >
-                                                {/* Vạch giả text bên trong nút */}
-                                                <div 
-                                                    className="h-1.5 w-1/2 rounded-full opacity-60"
-                                                    style={{ backgroundColor: design.buttons.textColor }}
-                                                ></div>
-                                            </div>
+                                                Aa
+                                            </span>
                                         </div>
-                                    )}
 
-                                    {/* --- LỚP 3: ICON (Cho theme Custom) --- */}
-                                    {theme.type === 'icon' && (
-                                        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                                            <i className="fa-solid fa-palette text-2xl text-gray-600"></i>
+                                        {/* Phần dưới: Button Preview */}
+                                        <div 
+                                            className="w-full h-10 flex items-center justify-center"
+                                            style={getButtonStyle(design.buttons)}
+                                        >
+                                            {/* Vạch giả text bên trong nút */}
+                                            <div 
+                                                className="h-1.5 w-1/2 rounded-full opacity-60"
+                                                style={{ backgroundColor: design.buttons.textColor }}
+                                            ></div>
                                         </div>
-                                    )}
+                                    </div>
                                 </div>
                             </div>
                             

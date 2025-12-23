@@ -305,7 +305,7 @@ export default function LinkTreePreview({
 
     // --- [MỚI] STYLE CHO FOOTER ---
     const footerStyle = {
-        backgroundColor: design.footer?.background || '#ffffff',
+        backgroundColor: design.footer?.backgroundColor || '#ffffff',
         color: design.footer?.textColor || '#6b7280',
     };
 

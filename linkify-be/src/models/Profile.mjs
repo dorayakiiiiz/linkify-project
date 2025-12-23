@@ -49,7 +49,6 @@ const ProfileSchema = new Schema({
             color: { type: String, default: '#000000' }, 
             font: { type: String, default: 'Inter' },
             sizeUsername: { type: String, enum: ['small', 'large'], default: 'small' },
-            sizeBio: { type: String, enum: ['small', 'large'], default: 'small' },
         },
 
         buttons: {
@@ -78,11 +77,8 @@ const ProfileSchema = new Schema({
         },
 
         footer: {
-            enabledStyle: { type: Boolean, default: false }, // allow footer style custom
-            background: { type: String, default: '#ffffff' },
+            backgroundColor: { type: String, default: '#ffffff' },
             textColor: { type: String, default: '#6b7280' },
-            linkColor: { type: String, default: '#2563eb' },
-            font: { type: String, default: 'Inter' }
         }
 
     }

@@ -16,6 +16,7 @@ export default function Register() {
     const [displayName, setDisplayName] = useState('');
     const [password, setPassword] = useState('');
     const [log, setLog] = useState({ type: '', content: '' });
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (log.content) {
@@ -86,12 +87,14 @@ export default function Register() {
         }
         
         try {
+            setLoading(true);
             await authService.register({
                 email,
                 displayName,
                 password
             });
 
+            setLoading(false);
             setLog({
                 type: 'success',
                 content: 'Register successfully! Redirecting to login page...'
@@ -106,6 +109,8 @@ export default function Register() {
                 type: 'error',
                 content: err?.response?.data?.message || 'Error occured. Try again later.'
             });
+        } finally {
+            setLoading(false);
         }
         
     }

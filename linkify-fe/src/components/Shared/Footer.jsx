@@ -7,43 +7,34 @@ export default function Footer() {
                 
                 <Link
                     to="/"
-                    className="hidden md:block font-momo text-xl md:text-2xl lg:text-3xl flex-1 flex-shrink-0"
+                    className="hidden md:block font-momo text-xl md:text-2xl lg:text-3xl flex-3 flex-shrink-0"
                 >
                     Linktree
                     <i className="fa-brands fa-linktree text-[#43E660]"></i>
                 </Link>
 
-                <div className="w-full flex-3 flex flex-wrap gap-x-[40px] gap-y-[10px] md:gap-y-[20px] text-[#0b3abc] items-center justify-center">
+                <div className="w-full flex-2 flex flex-wrap gap-x-[40px] gap-y-[10px] md:gap-y-[20px] text-[#0b3abc] items-center justify-center">
                     {[
                         {
                             title: "Home",
-                            link: "/"
+                            link: "/",
+                            onClick: () => window.scrollTo({ top: 0, behavior: "smooth" })
                         },
                         {
-                            title: "About",
+                            title: "About us",
                             link: "/"
                         },
                         {
                             title: "Features",
                             link: "/"
                         },
-                        {
-                            title: "Support",
-                            link: "/"
-                        },
-                        {
-                            title: "Privacy policy",
-                            link: "/"
-                        },
-                        {
-                            title: "Contact us",
-                            link: "/"
-                        },
+                       
                     ].map((item, idx) => (
                         <Link
                             key={idx}
                             to={item.link}
                             className="font-inter md:text-xl font-semibold"
+                            onClick={item.onClick}
                         >
                             {item.title}
                         </Link>
