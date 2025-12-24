@@ -41,7 +41,7 @@ export default function HeaderDesign() {
     const defaultAvatar = `https://ui-avatars.com/api/?name=${profile?.username || 'User'}&background=random`;
 
     return (
-        <div>
+        <div className="p-4">
 
             {/* --- 1. Profile Section (Avatar & Add Button) --- */}
             <div className="flex items-center mb-12">

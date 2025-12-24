@@ -43,7 +43,7 @@ export default function TextDesign() {
     // Lấy size hiện tại (mặc định là medium)
     const currentSize = profile?.design?.header?.sizeUsername || 'small';
     return (
-        <div>
+        <div className='p-4'>
             {/* Title font section - Giữ nguyên */}
             <div className="mb-4 bg-[#e6e5e3] p-2 rounded-2xl" 
                 onClick={() => openFontModal('header')}

@@ -36,7 +36,7 @@ export default function ButtonDesign() {
     };
 
     return (
-        <div>
+        <div className="p-4">
             <div className="mb-8">
                 <h3 className="text-gray-700 text-lg font-semibold mb-3">Button style</h3>
                 {/* Button style */}
