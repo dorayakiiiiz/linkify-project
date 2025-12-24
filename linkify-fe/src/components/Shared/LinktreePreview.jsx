@@ -310,9 +310,9 @@ export default function LinkTreePreview({
     };
 
     return (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-full h-screen md:h-full flex justify-center items-center">
             <div
-                className={`relative w-full p-[30px] md:p-4 max-w-[580px] ${!isPreview ? "md:h-[1160px] md:rounded-4xl py-8" : ""
+                className={`relative w-full h-full p-[30px] md:p-4 max-w-[580px] ${!isPreview ? "md:h-[1160px] md:rounded-4xl py-8" : ""
                     } bg-[#ECEEF1] shadow-2xl overflow-y-auto no-scrollbar flex flex-col items-center`}
                     style={pageBackgroundStyle} 
             >
@@ -519,20 +519,28 @@ export default function LinkTreePreview({
                                                     rel="noopener noreferrer"
                                                     onClick={() => handleItemClick(product, 'shop')}
                                                     className={`py-3 ${!isPreview ? "md:py-5 md:mx-[50px]" : ""
-                                                        } bg-white rounded-xl shadow text-center font-medium hover:scale-[1.02] transition-transform block`}
+                                                        } shadow text-center font-medium hover:scale-[1.02] transition-transform block`}
+                                                    style={dynamicButtonStyle}
                                                 >
                                                     <div className="flex flex-col items-center justify-center gap-[4px] px-4">
                                                         {product.imageUrl ? (
                                                             <img
                                                                 src={product.imageUrl}
                                                                 alt={product.name}
-                                                                className="w-full max-w-[250px] h-full max-h-[250px] object-cover rounded shrink-0"
+                                                                className={`w-48 h-48 ${!isPreview ? "md:w-64 md:h-64" : ""} object-cover rounded shrink-0`}
                                                             />
                                                         ) : (
-                                                            <i className="fa-solid fa-shop text-purple-600 text-sm"></i>
+                                                            <div className={`w-48 h-48 ${!isPreview ? "md:w-64 md:h-64" : ""} flex items-center justify-center bg-gray-100 rounded shrink-0`}>
+                                                                <i className="fa-solid fa-shop text-purple-600 text-4xl"></i>
+                                                            </div>
                                                         )}
 
-                                                        <span className="w-full">{product.name}</span>
+                                                        <span 
+                                                            className={`w-full mt-2 ${pageFontClass}`}
+                                                            style={{ color: pageTextColor }}
+                                                        >
+                                                            {product.name}
+                                                        </span>
 
                                                         <span className="text-purple-600 font-semibold shrink-0">
                                                             ${product.price}
