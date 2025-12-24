@@ -29,7 +29,7 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
     return (
         <>
             {/* Thanh công cụ hành động (Phần dưới) */}
-            <div className="bg-white p-4 rounded-3xl shadow-xl w-full absolute bottom-0.5 left-1/2 transform -translate-x-1/2 md:hidden grid grid-cols-3 gap-2 ">
+            <div className="bg-white p-4 rounded-3xl shadow-xl w-full absolute bottom-0.5 left-1/2 transform -translate-x-1/2 md:hidden grid grid-cols-5 gap-2 ">
 
                 {/* Header - Thêm sự kiện onClick */}
                 <div className="flex flex-col items-center mx-4" onClick={() => handleHeaderClick('Header')}>
