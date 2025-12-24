@@ -40,7 +40,7 @@ export default function FooterDesign() {
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full p-4">
             {/* ================= PHẦN 1: FOOTER ================= */}
             <div className="mb-10">
                 <h3 className="text-gray-700 text-lg font-semibold mb-4">Footer</h3>
