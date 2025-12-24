@@ -71,7 +71,7 @@ export default function PublicProfile() {
     }
 
     return (
-        <div className="w-full flex justify-center items-center bg-[#A6A8AA] md:py-10 relative">
+        <div className="w-full flex flex-1 justify-center items-center bg-[#A6A8AA] md:py-10 relative">
             <LinkTreePreview
                 profile={profile}
                 links={links}
