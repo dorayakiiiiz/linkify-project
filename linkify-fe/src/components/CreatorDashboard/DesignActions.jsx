@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HeaderDesign, ThemeDesign, Background, ButtonDesign, TextDesign } from './DesignComponent/index.js'
+import { HeaderDesign, ThemeDesign, Background, ButtonDesign, TextDesign, FooterDesign } from './DesignComponent/index.js'
 
 
 // props từ DesignPage: isDesignPanelOpen, toggleDesignPanel
@@ -29,7 +29,7 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
     return (
         <>
             {/* Thanh công cụ hành động (Phần dưới) */}
-            <div className="bg-white p-4 rounded-3xl shadow-xl w-full absolute bottom-0.5 left-1/2 transform -translate-x-1/2 md:hidden grid grid-cols-5 gap-2 ">
+            <div className="bg-white p-4 rounded-3xl shadow-xl w-full absolute bottom-0.5 left-1/2 transform -translate-x-1/2 md:hidden grid grid-cols-6 gap-2 ">
 
                 {/* Header - Thêm sự kiện onClick */}
                 <div className="flex flex-col items-center mx-4" onClick={() => handleHeaderClick('Header')}>
@@ -54,7 +54,12 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
                 <div className="flex flex-col items-center mx-4" onClick={() => handleHeaderClick('Buttons')}>
                     <i className="fa-solid fa-bars-staggered text-3xl text-gray-700 mb-1"></i>
                     <span className="text-sm font-medium text-gray-700">Buttons</span>
-                </div>                                            
+                </div>
+
+                <div className="flex flex-col items-center mx-4" onClick={() => handleHeaderClick('Footer & Donation')}>
+                    <i className="fa-solid fa-window-maximize text-3xl text-gray-700 mb-1"></i>
+                    <span className="text-sm font-medium text-gray-700">Footer & Donation</span>
+                </div>                                             
             </div>
 
 
@@ -73,6 +78,8 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
                 {activeDesign === 'Background' && <Background />}
                 {activeDesign === 'Text' && <TextDesign />}
                 {activeDesign === 'Buttons' && <ButtonDesign />}
+                {activeDesign === 'Footer & Donation' && <FooterDesign />}
+
 
             </div>
         </>
