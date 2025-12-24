@@ -90,9 +90,11 @@ export default function ShopModal({ onClose, editingProduct = null }) {
 
                 await addProduct(formData);
                 setLog({ type: "success", content: "Add new product successfully." });
+                onClose();
             } else {
                 await updateProduct(editingProduct._id, formData);
                 setLog({ type: "success", content: "Product updated successfully." });
+                onClose();
             }
         } catch (err) {
             setLog({ type: "error", content: err?.response?.data?.message || "Error occured. Try again later." });
@@ -108,7 +110,7 @@ export default function ShopModal({ onClose, editingProduct = null }) {
             onClick={onClose}
         >
             <div
-                className="flex flex-col w-full max-w-[750px] px-10 py-[26px] max-h-[90vh] overflow-y-auto bg-white md:rounded-3xl no-scrollbar"
+                className="flex flex-col w-full max-w-[750px] px-10 py-[26px] max-h-[90vh] overflow-y-auto bg-white md:rounded-3xl no-scrollbar animate-slide-up"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
