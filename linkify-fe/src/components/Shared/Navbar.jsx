@@ -45,14 +45,14 @@ export default function Navbar() {
                 </Link>
 
                 <div className="hidden md:flex justify-center items-center md:ml-[10px] lg:ml-[70px] font-semibold">
+                    <Link to="/dashboard" className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
+                        Dashboard
+                    </Link>
                     <div className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
-                        Template
+                        Design
                     </div>
                     <div className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
-                        Marketplace
-                    </div>
-                    <div className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
-                        Learn
+                        About us
                     </div>
                 </div>
             </div>
