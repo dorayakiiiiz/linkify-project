@@ -47,13 +47,13 @@ export default function MobilePreview({ isDesignPanelOpen }) {
             </div>
             
             {/* Điện thoại preview */}
-            <div className="flex-1 flex items-center">
-                <div className="xl:w-[300px] lg:w-[280px] md:w-[200px] relative w-auto aspect-[9/19] border-[8px] border-black rounded-[3rem] bg-black shadow-2xl overflow-hidden max-h-[88%]">              
+            <div className="flex-1 flex items-center justify-center px-10">
+                <div className="xl:w-[300px] lg:w-[280px] md:w-[200px] h-auto relative aspect-[9/19] border-[8px] border-black rounded-[3rem] bg-black shadow-2xl overflow-auto no-scrollbar">              
                     {/* tai thỏ */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-[18px] bg-black rounded-b-xl z-10"></div>
 
                     {/* content bên trong điện thoại */}
-                    <div className="w-full h-full">
+                    <div className="w-full">
                         <LinkTreePreview
                             profile={profile}
                             loading={loading}

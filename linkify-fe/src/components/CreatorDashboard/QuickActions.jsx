@@ -1,9 +1,11 @@
 import { quickActions } from "../../constants/dashboard"; 
 import LinkModal from "../../pages/CreatorDashboard/Modal/LinkModal";
+import ShopModal from "../../pages/CreatorDashboard/Modal/ShopModal";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 import MobilePreview from "./MobilePreview";
-export default function QuickActions() {
+export default function QuickActions({isLinkPage}) {
 
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,7 +40,8 @@ export default function QuickActions() {
                         </button>
                     ))}
                 </div>
-                {isModalOpen && <LinkModal onClose={() => setIsModalOpen(false)} />}
+                {isModalOpen && isLinkPage && createPortal(<LinkModal onClose={() => setIsModalOpen(false)} />, document.body)}
+                {isModalOpen && !isLinkPage && createPortal(<ShopModal onClose={() => setIsModalOpen(false)} />, document.body)}
         </div>  
     )
 } 

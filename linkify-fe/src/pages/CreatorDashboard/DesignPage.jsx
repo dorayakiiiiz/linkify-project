@@ -52,7 +52,7 @@ export default function DesignPage() {
 
             {/* 3. Màn hình mobile preview ở responsive mobile */}
             <div className='md:hidden flex justify-center'>
-                <div className='h-[100px]'>
+                <div className=''>
                     <MobilePreview isDesignPanelOpen={showHeaderDesign} />
                 </div>
                 <DesignActions 

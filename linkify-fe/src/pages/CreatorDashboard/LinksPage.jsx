@@ -308,7 +308,7 @@ export default function LinksPage() {
                             </div>
                         )}
 
-                        <QuickActions />
+                        <QuickActions isLinkPage={true} />
                     </div>
                 </div>
             </div>

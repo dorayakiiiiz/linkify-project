@@ -224,7 +224,7 @@ Linkify Team`
             // });
 
             console.log('[THÀNH CÔNG!!!]')
-            return send(generateAuthScript('login_success', { token })); 
+            return res.send(generateAuthScript('login_success', { token })); 
             
         } catch (err) {
             console.log("Facebook Auth Callback Error:", err);

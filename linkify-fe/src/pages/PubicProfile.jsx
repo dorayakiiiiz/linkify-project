@@ -155,7 +155,7 @@ export default function PublicProfile() {
 
     return (
         <div 
-            className="w-full min-h-screen flex justify-center items-center md:py-10 relative transition-colors duration-700"
+            className="w-full flex flex-1 justify-center items-center md:py-10 relative transition-colors duration-700"
             style={getOuterStyle()}
         >
             <LinkTreePreview
