@@ -260,7 +260,7 @@ export default function LinkTreePreview({
     return (
         <div className="w-full h-full flex justify-center items-center">
             <div
-                className={`relative w-full p-[30px] max-w-[580px] h-screen ${!isPreview ? "md:h-[1160px] md:rounded-4xl" : "md:h-[580px]"
+                className={`relative w-full p-[30px] md:p-4 max-w-[580px] ${!isPreview ? "md:h-[1160px] md:rounded-4xl py-8" : ""
                     } bg-[#ECEEF1] shadow-2xl overflow-y-auto no-scrollbar flex flex-col items-center`}
                     style={pageBackgroundStyle} 
             >
