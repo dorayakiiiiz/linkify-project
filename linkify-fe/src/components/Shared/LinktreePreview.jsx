@@ -70,6 +70,16 @@ const hexToRgba = (hex, alpha = 1) => {
     }
     return hex;
 }
+
+// Helper lấy class shape riêng cho donation (tránh conflict nếu cần)
+const getDonationShapeClass = (shape) => {
+    switch (shape) {
+        case 'square': return 'rounded-none';
+        case 'medium': return 'rounded-xl';
+        case 'round': default: return 'rounded-full';
+    }
+};
+
 export default function LinkTreePreview({
     profile, // lấy được cái profile hiện tại từ ProfileContext
     loading,
@@ -79,6 +89,7 @@ export default function LinkTreePreview({
     loadingProducts,
     isPreview = false,
     tab = "link",
+    extractedColor = null
 }) {
 
     // Component Skeleton cho các nút Link
@@ -146,51 +157,41 @@ export default function LinkTreePreview({
     // Lấy shape class
     const buttonShapeClass = getButtonShapeClass(design.buttons?.shape);
 
+    // --- LOGIC MÀU SẮC CHO TOGGLE ---
+    const getToggleTheme = () => {
+        // Mặc định dùng màu nút
+        let activeBg = buttonColor;
+        let activeText = buttonTextColor;
+        let inactiveText = buttonColor;
+
+        // Nếu Background là ẢNH -> Dùng màu trích xuất từ ảnh (extractedColor)
+        if (backgroundType === 'image' && extractedColor) {
+            // Để nút nổi bật trên nền ảnh, ta dùng màu trích xuất làm điểm nhấn
+            // Bg inactive sẽ là trắng mờ (glass), Bg active sẽ là màu trích xuất
+            activeBg = extractedColor;
+            activeText = '#ffffff'; // Chữ trắng trên nền màu ảnh
+            inactiveText = extractedColor; // Chữ màu ảnh trên nền trắng
+        } 
+        // Nếu Background là Gradient/Màu -> Dùng logic cũ (dựa theo buttonColor) hoặc headerColor để tương phản
+        else {
+             // Có thể tùy chỉnh thêm logic ở đây nếu muốn
+        }
+
+        return { activeBg, activeText, inactiveText };
+    };
+
+    const toggleTheme = getToggleTheme();
     
     // TÍNH TOÁN STYLE CHO BACKGROUND
     const getPageBackground = () => {
-
-
         if (backgroundType === 'image') {
-            // Ưu tiên dùng imageUrl
-            if (backgroundImage) {
-                return {
-                    backgroundImage: `url(${backgroundImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundColor: backgroundColor // Fallback color
-                };
-            }
-            // Nếu type=image nhưng không có imageUrl (lỗi data cũ), thử dùng value nếu nó là URL
-            if (backgroundColor.startsWith('http')) {
-                 return {
-                    backgroundImage: `url(${backgroundColor})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                };
-            }
-             // Fallback cuối cùng
+            if (backgroundImage) return { backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundColor: backgroundColor };
+            if (backgroundColor.startsWith('http')) return { backgroundImage: `url(${backgroundColor})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' };
             return { backgroundColor: backgroundColor };
         }
-        
-        if (backgroundType === 'gradient') {
-            // Gradient: Từ màu chọn -> Trắng (để thấy rõ hiệu ứng dải màu)
-            return {
-                background: `linear-gradient(180deg, ${backgroundColor} 0%, ${backgroundToColor} 100%)`,
-            };
-        }
-        if (backgroundType === 'blur') {
-            // Blur (giả lập bằng Radial Gradient): Màu chọn ở tâm -> Trắng ở viền
-            return {
-                background: `radial-gradient(circle, ${backgroundColor} 0%, ${backgroundToColor} 100%)`,
-            };
-        }
-        // Default Fill: Chỉ màu nền đặc
-        return {
-            backgroundColor: backgroundColor
-        };
+        if (backgroundType === 'gradient') return { background: `linear-gradient(180deg, ${backgroundColor} 0%, ${backgroundToColor} 100%)` };
+        if (backgroundType === 'blur') return { background: `radial-gradient(circle, ${backgroundColor} 0%, ${backgroundToColor} 100%)` };
+        return { backgroundColor: backgroundColor };
     };
 
     const pageBackgroundStyle = getPageBackground();
@@ -257,6 +258,57 @@ export default function LinkTreePreview({
 
     const dynamicButtonStyle = getButtonStyle();
 
+    // --- [MỚI] HÀM TÍNH STYLE RIÊNG CHO DONATION BUTTON ---
+    const getDonationButtonStyle = () => {
+        const dConfig = design.donationButton || {};
+
+        // Case 1: Dùng Global Style -> Trả về y hệt nút thường
+        if (dConfig.useGlobal) {
+            return {
+                style: dynamicButtonStyle,
+                className: buttonShapeClass
+            };
+        }
+
+        // Case 2: Dùng Style Riêng
+        const customShapeClass = getDonationShapeClass(dConfig.shape);
+        const dColor = dConfig.color || '#ff4081'; // Màu mặc định hồng nếu chưa set
+        const dTextColor = dConfig.textColor || '#ffffff';
+
+        let customStyleProps = {
+            color: dTextColor,
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.1)' // Shadow mặc định nhẹ cho đẹp
+        };
+
+        if (dConfig.style === 'outline') {
+            customStyleProps.backgroundColor = 'transparent';
+            customStyleProps.border = `2px solid ${dColor}`;
+            customStyleProps.color = dColor; // Outline thì chữ màu giống viền
+        } else if (dConfig.style === 'glass') {
+            customStyleProps.backgroundColor = hexToRgba(dColor, 0.6);
+            customStyleProps.backdropFilter = 'blur(5px)';
+            customStyleProps.border = '1px solid rgba(255,255,255,0.4)';
+        } else {
+            // Solid
+            customStyleProps.backgroundColor = dColor;
+            customStyleProps.border = '2px solid transparent';
+        }
+
+        return {
+            style: customStyleProps,
+            className: customShapeClass
+        };
+    };
+
+    const donationBtnInfo = getDonationButtonStyle();
+
+    // --- [MỚI] STYLE CHO FOOTER ---
+    const footerStyle = {
+        backgroundColor: design.footer?.backgroundColor || '#ffffff',
+        color: design.footer?.textColor || '#6b7280',
+    };
+
     return (
         <div className="w-full h-full flex justify-center items-center">
             <div
@@ -267,18 +319,14 @@ export default function LinkTreePreview({
                 {/* content */}
                 {/* <div className="w-full h-full overflow-y-auto no-scrollbar flex flex-col items-center"> */}
                 <div className="w-full flex justify-between items-center">
-                    <div
+                    <a
                         className={`${!isPreview ? "w-10 h-10" : "w-[34px] h-[34px]"
-                            } rounded-full bg-white flex justify-center items-center`}
+                            } rounded-full cursor-pointer bg-white flex justify-center items-center`}
+                            href="/"
                     >
                         <i className="fa-brands fa-linktree"></i>
-                    </div>
-                    <div
-                        className={`${!isPreview ? "w-10 h-10" : "w-[34px] h-[34px]"
-                            } rounded-full bg-white flex justify-center items-center`}
-                    >
-                        <i className="fa-regular fa-bell"></i>
-                    </div>
+                    </a>
+                    
                 </div>
 
                 {loading ? (
@@ -324,50 +372,56 @@ export default function LinkTreePreview({
 
 
                         {!loading && profile?.donation?.isEnabled && (
-                            <div className="mb-10 animate-fade-in-up">
-
+                            <div className={`${isPreview ? 'mb-4' : 'mb-10'} animate-fade-in-up w-full flex justify-center`}>
                                 <a 
-                                    href={profile.donation.url.match(/^https?:\/\//)
-                                            ? profile.donation.url
-                                            : "https://" + profile.donation.url}
+                                    href={profile.donation.url.match(/^https?:\/\//) ? profile.donation.url : "https://" + profile.donation.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={`
-                                        py-3 ${!isPreview ? "md:py-5 md:mx-[50px]" : ""} px-6 rounded-full cursor-pointer transition-all duration-300 transform hover:scale-[1.02] active:scale-95
-                                        flex items-center justify-center gap-2.5 font-bold ${!isPreview ? 'md:text-xl lg:text-2xl' : ''} shadow-md
-                                        bg-white whitespace-nowrap text-gray-800 border-2 border-pink-100 hover:border-pink-300 hover:shadow-pink-100
+                                        py-3 px-6 ${!isPreview ? "md:py-4 md:px-8" : "md:py-2 md:px-4"} 
+                                        flex items-center justify-center gap-2.5 font-bold cursor-pointer 
+                                        ${!isPreview ? 'md:text-xl' : 'text-sm'}
+                                        hover:scale-[1.02] active:scale-95 transition-transform
+                                        ${donationBtnInfo.className} 
                                     `}
+                                    style={donationBtnInfo.style}
                                 >
-                                    <div className={`w-8 h-8 rounded-full bg-pink-50 flex items-center justify-center ${isPreview ? 'hidden lg:flex' : ''}`}>
-                                        <i className="fa-solid fa-heart text-pink-500 text-sm animate-pulse"></i>
-                                    </div>
-
+                                    {/* Render Icon nếu có và không phải global style (hoặc global cũng hiện nếu muốn, ở đây t để hiện luôn cho đẹp) */}
+                                    {design.donationButton?.icon && (
+                                        <i className={`${design.donationButton.icon} ${!isPreview ? 'text-xl' : ''}`}></i>
+                                    )}
+                                    
                                     {profile.donation.text || "Support Me"}
                                 </a>
                             </div>
                         )}
                         {/* toggle đổi giữa link và shop */}
-                        <div className="relative flex items-center justify-center bg-[#8D8F90] font-bold font-quicksand p-1 rounded-full mb-[30px]">
-                            {/* lớp trắng che trượt qua lại */}
+                        <div 
+                            className="relative flex items-center justify-center font-bold font-quicksand p-1 rounded-full mb-[30px] shadow-sm backdrop-blur-sm"
+                            style={{ 
+                                // Nền của thanh toggle: Nếu là ảnh -> dùng màu trắng mờ, Nếu là màu -> dùng màu nút mờ
+                                backgroundColor: backgroundType === 'image' ? 'rgba(255, 255, 255, 0.25)' : hexToRgba(toggleTheme.inactiveText, 0.15),
+                                border: backgroundType === 'image' ? '1px solid rgba(255,255,255,0.3)' : 'none'
+                            }}
+                        >
+                            {/* Lớp trượt (Active Background) */}
                             <div
-                                className={`absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-full shadow-sm transition-all duration-300 ease-in-out ${isLinkTab ? "translate-x-0" : "translate-x-full"
-                                    }`}
+                                className={`absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] rounded-full shadow-md transition-all duration-300 ease-in-out ${isLinkTab ? "translate-x-0" : "translate-x-full"}`}
+                                style={{ backgroundColor: toggleTheme.activeBg }} 
                             ></div>
 
                             <div
-                                className={`z-10 px-[18px] py-1.5  ${!isPreview ? "md:px-[30px] md:py-2.5" : "md:px-3.5 md:py-0.5"
-                                    } rounded-full text-center cursor-pointer transition-colors duration-300 ${isLinkTab ? "text-black" : "text-white"
-                                    }`}
+                                className={`z-10 px-[18px] py-1.5 ${!isPreview ? "md:px-[30px] md:py-2.5" : "md:px-3.5 md:py-0.5"} rounded-full text-center cursor-pointer transition-colors duration-300`}
                                 onClick={() => setIsLinkTab(true)}
+                                style={{ color: isLinkTab ? toggleTheme.activeText : toggleTheme.inactiveText }}
                             >
                                 Link
                             </div>
 
                             <div
-                                className={`z-10 px-[18px] py-1.5 ${!isPreview ? "md:px-[30px] md:py-2.5" : "md:px-3.5 md:py-0.5"
-                                    } rounded-full text-center cursor-pointer transition-colors duration-300 ${!isLinkTab ? "text-black" : "text-white"
-                                    }`}
+                                className={`z-10 px-[18px] py-1.5 ${!isPreview ? "md:px-[30px] md:py-2.5" : "md:px-3.5 md:py-0.5"} rounded-full text-center cursor-pointer transition-colors duration-300`}
                                 onClick={() => setIsLinkTab(false)}
+                                style={{ color: !isLinkTab ? toggleTheme.activeText : toggleTheme.inactiveText }}
                             >
                                 Shop
                             </div>
@@ -497,14 +551,24 @@ export default function LinkTreePreview({
                                     </>
                                 ))}
 
-                            <div className="mt-auto mb-[30px]">
-                                <div
-                                    className={`py-3 px-1 ${!isPreview ? "md:py-5 md:mx-5" : "text-sm"
-                                        } font-bold bg-white text-center rounded-4xl shadow flex items-center justify-center cursor-pointer`}
-                                >
-                                    Join {profile.username} on Linktree
+                            {/* --- HIỂN THỊ FOOTER --- */}
+                            {profile?.footerEnable && (
+                                <div className="w-full mt-auto pt-8 pb-4 flex justify-center">
+                                    <a className="cursor-pointer" href="/">
+                                        <div
+                                            className={`
+                                                py-2 px-4 ${!isPreview ? "md:py-3 md:px-6" : "text-xs"} 
+                                                font-bold text-center rounded-3xl shadow-sm flex items-center justify-center gap-2
+                                                hover:opacity-90 transition-opacity
+                                            `}
+                                            style={footerStyle}
+                                        >
+                                            <i className="fa-brands fa-linktree"></i>
+                                            <span>Join {profile.username} on Linkify</span>
+                                        </div>
+                                    </a>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 )}

@@ -59,28 +59,12 @@ export default function Sidebar() {
         return location.pathname === path;
     };
 
-    // Check xem Parent (vd: My Linkify) có đang active không (nếu con nó active)
-    const isParentActive = (item) => {
-        if (item.hasDropdown) {
-            return item.subItems.some(sub => isActive(sub.label));
-        }
-        return isActive(item.label);
-    };
-
-    const handleMainClick = (item, index) => {
-        if (item.hasDropdown) {
-            setOpenIndex(openIndex === index ? null : index);
-        } else {
-            navigate(getPath(item.label));
-        }
+    const handleClick = (item, index) => {
+        navigate(getPath(item.label));
     };
 
     const handleSubClick = (subLabel) => {
         navigate(getPath(subLabel));
-    };
-
-    const handleToolClick = (toolLabel) => {
-        navigate(getPath(toolLabel));
     };
 
     const handleAccountSetting = () => {
@@ -106,10 +90,10 @@ export default function Sidebar() {
             )}
 
             {/* User Info & Noti */}
-            <div className="flex justify-between items-center px-[12px] py-[8px] mt-1">
+            <div className="flex border-b border-gray-300 justify-between items-center px-5 py-2 my-2.5">
                 <div 
                     ref={dropdownRef}
-                    className="relative flex items-center gap-1.5 px-3 py-[4px] -mx-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl"
+                    className="relative flex items-center gap-1.5 px-2 py-[4px] -mx-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl"
                     onClick={handleToggleDropdown}    
                 >
                     <img
@@ -156,66 +140,37 @@ export default function Sidebar() {
                 </div>
 
 
-                <span className="px-2 py-2 -mx-2 -my-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl">
-                    <i className="fa-regular fa-bell "></i>
-                </span>
+                
             </div>
 
             {/* 2. Menu Items */}
-            <div className="overflow-y-auto h-[calc(100%-120px)]">
-                <div className="px-3 py-2">
+            <div className="overflow-y-auto flex flex-col h-[calc(100%-120px)]">
+                <div className="px-6 lg:px-7">
                     {adminMenu.map((item, index) => {
-                        const parentActive = isParentActive(item);
-                        
                         return (
                             <div key={item.label} className="mb-1">
-                                {/* Main Item */}
                                 <div
-                                    onClick={() => handleMainClick(item, index)}
-                                    // đang active mà ko subitem thì / đang active mà có subitem thì
-                                    className={`flex text-[#37181B] items-center py-2 px-1 -mx-1 transition-all duration-150 cursor-pointer
-                                        ${parentActive && item.hasDropdown 
-                                            ? "hover:bg-[#E2E2DF] hover:rounded-xl" // Active nhưng là dropdown cha
-                                            : parentActive && !item.hasDropdown
-                                                ? "bg-[#E2E2DF] font-bold rounded-xl" // Active và là link đơn
-                                                : "hover:bg-[#E2E2DF] hover:rounded-xl" // Inactive
+                                    onClick={() => handleClick(item)}
+                                    className={`flex items-center py-2 px-2 -mx-2 my-2 rounded-xl cursor-pointer transition-all duration-150
+                                        ${isActive(item.label) 
+                                            ? "bg-gray-50 shadow-xs font-bold" // Style khi active
+                                            : "hover:bg-[#d7d4cd] text-gray-600" // Style mặc định
                                         }`}
                                 >
-                                    <i className={`fa-solid ${item.icon}`} />
+                                    <i className={`${isActive(item.label) ? 'text-blue-500' : ''} fa-solid ${item.icon}`} />
                                     <span className="ml-1.5">{item.label}</span>
-                                    {item.hasDropdown && (
-                                        <i className={`fa-solid fa-angle-down text-[10px] pt-1 ml-auto mr-1 transition-transform duration-300 ${openIndex === index ? "rotate-180" : ""}`}/>
-                                    )}
                                 </div>
-
-                                {/* Sub Items Dropdown */}
-                                {item.hasDropdown && openIndex === index && (
-                                    <div className="ml-6 mt-1 space-y-1 text-[#37181B]">
-                                        {item.subItems.map((sub) => (
-                                            <div
-                                                key={sub.label}
-                                                onClick={() => handleSubClick(sub.label)}
-                                                className={`py-1.5 px-2 rounded-md cursor-pointer text-sm transition-all duration-150
-                                                    ${isActive(sub.label)
-                                                        ? "bg-[#E2E2DF] font-bold"
-                                                        : "hover:bg-[#E2E2DF]"
-                                                    }`}
-                                            >
-                                                {sub.label}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
                             </div>
                         );
                     })}
                 </div>
             </div>
 
-            {/* 4. Bottom Actions  */}
-            <div className="px-3 py-3 mb-3 flex justify-between w-full absolute bottom-0 bg-[#ecede8]">
-                <i className="fa-regular fa-circle-question pl-2 pr-7 py-2 -mx-2 -my-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-full text-lg"></i>
-                <i className="fa-solid fa-bullhorn pl-2 pr-7 py-2 -mx-2 -my-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-full text-lg"></i>
+            <div className="mb-1 px-6 lg:px-7 text-gray-500 mt-auto cursor-pointer" onClick={handleAccountSetting}>
+                <div className="p-2 hover:bg-gray-50 hover:shadow-sm hover:text-blue-600 rounded-xl">
+                    <i className="fa-solid fa-gear"></i>
+                    <span className="ml-1.5 text-gray-600">Account setting</span>
+                </div>
             </div>
         </div>
     );

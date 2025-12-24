@@ -21,6 +21,8 @@ export default function Login() {
     // dùng trong trường hợp đang đăng nhập r ở chỗ khác mà tnhien nhảy vào trang login lại
     const [justLoggedIn, setJustLoggedIn] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+
     const navigate = useNavigate();
     const { login, isLogin } = useAuth();
     const { fetchProfile } = useProfile();
@@ -90,6 +92,7 @@ export default function Login() {
         }
 
         try {
+            setLoading(true);
             const res = await authService.login({
                 email,
                 password
@@ -100,6 +103,7 @@ export default function Login() {
             // Lưu token vào localStorage
             login(token);
             setJustLoggedIn(true);
+            setLoading(false);
             setLog({
                 type: 'success',
                 content: 'Login successfully! Redirecting...'
@@ -117,6 +121,8 @@ export default function Login() {
                 type: 'error',
                 content: err?.response?.data?.message || 'Error occured. Try again later.'
             });
+        } finally {
+            setLoading(false);
         }
         
     }
@@ -208,6 +214,7 @@ export default function Login() {
                             color="#fff" 
                             text="Continue" 
                             onClick={handleSubmit}
+                            disabled={loading}
                         />
 
                     </form>

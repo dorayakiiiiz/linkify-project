@@ -53,6 +53,7 @@ export default function Sidebar() {
             'Links': '/dashboard/links',
             'Shop': '/dashboard/shop',
             'Design': '/dashboard/design',
+            'Donation': '/dashboard/donation',
             'Insights': '/dashboard/insights',
             
             // Tools
@@ -68,28 +69,9 @@ export default function Sidebar() {
         return location.pathname === path;
     };
 
-    // Check xem Parent (vd: My Linkify) có đang active không (nếu con nó active)
-    const isParentActive = (item) => {
-        if (item.hasDropdown) {
-            return item.subItems.some(sub => isActive(sub.label));
-        }
-        return isActive(item.label);
-    };
 
-    const handleMainClick = (item, index) => {
-        if (item.hasDropdown) {
-            setOpenIndex(openIndex === index ? null : index);
-        } else {
-            navigate(getPath(item.label));
-        }
-    };
-
-    const handleSubClick = (subLabel) => {
-        navigate(getPath(subLabel));
-    };
-
-    const handleToolClick = (toolLabel) => {
-        navigate(getPath(toolLabel));
+    const handleClick = (item) => {
+        navigate(getPath(item.label));
     };
 
     const handleSwitchProfile = () => {
@@ -135,7 +117,7 @@ export default function Sidebar() {
             )}
 
             {/* User Info & Noti */}
-            <div className="flex justify-between items-center px-[12px] py-[8px] mt-1">
+            <div className="flex border-b border-gray-300 justify-between items-center px-5 py-2 my-2.5">
                 <div 
                     ref={dropdownRef}
                     className="relative flex items-center gap-1.5 px-2 py-[4px] -mx-2 hover:bg-[#d7d4cd] hover:cursor-pointer hover:rounded-xl"
@@ -227,89 +209,68 @@ export default function Sidebar() {
                             )}
                         </div> 
 
-                         
-                        
                     </div>
                 </div>
 
-
-                            
+                <div 
+                    title="Setting" 
+                    className="w-8 h-8 border border-gray-400 bg-white hover:bg-gray-200 cursor-pointer rounded-full p-2 flex items-center justify-center"
+                    onClick={handleAccountSetting}
+                >
+                   <i className="fa-solid fa-gear"></i>
+                </div>      
             </div>
 
             {/* 2. Menu Items */}
-            <div className="overflow-y-auto h-[calc(100%-120px)]">
-                <div className="px-3 py-2">
-                    {creatorMenu.map((item, index) => {
-                        // check nó có active ko
-                        const parentActive = isParentActive(item);
-                        
+            <div className="overflow-y-auto flex flex-col h-[calc(100%-120px)]">
+                <div className="px-6 lg:px-7">
+                    {creatorMenu.map((item) => {
                         return (
                             <div key={item.label} className="mb-1">
-                                {/* Main Item */}
                                 <div
-                                    onClick={() => handleMainClick(item, index)}
-                                    // đang active mà ko subitem thì / đang active mà có subitem thì
-                                    className={`flex text-[#37181B] items-center py-2 px-1 -mx-1 transition-all duration-150 cursor-pointer
-                                        ${parentActive && item.hasDropdown 
-                                            ? "hover:bg-[#E2E2DF] hover:rounded-xl" // Active nhưng là dropdown cha
-                                            : parentActive && !item.hasDropdown
-                                                ? "bg-[#E2E2DF] font-bold rounded-xl" // Active và là link đơn
-                                                : "hover:bg-[#E2E2DF] hover:rounded-xl" // Inactive
+                                    onClick={() => handleClick(item)}
+                                    className={`flex items-center py-2 px-2 -mx-2 my-2 rounded-xl cursor-pointer transition-all duration-150
+                                        ${isActive(item.label) 
+                                            ? "bg-gray-50 shadow-xs font-bold" // Style khi active
+                                            : "hover:bg-[#d7d4cd] text-gray-600" // Style mặc định
                                         }`}
                                 >
-                                    <i className={`fa-solid ${item.icon}`} />
+                                    <i className={`${isActive(item.label) ? 'text-blue-500' : ''} fa-solid ${item.icon}`} />
                                     <span className="ml-1.5">{item.label}</span>
-                                    {item.hasDropdown && (
-                                        <i className={`fa-solid fa-angle-down text-[10px] pt-1 ml-auto mr-1 transition-transform duration-300 ${openIndex === index ? "rotate-180" : ""}`}/>
-                                    )}
                                 </div>
-
-                                {/* Sub Items Dropdown */}
-                                {item.hasDropdown && openIndex === index && (
-                                    <div className="ml-6 mt-1 space-y-1 text-[#37181B]">
-                                        {item.subItems.map((sub) => (
-                                            <div
-                                                key={sub.label}
-                                                onClick={() => handleSubClick(sub.label)}
-                                                className={`py-1.5 px-2 rounded-md cursor-pointer text-sm transition-all duration-150
-                                                    ${isActive(sub.label)
-                                                        ? "bg-[#E2E2DF] font-bold"
-                                                        : "hover:bg-[#E2E2DF]"
-                                                    }`}
-                                            >
-                                                {sub.label}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
                             </div>
                         );
                     })}
                 </div>
 
                 {/* 3. Tools Section */}
-                <div className="px-3 py-2">
-                    <div className="text-s font-medium text-[#9c9b95] w-[32px] pb-2">
+                <div className="px-6 lg:px-7 py-2">
+                    <div className="-ml-3 font-medium text-[#9c9b95] w-[32px]">
                         Tools
                     </div>
                     {tools.map((t) => (
                         <div
                             key={t.label}
-                            onClick={() => handleToolClick(t.label)} 
+                            onClick={() => handleClick(t)} 
                             className={`flex items-center py-2 px-2 -mx-2 my-2 rounded-xl cursor-pointer transition-all duration-150
                                 ${isActive(t.label) 
-                                    ? "bg-[#d7d4cd] font-semibold text-black" // Style khi active
-                                    : "hover:bg-[#d7d4cd] text-black" // Style mặc định
+                                    ? "bg-gray-50 shadow-xs font-bold" // Style khi active
+                                    : "hover:bg-[#d7d4cd] text-gray-600" // Style mặc định
                                 }`}
                         >
-                            <i className={t.icon}></i>
+                            <i className={` ${isActive(t.label) ? 'text-blue-500' : ''} fa-solid ${t.icon}`} />
                             <span className="ml-1.5">{t.label}</span>
                         </div>
                     ))}
                 </div>
+
+                <div className="mb-1 px-6 lg:px-7 text-gray-500 mt-auto cursor-pointer" onClick={handleAccountSetting}>
+                    <div className="p-2 hover:bg-gray-50 hover:shadow-sm hover:text-blue-600 rounded-xl">
+                        <i className="fa-solid fa-gear"></i>
+                        <span className="ml-1.5 text-gray-600">Account setting</span>
+                    </div>
+                </div>
             </div>
-
-
         </div>
     );
 }
