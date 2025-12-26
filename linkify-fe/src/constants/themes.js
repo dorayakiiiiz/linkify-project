@@ -1033,59 +1033,60 @@ export const THEMES = [
             "themeId": "theme18",
 
             // 1. Cấu hình Nền (Background)
-            // Sử dụng màu xanh lá xám (Sage Green) làm nền chờ để hòa hợp với màu rừng.
+            
             "background": {
                 "type": "image",
                 "value": "#2F3E33",      // Màu xanh lá đậm trung tính
                 "imageUrl": "/theme_18.jpg",
-                "toColor": "#4A5D4E",     // Gradient sang tông xám xanh
+                "toColor": "#4A5D4E",     
                 "direction": "to bottom"
             },
 
             // 2. Cấu hình Header (Username & Bio)
-            // Màu trắng xám nhạt gợi cảm giác sạch sẽ và hiện đại.
+            
             "header": {
-                "color": "#F2F2F2",       
-                "font": "Inter",          // Font chữ tối giản, hiện đại
+                "color": "#1B261F",       // Màu xám đen (lấy từ khung cửa sổ)
+                "font": "Inter",          
                 "sizeUsername": "small",
-                "textShadow": "0 2px 4px rgba(0,0,0,0.4)"
+                "textShadow": "0 1px 3px rgba(255,255,255,0.3)" // Thêm bóng sáng nhẹ phía sau để chữ đen nổi trên nền tối
             },
 
             // 3. Cấu hình Nút (Buttons)
-            // Kiểu "glass" (kính) cực kỳ phù hợp với bối cảnh cửa sổ tàu.
+            
             "buttons": {
                 "shape": "medium",
                 "style": "glass",
-                "color": "rgba(47, 62, 51, 0.6)", // Màu xanh rừng trầm trong suốt
+                "color": "rgba(27, 38, 31, 0.75)", // Làm nền nút đậm hơn để che bớt chi tiết rừng phía sau
                 "textColor": "#F2F2F2",           
                 "borderColor": "rgba(255, 255, 255, 0.15)",
-                "shadowColor": "rgba(0,0,0,0.2)",
+                "shadowColor": "rgba(0,0,0,0.3)",
                 "shadowStyle": "subtle"
             },
 
             // 4. Cấu hình Text chung
+            // Chỉnh màu ghi chú đậm hơn để dễ đọc.
             "text": {
-                "color": "#D1D9D2",       // Màu xám xanh nhạt cho các văn bản phụ
+                "color": "#2D3A30",       // Màu xanh rêu đá đậm
                 "font": "Inter",
                 "size": "small",
                 "textShadow": "none"
             },
 
             // 5. Nút donation (Nổi bật)
-            // Sử dụng màu vàng cát (Sunlight Gold) lấy từ vệt nắng chiếu trên khung cửa.
+            
             "donationButton": {
                 "useGlobal": false,
                 "shape": "medium",
                 "style": "solid",
-                "color": "#E3C18D",       // Màu vàng nắng nhạt
-                "textColor": "#1B261F",    // Chữ màu tối để tương phản
-                "icon": "fa-solid fa-train", // Icon tàu hỏa phù hợp bối cảnh
+                "color": "#E3C18D",       
+                "textColor": "#1B261F",    
+                "icon": "fa-solid fa-train", 
                 "size": "medium"
             },
 
             // 6. Footer
             "footer": {
-                "backgroundColor": "rgba(27, 38, 31, 0.9)", // Màu tối hẳn để kết thúc trang
+                "backgroundColor": "rgba(27, 38, 31, 0.9)", 
                 "textColor": "#B0BDB3"
             }
         }
@@ -1418,5 +1419,328 @@ export const THEMES = [
                 "textColor": "#4F4F4F"
             }
         }
-    }
+    },
+
+    {
+        id: 'theme24',
+        name: 'Cloudy Stream',
+        design: {
+            themeId: 'theme24',
+
+            // 1. Cấu hình Nền (Background)
+            background: {
+                type: 'image',
+                value: '#132A1F',      // Xanh lục sẫm làm nền chờ
+                imageUrl: '/theme_24.jpg',
+                toColor: '#344E41',    
+                direction: 'to bottom'
+            },
+
+            // 2. Cấu hình Header (Username & Bio)
+           
+            header: {
+                color: '#FFFFFF',      // Màu trắng như yêu cầu
+                font: 'Inter',         
+                sizeUsername: 'small',
+                textShadow: '0 2px 10px rgba(0,0,0,0.8)' // Bóng đổ đen đậm để tách chữ khỏi nền mây trắng
+            },
+
+            // 3. Cấu hình Nút (Buttons)
+           
+            buttons: {
+                shape: 'medium',
+                style: 'glass',
+                color: 'rgba(19, 42, 31, 0.7)', 
+                textColor: '#FFFFFF',           
+                shadowColor: '#000000',
+                shadowStyle: 'subtle'
+            },
+
+            // 4. Cấu hình Text chung
+            text: {
+                color: '#E0E0E0',       // Màu xám trắng nhạt cho các ghi chú
+                font: 'Inter',
+                size: 'small',
+                textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+            },
+
+            // 5. Nút donation (Nổi bật)
+            
+            donationButton: {
+                useGlobal: false,
+                shape: 'medium',
+                style: 'solid',
+                color: '#51DDF1',       // Màu xanh nước biển sáng (Cyan)
+                textColor: '#0B1D33',    // Chữ xanh đen đậm cho dễ đọc trên nền sáng
+                icon: 'fa-solid fa-droplet', // Icon giọt nước phù hợp với dòng suối
+                size: 'medium'
+            },
+
+            // 6. Footer
+            
+            footer: {
+                backgroundColor: 'rgba(52, 78, 65, 0.9)', 
+                textColor: '#51DDF1',
+            }
+        }
+    },
+
+    {
+        id: 'theme25',
+        name: 'Stupid Cow',
+        design: {
+            themeId: 'theme25',
+
+            // 1. Cấu hình Nền (Background)
+            // Tông màu xanh lục sẫm lấy từ các lùm cây ven suối.
+            background: {
+                type: 'image',
+                value: '#132A1F',      
+                imageUrl: '/theme_25.jpg',
+                toColor: '#344E41',    
+                direction: 'to bottom'
+            },
+
+            // 2. Cấu hình Header (Username & Bio)
+            // Màu trắng rực rỡ, kèm bóng đổ đen đậm để nổi rõ trên nền mây trắng sáng.
+            header: {
+                color: '#FFFFFF',      // Màu trắng như bạn yêu cầu
+                font: 'Inter',         
+                sizeUsername: 'small',
+                textShadow: '0 2px 10px rgba(0,0,0,0.8)' // Bóng đổ rất đậm để tách chữ khỏi mây
+            },
+
+            // 3. Cấu hình Nút (Buttons)
+            // Kính mờ tông xanh đêm đậm, giúp chữ trắng bên trong cực kỳ nổi bật.
+            buttons: {
+                shape: 'medium',
+                style: 'glass',
+                color: 'rgba(19, 42, 31, 0.7)', 
+                textColor: '#FFFFFF',           
+                shadowColor: '#000000',
+                shadowStyle: 'subtle'
+            },
+
+            // 4. Cấu hình Text chung
+            text: {
+                color: '#E0E0E0',       
+                font: 'Inter',
+                size: 'small',
+                textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+            },
+
+            // 5. Nút donation (Nổi bật)
+            // Sử dụng màu xanh Cyan (Xanh suối) để không bị quá hồng, tạo cảm giác tươi mát.
+            donationButton: {
+                useGlobal: false,
+                shape: 'medium',
+                style: 'solid',
+                color: '#51DDF1',       // Màu xanh nước biển sáng (Cyan)
+                textColor: '#0B1D33',    
+                icon: 'fa-solid fa-water', // Icon sóng nước phù hợp với dòng suối trong ảnh
+                size: 'medium'
+            },
+
+            // 6. Footer
+            // Màu xanh rêu đá đậm để làm nền cho chữ màu xanh Cyan nổi lên.
+            footer: {
+                backgroundColor: 'rgba(27, 38, 31, 0.95)', 
+                textColor: '#51DDF1',
+            }
+        }
+    },
+
+    {
+        id: 'theme26',
+        name: 'Grumpy Cat',
+        design: {
+            themeId: 'theme26',
+
+            // 1. Cấu hình Nền (Background)
+            
+            background: {
+                type: 'image',
+                value: '#8E95A5',      // Màu xám xanh lông chuột
+                imageUrl: '/theme_26.jpg',
+                toColor: '#4A4E59',    // Gradient xuống tông xám đậm
+                direction: 'to bottom'
+            },
+
+            // 2. Cấu hình Header (Username & Bio)
+            
+            header: {
+                color: '#FFFFFF',      // Màu trắng
+                font: 'Inter',         
+                sizeUsername: 'small',
+                textShadow: '0 2px 4px rgba(0,0,0,0.3)' // Bóng đổ nhẹ để tạo độ sâu
+            },
+
+            // 3. Cấu hình Nút (Buttons)
+            
+            buttons: {
+                shape: 'medium',
+                style: 'glass',
+                color: 'rgba(255, 255, 255, 0.15)', // Kính mờ trắng nhẹ tinh tế
+                textColor: '#FFFFFF',           
+                shadowColor: 'rgba(0,0,0,0.2)',
+                shadowStyle: 'subtle'
+            },
+
+            // 4. Cấu hình Text chung
+            text: {
+                color: '#D1D5DB',       // Màu xám nhạt (Light Gray) cho bio và ghi chú
+                font: 'Inter',
+                size: 'small'
+            },
+
+            // 5. Nút donation (Nổi bật)
+           
+            donationButton: {
+                useGlobal: false,
+                shape: 'medium',
+                style: 'solid',
+                color: '#F9B115',       // Màu vàng mắt mèo rực rỡ
+                textColor: '#1F2937',    // Chữ màu tối để tương phản mạnh với màu vàng
+                icon: 'fa-solid fa-cat', // Icon mèo phù hợp
+                size: 'medium'
+            },
+
+            // 6. Footer
+            
+            footer: {
+                backgroundColor: 'rgba(31, 41, 55, 0.8)', 
+                textColor: '#F9B115',   // Chữ màu vàng mắt mèo để đồng bộ
+            }
+        }
+    },
+
+
+    {
+        id: 'theme27',
+        name: 'Doraemon Dream',
+        design: {
+            themeId: 'theme27',
+
+            // 1. Cấu hình Nền (Background)
+            // Lấy tông xanh bầu trời rực rỡ từ ảnh.
+            background: {
+                type: 'image',
+                value: '#33A1FD',      // Xanh dương sáng
+                imageUrl: '/theme_27.jpg',
+                toColor: '#BAE2FF',    // Gradient lên tông xanh nhạt của mây
+                direction: 'to bottom'
+            },
+
+            // 2. Cấu hình Header (Username & Bio)
+            // Màu trắng tinh khôi để nổi bật trên nền trời xanh, thêm shadow để rõ chữ.
+            header: {
+                color: '#FFFFFF',      
+                font: 'Quicksand',     // Font bo tròn mềm mại hợp với Doraemon
+                sizeUsername: 'small',
+                textShadow: '0 2px 6px rgba(0,71,171,0.5)' // Shadow xanh dương đậm
+            },
+
+            // 3. Cấu hình Nút (Buttons)
+            // Sử dụng màu trắng trong suốt nhẹ (glass) để không che mất các bong bóng xà phòng.
+            buttons: {
+                shape: 'round',         // Nút bo tròn hoàn toàn theo phong cách hoạt hình
+                style: 'glass',
+                color: 'rgba(255, 255, 255, 0.4)', 
+                textColor: '#005FB8',   // Chữ màu xanh Doraemon đậm
+                shadowColor: 'rgba(0,0,0,0.1)',
+                shadowStyle: 'subtle'
+            },
+
+            // 4. Cấu hình Text chung
+            text: {
+                color: '#FFFFFF',       
+                font: 'Quicksand',
+                size: 'small',
+                textShadow: '0 1px 3px rgba(0,0,0,0.2)'
+            },
+
+            // 5. Nút donation (Nổi bật)
+            // Lấy màu Vàng từ chiếc chuông của Doraemon làm điểm nhấn.
+            donationButton: {
+                useGlobal: false,
+                shape: 'round',
+                style: 'solid',
+                color: '#FFD700',       // Vàng rực rỡ (màu chuông)
+                textColor: '#D32F2F',   // Chữ màu Đỏ (màu vòng cổ) tạo sự tương phản cực mạnh
+                icon: 'fa-solid fa-bell', // Icon chuông đặc trưng
+                size: 'medium'
+            },
+
+            // 6. Footer
+            // Màu đỏ của chiếc đuôi và vòng cổ để chốt lại bố cục.
+            footer: {
+                backgroundColor: 'rgba(211, 47, 47, 0.9)', 
+                textColor: '#FFFFFF',
+            }
+        }
+    },
+
+    {
+        id: 'theme28',
+        name: 'Starry Campfire',
+        design: {
+            themeId: 'theme28',
+
+            // 1. Cấu hình Nền (Background)
+           
+            background: {
+                type: 'image',
+                value: '#0A192F',      
+                imageUrl: '/theme_28.jpg',
+                toColor: '#1B2735',    
+                direction: 'to bottom'
+            },
+
+            // 2. Cấu hình Header (Username & Bio)
+            
+            header: {
+                color: '#FFFFFF',      
+                font: 'Inter',         
+                sizeUsername: 'small',
+                textShadow: '0 2px 8px rgba(0,0,0,0.7)' 
+            },
+
+            // 3. Cấu hình Nút (Buttons)
+           
+            buttons: {
+                shape: 'medium',
+                style: 'glass',
+                color: 'rgba(15, 23, 42, 0.6)', 
+                textColor: '#FFFFFF',           
+                shadowColor: '#000000',
+                shadowStyle: 'subtle'
+            },
+
+            // 4. Cấu hình Text chung
+            text: {
+                color: '#CBD5E1',       
+                font: 'Inter',
+                size: 'small'
+            },
+
+            // 5. Nút donation (Nổi bật)
+          
+            donationButton: {
+                useGlobal: false,
+                shape: 'medium',
+                style: 'solid',
+                color: '#F97316',       // Màu cam lửa rực rỡ
+                textColor: '#FFFFFF',    
+                icon: 'fa-solid fa-fire', // Icon ngọn lửa
+                size: 'medium'
+            },
+
+            // 6. Footer
+            
+            footer: {
+                backgroundColor: 'rgba(12, 74, 110, 0.9)', 
+                textColor: '#F97316',   // Chữ footer màu cam để đồng bộ với nút Donation
+            }
+        }
+    },
 ];
