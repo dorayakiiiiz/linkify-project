@@ -259,3 +259,40 @@ npm run dev
 
 Frontend sẽ chạy tại: `http://localhost:5173`
 
+### Usage
+
+Phần này mô tả cách sử dụng hệ thống Linkify từ góc nhìn người dùng, tương ứng với các vai trò và use cases cốt lõi đã được xác định.
+
+#### Creator Usage
+
+Sau khi đăng ký hoặc đăng nhập thành công, người dùng với vai trò Creator có thể:
+
+- Thiết lập và quản lý **hồ sơ cá nhân**, bao gồm avatar, tên hiển thị và phần mô tả bio.
+- Tạo và quản lý **danh sách liên kết**, cho phép thêm, chỉnh sửa, xóa và sắp xếp thứ tự hiển thị của các liên kết.
+- Tùy chỉnh **giao diện trang bio** thông qua các template, màu sắc và font chữ, với khả năng xem trước theo thời gian thực.
+- Theo dõi **thống kê và phân tích tương tác**, bao gồm số lượt xem, số lượt nhấp và tỷ lệ chuyển đổi (CTR).
+- Đăng tải và quản lý **sản phẩm trong cửa hàng cá nhân** nhằm phục vụ affiliate marketing hoặc bán hàng trực tiếp.
+- Tích hợp **chức năng quyên góp**, cho phép người theo dõi ủng hộ thông qua liên kết thanh toán hoặc mã QR.
+- Sử dụng **các tính năng AI** để gợi ý nội dung bio hoặc ý tưởng bài đăng dựa trên lĩnh vực hoạt động.
+
+Trang bio công khai của Creator được truy cập thông qua một đường dẫn duy nhất, ví dụ:  
+`https://linkify.me/username`
+
+#### Visitor Usage
+
+Người truy cập không cần đăng nhập có thể:
+
+- Truy cập trang bio công khai của Creator.
+- Xem danh sách liên kết, sản phẩm và thông tin được chia sẻ.
+- Thực hiện các tương tác như nhấp vào liên kết hoặc sản phẩm.
+
+Các hành vi này được hệ thống ghi nhận nhằm phục vụ mục đích phân tích và thống kê.
+
+#### Administrator Usage
+
+Người dùng với vai trò Administrator có quyền:
+
+- Quản lý danh sách người dùng trên toàn hệ thống.
+- Thực hiện khóa hoặc mở khóa các tài khoản vi phạm chính sách.
+- Kiểm duyệt và xử lý nội dung không phù hợp hoặc vi phạm điều khoản sử dụng.
+- Theo dõi **thống kê tổng quan của nền tảng**, bao gồm số lượng người dùng và lưu lượng truy cập, nhằm giám sát tình trạng vận hành của hệ thống.
