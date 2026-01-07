@@ -428,7 +428,7 @@ export default function LinktreePreview({
                         </div>
 
                         {/* links list */}
-                        <div className={`${products.length === 0 && 'mt-3'} w-full flex-1 flex flex-col gap-5`}>
+                        <div className={`${products.length === 0 && 'mt-3'} w-full flex-1 flex flex-col gap-5 pb-4`}>
                             {isLinkTab &&
                                 (loadingLinks ? (
                                     <ListSkeleton />

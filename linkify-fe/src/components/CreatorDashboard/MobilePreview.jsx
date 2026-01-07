@@ -48,7 +48,7 @@ export default function MobilePreview({ isDesignPanelOpen }) {
             
             {/* Điện thoại preview */}
             <div className="flex-1 flex items-center justify-center px-12">
-                <div className="xl:w-[300px] lg:w-[280px] md:w-[200px] h-auto relative aspect-[9/19] border-[8px] border-black rounded-[3rem] bg-black shadow-2xl overflow-auto max-h-[93%] no-scrollbar">              
+                <div className="w-[85vw] max-w-[320px] xl:w-[300px] lg:w-[280px] md:w-[200px] h-auto relative aspect-[9/19] border-[8px] border-black rounded-[3rem] bg-black shadow-2xl overflow-auto max-h-[93%] no-scrollbar">              
                     {/* tai thỏ */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-[18px] bg-black rounded-b-xl z-10"></div>
 
