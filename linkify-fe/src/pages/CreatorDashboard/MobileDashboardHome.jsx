@@ -4,11 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import InsightsPage from './InsightsPage';
 import PostIdeaPage from './Tools/PostIdeaPage';
 import LinkShortenerPage from './Tools/LinkShortenerPage';
+import UserSettingDropDown from './Modal/UserSettingDropDown';
 
 export default function MobileDashboardHome() {
     const { profile } = useProfile();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('home'); // home, insights, post-ideas, shortener
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     if (!profile) return null;
 
@@ -28,12 +31,6 @@ export default function MobileDashboardHome() {
                         <PostIdeaPage />
                     </div>
                 );
-            case 'shortener':
-                return (
-                    <div className="pb-[80px] min-h-full">
-                        <LinkShortenerPage />
-                    </div>
-                );
             default:
                 return (
                     <div className="pb-[80px]"> {/* Thêm padding bottom để không bị che bởi footer */}
@@ -43,12 +40,23 @@ export default function MobileDashboardHome() {
                                 <i className="fa-solid fa-share-nodes text-xl cursor-pointer"></i>
                             </div>
                             
-                            <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-200 mb-3">
-                                <img 
-                                    src={profile.avatarUrl} 
-                                    alt="avatar" 
-                                    className="w-full h-full object-cover"
+                            <div className="relative mb-3 flex flex-col items-center">
+                                <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-200">
+                                    <img 
+                                        src={profile.avatarUrl} 
+                                        alt="avatar" 
+                                        className="w-full h-full object-cover"
+                                        onClick={() => setIsModalOpen(true)}
+                                    />
+                                </div>
+                                <UserSettingDropDown 
+                                    isOpen={isModalOpen} 
+                                    onClose={() => setIsModalOpen(false)} 
+                                    className="left-1/2 -translate-x-1/2 mt-2" 
                                 />
+                                {isModalOpen && (
+                                    <div className="fixed inset-0 z-[40]" onClick={() => setIsModalOpen(false)}></div>
+                                )}
                             </div>
                             <h2 className="text-2xl font-bold mb-1">@{profile.username}</h2>
                             <a href={`/${profile.username}`} className="text-gray-500 text-sm mb-4 hover:underline">
@@ -149,6 +157,7 @@ export default function MobileDashboardHome() {
                     <span className="text-[10px] font-medium">Post ideas</span>
                 </div>
             </div>
+
         </div>
     );
 }
