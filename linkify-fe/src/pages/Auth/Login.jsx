@@ -150,7 +150,7 @@ export default function Login() {
 
                 {/* Ảnh */}
                 <img 
-                    src="/social_background.jpeg" 
+                    src="/bg.jpg" 
                     alt="Background" 
                     className="hidden lg:block w-[40%] h-full object-cover"
                 />
@@ -223,24 +223,31 @@ export default function Login() {
                         OR
                     </div>
 
-                    <div className="flex md:flex-col w-full max-w-[250px] gap-[20px] mt-3">
-                        <button
-                            type="submit"
-                            className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] border bg-[#ff2821] hover:bg-[#f96666] text-[#fff] font-semibold rounded-3xl"
-                            onClick={handleGoogleLogin}
-                        >
-                            <i className="fa-brands fa-google md:mr-[10px]"></i>
-                            <div className="hidden md:block">Sign up with Google</div>
-                        </button> 
+                    <div className="flex flex-col w-full max-w-[300px] gap-5 mt-6">
+                    
+                        <div className="w-full">
+                            <button 
+                                type="button"
+                                onClick={handleGoogleLogin} 
+                                className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-gray-200 rounded-3xl cursor-pointer font-quicksand hover:bg-gray-50 transition-colors font-bold text-gray-700"
+                            >
+                                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
+                                Sign up with Google
+                            </button>
+                        </div>
+
+                        <div className="">
+                            <button 
+                                type="button"
+                                onClick={handleGFacebookLogin} 
+                                className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-gray-200 rounded-3xl cursor-pointer font-quicksand hover:bg-gray-50 transition-colors font-bold text-gray-700"
+                            >
+                                <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" className="w-5 h-5" alt="Google" />
+                                Sign up with Facebook
+                            </button>
+                        </div>
     
-                        <button
-                            type="submit"
-                            className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] bg-[#295ff4] hover:bg-[#5683ff] text-[#fff] font-semibold rounded-3xl"
-                            onClick={handleGFacebookLogin}
-                        >
-                            <i className="fa-brands fa-facebook md:mr-[10px]"></i>
-                            <div className="hidden md:block">Sign up with Facebook</div>
-                        </button>
+                       
                     </div>
 
                     <div className="mt-[20px] text-[#898b8c]">
