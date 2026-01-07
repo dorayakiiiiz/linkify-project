@@ -152,7 +152,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
 
     return (
         <div
-            className="fixed inset-0 z-100 bg-black/50 backdrop-blur flex items-center justify-center"
+            className="fixed inset-0 z-100 bg-black/50 backdrop-blur flex items-end md:items-center justify-center"
             onClick={onClose}
         >
             {isDeleteModalOpen && (
@@ -166,7 +166,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
             )}
 
             <div 
-                className="flex flex-col items-center w-full max-w-[600px] min-h-[600px] max-h-[700px] bg-[#fff] md:rounded-2xl"
+                className="flex flex-col items-center w-full max-w-[600px] min-h-[600px] max-h-[700px] bg-[#fff] rounded-t-2xl md:rounded-2xl"
                 onClick={e => e.stopPropagation()}
             >
                 <div className="w-full relative flex items-center justify-center mt-6 font-momo text-2xl">

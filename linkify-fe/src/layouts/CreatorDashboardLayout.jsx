@@ -25,8 +25,14 @@ export default function CreatorDashboardLayout() {
     // Mặc định trang chính là Links, các trang khác coi như trang con khi ở mobile
     // Logic xử lý nút Back
     const handleBack = () => {
+        // [MỚI] Logic riêng cho Mobile: Luôn back về trang Menu chính
+        if (window.innerWidth < 768) {
+            navigate('/dashboard');
+            return;
+        }
+
+        // [CŨ] Logic cho Desktop (giữ nguyên để không ảnh hưởng)
         if (location.pathname.includes('/dashboard/links')) {
-            // Nếu đang ở Links -> Back về Dashboard Home (Mobile)
             navigate('/dashboard');
         } else {
             // Nếu đang ở các trang con khác (Design, Shop...) -> Back về Links

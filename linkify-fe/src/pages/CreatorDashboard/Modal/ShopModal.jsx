@@ -106,11 +106,11 @@ export default function ShopModal({ onClose, editingProduct = null }) {
 
     return (
         <div
-            className="fixed inset-0 z-100 bg-black/50 backdrop-blur flex items-center justify-center"
+            className="fixed inset-0 z-100 bg-black/50 backdrop-blur flex items-end md:items-center justify-center"
             onClick={onClose}
         >
             <div
-                className="flex flex-col w-full max-w-[750px] px-10 py-[26px] max-h-[90vh] overflow-y-auto bg-white md:rounded-3xl no-scrollbar animate-slide-up"
+                className="flex flex-col w-full max-w-[750px] px-10 py-[26px] max-h-[90vh] overflow-y-auto bg-white rounded-t-4xl md:rounded-3xl no-scrollbar animate-slide-up"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}

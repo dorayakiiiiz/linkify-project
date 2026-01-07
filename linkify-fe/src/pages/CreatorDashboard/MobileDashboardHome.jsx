@@ -3,7 +3,6 @@ import { useProfile } from '../../context/ProfileContext';
 import { useNavigate } from 'react-router-dom';
 import InsightsPage from './InsightsPage';
 import PostIdeaPage from './Tools/PostIdeaPage';
-import LinkShortenerPage from './Tools/LinkShortenerPage';
 
 export default function MobileDashboardHome() {
     const { profile } = useProfile();
@@ -18,9 +17,10 @@ export default function MobileDashboardHome() {
         switch (activeTab) {
             case 'insights':
                 return (
-                    <div className="pb-[80px] min-h-full">
-                        <InsightsPage />
-                    </div>
+                    // <div className="pb-[80px] min-h-full">
+                    //     <InsightsPage />
+                    // </div>
+                    <Link to="/dashboard/insights"></Link>
                 );
             case 'post-ideas':
                 return (
@@ -28,88 +28,137 @@ export default function MobileDashboardHome() {
                         <PostIdeaPage />
                     </div>
                 );
-            case 'shortener':
-                return (
-                    <div className="pb-[80px] min-h-full">
-                        <LinkShortenerPage />
-                    </div>
-                );
             default:
                 return (
                     <div className="pb-[80px]"> {/* Thêm padding bottom để không bị che bởi footer */}
                         {/* Header */}
-                        <div className="px-4 pt-6 pb-4 flex flex-col items-center">
-                            <div className="w-full flex justify-end gap-4 mb-2">
-                                <i className="fa-solid fa-share-nodes text-xl cursor-pointer"></i>
-                            </div>
+                        <div className="px-4 pt-12 pb-6 flex flex-col items-center">
                             
-                            <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-200 mb-3">
+                            <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 mb-4 shadow-sm">
                                 <img 
                                     src={profile.avatarUrl} 
                                     alt="avatar" 
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            <h2 className="text-2xl font-bold mb-1">@{profile.username}</h2>
-                            <a href={`/${profile.username}`} className="text-gray-500 text-sm mb-4 hover:underline">
+                            <h2 className="text-3xl font-bold mb-2">@{profile.username}</h2>
+                            <a href={`/${profile.username}`} className="text-gray-500 text-base mb-6 hover:underline">
                                 linkify.com/{profile.username}
                             </a>
                         </div>
 
                         {/* Tabs */}
-                        <div className="flex px-4 gap-2 mb-6 overflow-x-auto no-scrollbar">
-                            <button className="px-6 py-2 bg-black text-white rounded-full text-sm font-semibold whitespace-nowrap">
+                        <div className="flex px-4 gap-2 mb-8 overflow-x-auto no-scrollbar">
+                            <button className="px-8 py-2.5 bg-black text-white rounded-full text-sm font-semibold whitespace-nowrap shadow-sm">
                                 Pages
                             </button>
                             <button 
                                 onClick={() => navigate('/dashboard/design')}
-                                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-semibold whitespace-nowrap"
+                                className="px-8 py-2.5 bg-gray-100 text-gray-700 rounded-full text-sm font-semibold whitespace-nowrap"
                             >
                                 Design
                             </button>
                         </div>
 
                         {/* Cards Grid */}
-                        <div className="grid grid-cols-2 gap-4 px-4">
+                        <div className="grid grid-cols-2 gap-5 px-4 pb-4">
                             {/* Links Card */}
                             <div 
                                 onClick={() => navigate('/dashboard/links')}
-                                className="flex flex-col gap-2 cursor-pointer group"
+                                className="flex flex-col gap-3 cursor-pointer group"
                             >
-                                <div className="aspect-[9/16] bg-[#f3f3f1] rounded-3xl border border-gray-200 relative overflow-hidden group-hover:shadow-lg transition">
-                                    {/* Mini preview simulation */}
-                                    <div className="absolute inset-4 bg-white rounded-2xl shadow-sm flex flex-col items-center py-4 gap-2 border border-gray-100">
-                                        <div className="w-8 h-8 rounded-full bg-gray-200"></div>
-                                        <div className="w-16 h-2 bg-gray-100 rounded"></div>
-                                        <div className="w-full px-2 flex flex-col gap-1.5 mt-2">
-                                            <div className="h-6 bg-yellow-50 rounded-lg w-full border border-yellow-100"></div>
-                                            <div className="h-6 bg-yellow-50 rounded-lg w-full border border-yellow-100"></div>
-                                            <div className="h-6 bg-yellow-50 rounded-lg w-full border border-yellow-100"></div>
+                                <div className="aspect-[2/3] bg-white rounded-3xl border border-gray-200 relative overflow-hidden shadow-md group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+                                    {/* Abstract Background Decoration */}
+                                    <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-green-50 to-white z-0"></div>
+                                    
+                                    {/* Content Link Simulation */}
+                                    <div className="relative z-10 p-6 h-full flex flex-col">
+                                        <div className="flex items-center gap-2.5 mb-6">
+                                            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 shadow-sm">
+                                                <i className="fa-solid fa-link text-base"></i>
+                                            </div>
+                                            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Links</span>
+                                        </div>
+
+                                        {/* Link Items Rows */}
+                                        <div className="flex flex-col gap-3 mt-auto mb-5">
+                                            {/* Item 1 (Active) */}
+                                            <div className="h-12 w-full bg-white border border-gray-100 rounded-xl shadow-sm flex items-center justify-between px-4">
+                                                <div className="w-16 h-2 bg-gray-600 rounded-full"></div>
+                                                <div className="w-6 h-3 bg-green-400 rounded-full shadow-[0_0_10px_rgba(74,222,128,0.4)]"></div>
+                                            </div>
+                                            {/* Item 2 */}
+                                            <div className="h-12 w-full bg-white border border-gray-100 rounded-xl shadow-sm flex items-center justify-between px-4 opacity-70">
+                                                <div className="w-10 h-2 bg-gray-300 rounded-full"></div>
+                                                <div className="w-6 h-3 bg-gray-200 rounded-full"></div>
+                                            </div>
+                                            {/* Item 3 */}
+                                            <div className="h-12 w-full bg-white border border-gray-100 rounded-xl shadow-sm flex items-center justify-between px-4 opacity-40">
+                                                <div className="w-14 h-2 bg-gray-300 rounded-full"></div>
+                                                <div className="w-6 h-3 bg-gray-200 rounded-full"></div>
+                                            </div>
+                                        </div>
+
+                                        {/* Add Button Simulation */}
+                                        <div className="h-14 w-full bg-black rounded-2xl shadow-lg flex items-center justify-center gap-2 text-white shrink-0">
+                                            <i className="fa-solid fa-plus text-sm"></i>
+                                            <div className="w-10 h-2 bg-white/30 rounded-full"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex justify-between items-center px-1">
-                                    <span className="font-semibold">Links</span>
-                                    <i className="fa-solid fa-ellipsis text-gray-400"></i>
+                                <div className="flex justify-between items-center px-2">
+                                    <span className="font-bold text-gray-800 text-base">Add Links</span>
+                                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors">
+                                        <i className="fa-solid fa-arrow-right text-sm"></i>
+                                    </div>
                                 </div>
                             </div>
 
                             {/* Shop Card */}
                             <div 
                                 onClick={() => navigate('/dashboard/shop')}
-                                className="flex flex-col gap-2 cursor-pointer group"
+                                className="flex flex-col gap-3 cursor-pointer group"
                             >
-                                <div className="aspect-[9/16] bg-[#f3f3f1] rounded-3xl border border-gray-200 relative overflow-hidden group-hover:shadow-lg transition flex items-center justify-center">
-                                    <div className="text-center p-4">
-                                        <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                                            <i className="fa-solid fa-shop text-2xl text-purple-600"></i>
+                                <div className="aspect-[2/3] bg-white rounded-3xl border border-gray-200 relative overflow-hidden shadow-md group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+                                    {/* Abstract Background Decoration */}
+                                    <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-purple-50 to-white z-0"></div>
+
+                                    {/* Content Shop Simulation */}
+                                    <div className="relative z-10 p-6 h-full flex flex-col">
+                                        <div className="flex items-center gap-2.5 mb-6">
+                                            <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 shadow-sm">
+                                                <i className="fa-solid fa-shop text-base"></i>
+                                            </div>
+                                            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Shop</span>
                                         </div>
-                                        <p className="text-xs text-gray-500 font-medium">Curate products you love</p>
-                                        <div className="mt-3 px-4 py-1.5 bg-white rounded-full text-xs font-bold shadow-sm">Get started</div>
+
+                                        {/* Product Grid Simulation - Kéo giãn height ra */}
+                                        <div className="grid grid-cols-2 gap-2.5 mt-auto mb-3">
+                                            {/* Product 1 */}
+                                            <div className="aspect-[3/4] bg-white border border-purple-50 rounded-xl shadow-sm p-2.5 flex flex-col gap-2">
+                                                <div className="flex-1 bg-purple-50 rounded-lg w-full"></div>
+                                                <div className="h-2 w-full bg-gray-100 rounded-full"></div>
+                                                <div className="h-1.5 w-1/2 bg-gray-200 rounded-full"></div>
+                                            </div>
+                                            {/* Product 2 */}
+                                            <div className="aspect-[3/4] bg-white border border-gray-100 rounded-xl shadow-sm p-2.5 flex flex-col gap-2 mt-6 opacity-80">
+                                                <div className="flex-1 bg-yellow-50 rounded-lg w-full"></div>
+                                                <div className="h-2 w-full bg-gray-100 rounded-full"></div>
+                                                <div className="h-1.5 w-1/2 bg-gray-200 rounded-full"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Floating Badge */}
+                                        <div className="absolute bottom-5 right-5 bg-purple-600 text-white text-[11px] font-bold px-3.5 py-2 rounded-full shadow-lg">
+                                            $ Earn
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="flex justify-between items-center px-1">
-                                    <span className="font-semibold">Shop</span>
+                                <div className="flex justify-between items-center px-2">
+                                    <span className="font-bold text-gray-800 text-base">Products</span>
+                                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                                        <i className="fa-solid fa-arrow-right text-sm"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -128,22 +177,22 @@ export default function MobileDashboardHome() {
             {/* Footer Menu - Fixed */}
             <div className="fixed bottom-0 left-0 w-full h-[60px] bg-white border-t border-gray-200 px-4 flex justify-between items-center z-[100]">
                 <div 
-                    onClick={() => setActiveTab('home')}
-                    className={`flex flex-col items-center gap-1 cursor-pointer w-1/4 ${activeTab === 'home' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
+                    onClick={() => navigate('/dashboard')}
+                    className="flex flex-col items-center gap-1 cursor-pointer w-1/4 text-black"
                 >
                     <i className="fa-solid fa-layer-group text-xl"></i>
                     <span className="text-[10px] font-medium">My Linkify</span>
                 </div>
                 <div 
-                    onClick={() => setActiveTab('insights')}
-                    className={`flex flex-col items-center gap-1 cursor-pointer w-1/4 ${activeTab === 'insights' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
+                    onClick={() => navigate('/dashboard/insights')}
+                    className="flex flex-col items-center gap-1 cursor-pointer w-1/4 text-gray-400 hover:text-black"
                 >
                     <i className="fa-solid fa-chart-simple text-xl"></i>
                     <span className="text-[10px] font-medium">Insights</span>
                 </div>
                 <div 
-                    onClick={() => setActiveTab('post-ideas')}
-                    className={`flex flex-col items-center gap-1 cursor-pointer w-1/4 ${activeTab === 'post-ideas' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
+                    onClick={() => navigate('/dashboard/tools/post-ideas')}
+                    className="flex flex-col items-center gap-1 cursor-pointer w-1/4 text-gray-400 hover:text-black"
                 >
                     <i className="fa-solid fa-pencil text-xl"></i>
                     <span className="text-[10px] font-medium">Post ideas</span>
