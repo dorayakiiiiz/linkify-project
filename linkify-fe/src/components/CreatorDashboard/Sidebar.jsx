@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useProfile } from "../../context/ProfileContext";
 import { creatorMenu, tools } from "../../constants/dashboard";
-import SwitchProfileModal from "../../pages/CreatorDashboard/Modal/SwitchProfileModal";
 import AccountSettingModal from "../Modal/AccountSettingModal";
+import UserSettingDropDown from "../../pages/CreatorDashboard/Modal/UserSettingDropDown";
 
 export default function Sidebar() {
     const { user, logout } = useAuth();
@@ -17,15 +17,11 @@ export default function Sidebar() {
 
     // lưu trạng thái bật tắt của user dropdown
     const [dropdown, setDropdown] = useState(false);
-    // lưu trạng thái đang đăng xuất (hiệu ứng spinner quay quay)
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
-
     
     const handleToggleDropdown = () => {
         setDropdown(!dropdown);
     }
 
-    const [isSwitchProfileModalOpen, setIsSwitchProfileModalOpen] = useState(false);
     const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
 
     // ref cho user dropdown menu
@@ -74,42 +70,13 @@ export default function Sidebar() {
         navigate(getPath(item.label));
     };
 
-    const handleSwitchProfile = () => {
-        setIsSwitchProfileModalOpen(true);
-        setDropdown(false);
-    }
-
-    const handleCreateProfile = () => {
-        navigate('/onboarding/profile', { state: { isAddingNew: true } });
-    }
-
     const handleAccountSetting = () => {
         setIsAccountModalOpen(true);
         setDropdown(false);
     }
 
-    const handleHelp = () => {
-
-    }
-
-
-    const handleLogout = () => {
-        if (isLoggingOut) 
-            return;
-        setIsLoggingOut(true);
-        setTimeout(() => {
-            logout();
-        }, 1000);
-    }
-
     return (
         <div className="bg-[#ecede8] lg:w-[280px] md:w-[200px] rounded-tl-xl relative flex-shrink-0 hidden md:block h-full border-r border-[#d7d6d4]">
-            {isSwitchProfileModalOpen && (
-                <SwitchProfileModal 
-                    onClose={() => setIsSwitchProfileModalOpen(false)}
-                />
-            )}
-
             {isAccountModalOpen && (
                 <AccountSettingModal 
                     onClose={() => setIsAccountModalOpen(false)}
@@ -134,82 +101,7 @@ export default function Sidebar() {
                     <i className={`fa-solid fa-angle-down text-[10px] pt-1 ml-auto mr-1 transition-transform duration-300 ${dropdown? "rotate-180" : ""}`}/>
 
                     {/* user dropdown menu */}
-                    <div 
-                        className={`text-[#212529] absolute shadow-xl top-[calc(100%+4px)] w-[220px] bg-[#fff] rounded-xl flex flex-col ${dropdown ? 'scale-100' : 'scale-0'} transition duration-200 z-1`}
-                        onClick={e => e.stopPropagation()}
-                    >
-                        <div className="w-full border-b border-[#e0dfde] py-[10px] flex items-center justify-center gap-[10px]">
-                            <img
-                                src={profile?.avatarUrl}
-                                className="rounded-full h-[36px] w-[36px]"
-                                alt="avatar"
-                            />
-                            <div className="">
-                                <div className="font-semibold">
-                                    {profile?.username}
-                                </div>
-
-                                <div className="text-sm">
-                                    linkify.com/{profile?.username}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="border-b border-[#e0dfde]">
-                            <div 
-                                className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]"
-                                onClick={handleSwitchProfile}    
-                            >
-                                <i className="fa-solid fa-shuffle mr-[6px]"></i>
-                                Switch linkify profile
-                            </div>
-
-                            <div 
-                                className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]"
-                                onClick={handleCreateProfile}    
-                            >
-                                <i className="fa-regular fa-square-plus mr-[6px]"></i>
-                                Create new linkify
-                            </div>         
-                        </div>
-
-                        <div className="border-b border-[#e0dfde]">
-                            <div 
-                                className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]"
-                                onClick={handleAccountSetting}
-                            >
-                                <i className="fa-regular fa-user mr-[6px]"></i>
-                                Account
-                            </div>
-
-                            <div 
-                                className="pl-[16px] py-[4px] mx-[4px] mb-[4px] rounded-md hover:bg-[#F1F0EE]"
-                                onClick={handleHelp}
-                            >
-                                <i className="fa-regular fa-circle-question mr-[6px]"></i>
-                                Help
-                            </div>         
-                        </div>
-
-                        <div 
-                            className={`pl-[16px] py-[4px] m-[4px] rounded-md transition-all duration-200
-                                ${isLoggingOut ? 'bg-gray-100 text-gray-400 cursor-wait' : 'hover:bg-[#F1F0EE] cursor-pointer'}`}
-                            onClick={handleLogout}
-                        >
-                            {isLoggingOut ? (
-                                <div className="flex items-center">
-                                    <i className="fa-solid fa-circle-notch fa-spin mr-[6px]"></i>
-                                    <span>Logging out...</span>
-                                </div>
-                            ) : (
-                                <div className="flex items-center">
-                                    <i className="fa-solid fa-arrow-right-from-bracket mr-[6px]"></i>
-                                    <span>Log out</span>
-                                </div>
-                            )}
-                        </div> 
-
-                    </div>
+                    <UserSettingDropDown isOpen={dropdown} onClose={() => setDropdown(false)} />
                 </div>
 
                 <div 
