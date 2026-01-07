@@ -225,18 +225,14 @@ export default function ShopPage() {
                                                                                 )}
                                                                                 
                                                                                 <div className="flex items-center space-x-3 gap-2 text-gray-500">
-                                                                                    <i
-                                                                                        className="fa-solid fa-star text-base hover:text-gray-700 cursor-pointer"
-                                                                                        title="Favourite"
-                                                                                    ></i>
-                                                                                    <i
-                                                                                        className="fa-solid fa-lock text-base hover:text-gray-700 cursor-pointer"
-                                                                                        title="Lock"
-                                                                                    ></i>
-                                                                                    <i
-                                                                                        className="fa-regular fa-chart-bar text-base hover:text-gray-700 cursor-pointer"
+
+                                                                                    <div 
+                                                                                        className=" text-base font-semibold text-red-400 cursor-pointer"
                                                                                         title="Analytics"
-                                                                                    ></i>
+                                                                                    >
+                                                                                        <i className="fa-regular fa-chart-bar mr-2"></i>
+                                                                                        {product.clickCount} clicks.
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
 
@@ -261,7 +257,7 @@ export default function ShopPage() {
 
                                                                                     <i
                                                                                         title="Edit"
-                                                                                        className="fa-solid fa-pen text-gray-500 text-lg hover:text-[#47B6FF] cursor-pointer"
+                                                                                        className="fa-solid fa-pen text-blue-400 text-lg hover:text-blue-700 cursor-pointer"
                                                                                         onClick={() => handleOpenEdit(product)}
                                                                                     ></i>
                                                                                 </div>
@@ -269,7 +265,7 @@ export default function ShopPage() {
                                                                                 <div>
                                                                                     <i
                                                                                         title="Delete"
-                                                                                        className="fa-solid fa-trash-can text-gray-500 text-lg hover:text-red-500 cursor-pointer"
+                                                                                        className="fa-solid fa-trash-can text-red-400 text-lg hover:text-red-600 cursor-pointer"
                                                                                         onClick={() => handleOpenDelete(product._id)}
                                                                                     ></i>
                                                                                 </div>

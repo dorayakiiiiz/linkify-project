@@ -1,7 +1,7 @@
 import { useProfile } from "../../context/ProfileContext";
 import { useLinks } from "../../context/LinkContext";
 import { useShop } from "../../context/ShopContext";
-import LinkTreePreview from "../Shared/LinktreePreview";
+import LinktreePreview from "../Shared/LinktreePreview";
 import { useLocation } from "react-router-dom";
 
 export default function MobilePreview({ isDesignPanelOpen }) {
@@ -54,7 +54,7 @@ export default function MobilePreview({ isDesignPanelOpen }) {
 
                     {/* content bên trong điện thoại */}
                     <div className="w-full h-full">
-                        <LinkTreePreview
+                        <LinktreePreview
                             profile={profile}
                             loading={loading}
                             links={links}

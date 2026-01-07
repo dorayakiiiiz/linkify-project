@@ -229,10 +229,10 @@ export default function LinksPage() {
 
                                                                         {/* share + toggle enable ẩn hiện */}
                                                                         <div className="flex items-start pt-1 space-x-3">
-                                                                            <div>
+                                                                            <div onClick={() => navigator.clipboard.writeText(link.url)}>
                                                                                 <i
-                                                                                    className="fa-solid fa-share-from-square text-gray-500 text-lg hover:text-gray-700 cursor-pointer"
-                                                                                    title="Share"
+                                                                                    className="fa-solid fa-copy text-gray-500 text-lg hover:text-gray-700 cursor-pointer"
+                                                                                    title="Copy"
                                                                                 ></i>
                                                                             </div>
 
@@ -257,33 +257,33 @@ export default function LinksPage() {
                                                                     {/* option */}
                                                                     <div className="flex items-center justify-between mt-4 text-gray-500 text-sm">
                                                                         <div className="flex items-center space-x-3 flex-wrap gap-2">
-                                                                            <i
+                                                                            {/* <i
                                                                                 className="fa-solid fa-star text-base hover:text-gray-700 cursor-pointer"
                                                                                 title="Favourite"
                                                                             ></i>
                                                                             <i
                                                                                 className="fa-solid fa-lock text-base hover:text-gray-700 cursor-pointer"
                                                                                 title="Lock"
-                                                                            ></i>
+                                                                            ></i> */}
 
                                                                             <div 
-                                                                                className=" text-base hover:text-gray-700 cursor-pointer"
+                                                                                className=" text-base font-semibold text-red-400 cursor-pointer"
                                                                                 title="Analytics"
                                                                             >
-                                                                            <i className="fa-regular fa-chart-bar mr-2"></i>
-                                                                            {link.clickCount} clicks.
+                                                                                <i className="fa-regular fa-chart-bar mr-2"></i>
+                                                                                {link.clickCount} clicks.
                                                                             </div>
                                                                         </div>
 
                                                                         <div>
                                                                             <i
                                                                                 title="Edit"
-                                                                                className="fa-solid fa-pen text-gray-400 text-lg mr-2 cursor-pointer hover:text-[#47B6FF]"
+                                                                                className="fa-solid fa-pen text-blue-400 text-lg mr-2 cursor-pointer hover:text-blue-700"
                                                                                 onClick={() => handleOpenEdit(link)}
                                                                             ></i>
                                                                             <i
                                                                                 title="Delete"
-                                                                                className="fa-solid fa-trash-can text-lg hover:text-red-500 cursor-pointer"
+                                                                                className="fa-solid fa-trash-can text-lg text-red-400 hover:text-red-600 cursor-pointer"
                                                                                 onClick={() =>
                                                                                     handleOpenDelete(link._id)
                                                                                 }

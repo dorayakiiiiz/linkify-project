@@ -3,7 +3,6 @@ import { useProfile } from '../../context/ProfileContext';
 import { useNavigate } from 'react-router-dom';
 import InsightsPage from './InsightsPage';
 import PostIdeaPage from './Tools/PostIdeaPage';
-import LinkShortenerPage from './Tools/LinkShortenerPage';
 
 export default function MobileDashboardHome() {
     const { profile } = useProfile();
@@ -18,20 +17,15 @@ export default function MobileDashboardHome() {
         switch (activeTab) {
             case 'insights':
                 return (
-                    <div className="pb-[80px] min-h-full">
-                        <InsightsPage />
-                    </div>
+                    // <div className="pb-[80px] min-h-full">
+                    //     <InsightsPage />
+                    // </div>
+                    <Link to="/dashboard/insights"></Link>
                 );
             case 'post-ideas':
                 return (
                     <div className="pb-[80px] min-h-full">
                         <PostIdeaPage />
-                    </div>
-                );
-            case 'shortener':
-                return (
-                    <div className="pb-[80px] min-h-full">
-                        <LinkShortenerPage />
                     </div>
                 );
             default:
@@ -128,22 +122,22 @@ export default function MobileDashboardHome() {
             {/* Footer Menu - Fixed */}
             <div className="fixed bottom-0 left-0 w-full h-[60px] bg-white border-t border-gray-200 px-4 flex justify-between items-center z-[100]">
                 <div 
-                    onClick={() => setActiveTab('home')}
-                    className={`flex flex-col items-center gap-1 cursor-pointer w-1/4 ${activeTab === 'home' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
+                    onClick={() => navigate('/dashboard')}
+                    className="flex flex-col items-center gap-1 cursor-pointer w-1/4 text-black"
                 >
                     <i className="fa-solid fa-layer-group text-xl"></i>
                     <span className="text-[10px] font-medium">My Linkify</span>
                 </div>
                 <div 
-                    onClick={() => setActiveTab('insights')}
-                    className={`flex flex-col items-center gap-1 cursor-pointer w-1/4 ${activeTab === 'insights' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
+                    onClick={() => navigate('/dashboard/insights')}
+                    className="flex flex-col items-center gap-1 cursor-pointer w-1/4 text-gray-400 hover:text-black"
                 >
                     <i className="fa-solid fa-chart-simple text-xl"></i>
                     <span className="text-[10px] font-medium">Insights</span>
                 </div>
                 <div 
-                    onClick={() => setActiveTab('post-ideas')}
-                    className={`flex flex-col items-center gap-1 cursor-pointer w-1/4 ${activeTab === 'post-ideas' ? 'text-black' : 'text-gray-400 hover:text-black'}`}
+                    onClick={() => navigate('/dashboard/tools/post-ideas')}
+                    className="flex flex-col items-center gap-1 cursor-pointer w-1/4 text-gray-400 hover:text-black"
                 >
                     <i className="fa-solid fa-pencil text-xl"></i>
                     <span className="text-[10px] font-medium">Post ideas</span>
