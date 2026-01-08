@@ -3,7 +3,7 @@ import { useProfile } from '../../context/ProfileContext';
 import { useNavigate } from 'react-router-dom';
 import InsightsPage from './InsightsPage';
 import PostIdeaPage from './Tools/PostIdeaPage';
-import UserSettingDropDown from './Modal/UserSettingDropDown';
+// import UserSettingDropDown from './Modal/UserSettingDropDown';
 
 export default function MobileDashboardHome() {
     const { profile } = useProfile();
@@ -46,11 +46,11 @@ export default function MobileDashboardHome() {
                                         onClick={() => setIsModalOpen(true)}
                                     />
                                 </div>
-                                <UserSettingDropDown 
+                                {/* <UserSettingDropDown 
                                     isOpen={isModalOpen} 
                                     onClose={() => setIsModalOpen(false)} 
                                     className="left-1/2 -translate-x-1/2 mt-2" 
-                                />
+                                /> */}
                                 {isModalOpen && (
                                     <div className="fixed inset-0 z-[40]" onClick={() => setIsModalOpen(false)}></div>
                                 )}

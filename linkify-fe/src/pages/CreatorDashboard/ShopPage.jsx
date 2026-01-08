@@ -112,17 +112,18 @@ export default function ShopPage() {
                         </div>
                     </div>
 
-                    <div 
+                    <div
                         className="flex justify-end"
                         onClick={() => setIsTrashOpen(true)}
                     >
-                        <div className="flex justify-center cursor-pointer shadow gap-2 items-center border border-gray-300 px-4 py-2 rounded-lg mr-2 bg-gray-100 hover:bg-[#fff]">
-                            <div>
+                        <div className="group flex items-center gap-3 px-5 py-2.5 bg-white border border-slate-200 rounded-full cursor-pointer transition-all duration-300 hover:border-red-400 hover:bg-red-50/50 hover:shadow-[0_8px_20px_-10px_rgba(59,130,246,0.3)] active:scale-95">
+                            <div className="flex items-center justify-center text-slate-400 group-hover:text-red-500 group-hover:rotate-12 transition-all duration-300">
+                                <i className="fa-regular fa-trash-can text-lg"></i>
+                            </div>
+
+                            <span className="text-slate-600 text-sm font-medium tracking-tight group-hover:text-red-600 transition-colors">
                                 View trash bin
-                            </div>
-                            <div className="flex justify-center items-center text-gray-500">
-                                <i className="fa-regular fa-trash-can text-xl"></i>
-                            </div>
+                            </span>
                         </div>
                     </div>
 
