@@ -183,7 +183,7 @@ export default function Register() {
                         setState={setPassword}
                     />
 
-                    <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-[green] success-text' : ''} font-semibold`}>
+                    <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-green-400 success-text' : ''} font-semibold`}>
                         {log.content}
                     </div>
 
@@ -191,8 +191,8 @@ export default function Register() {
                         By clicking 
                         <span className="font-semibold"> Create account</span>
                         , you agree to Linkify's 
-                        <a href="" className="font-semibold underline"> privacy notice</a>, 
-                        <a href="" className="font-semibold underline">T&Cs </a> 
+                        <span className="font-semibold"> privacy notice</span>, 
+                        <span className="font-semibold">T&Cs </span> 
                         and to receive offers, news and updates.
                     </div>
 
