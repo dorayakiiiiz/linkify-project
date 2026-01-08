@@ -32,7 +32,6 @@ import ShopPage from "./pages/CreatorDashboard/ShopPage";
 import DonationPage from "./pages/CreatorDashboard/DonationPage";
 import InsightsPage from "./pages/CreatorDashboard/InsightsPage";
 import PostIdeaPage from "./pages/CreatorDashboard/Tools/PostIdeaPage";
-import LinkShortenerPage from "./pages/CreatorDashboard/Tools/LinkShortenerPage";
 import MobilePreview from "./components/CreatorDashboard/MobilePreview";
 
 import AdminDashboardLayout from "./layouts/AdminDashboardLayout";

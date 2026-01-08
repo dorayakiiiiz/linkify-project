@@ -29,7 +29,7 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
     return (
         <>
             {/* Thanh công cụ hành động (Phần dưới) */}
-            <div className="bg-white p-4 rounded-3xl shadow-xl w-full absolute bottom-0.5 left-1/2 transform -translate-x-1/2 md:hidden grid grid-cols-6 gap-2 ">
+            <div className="bg-white pt-4 px-4 rounded-t-3xl shadow-xl w-full absolute bottom-0 left-1/2 transform -translate-x-1/2 md:hidden flex gap-2 overflow-x-auto">
 
                 {/* Header - Thêm sự kiện onClick */}
                 <div className="flex flex-col items-center mx-4" onClick={() => handleHeaderClick('Header')}>
@@ -64,8 +64,8 @@ export default function DesignActions({ isDesignPanelOpen, toggleDesignPanel }) 
 
 
             {/* Component HeaderDesign với Hiệu ứng Trượt lên */}
-            <div className={`${headerDesignClasses} overflow-y-auto`}>
-                <div className="p-4 flex justify-between items-center border-b">
+            <div className={`${headerDesignClasses} overflow-y-auto rounded-t-4xl`}>
+                <div className="p-4 flex justify-between items-center border-b border-gray-400">
                     <h2 className="text-lg font-bold">{activeDesign}</h2>
                     <button onClick={handleClosePanel} className="text-gray-500 hover:text-gray-700">
                         <i className="fas fa-times"></i>

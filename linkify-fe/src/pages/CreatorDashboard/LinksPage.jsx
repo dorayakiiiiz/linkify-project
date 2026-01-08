@@ -26,6 +26,9 @@ export default function LinksPage() {
     // modal trash
     const [isTrashOpen, setIsTrashOpen] = useState(false);
 
+    // State cho hiệu ứng copy
+    const [copiedId, setCopiedId] = useState(null);
+
     const handleOpenAdd = () => {
         setEditingLink(null);
         setIsLinkModalOpen(true);
@@ -60,6 +63,17 @@ export default function LinksPage() {
         if (!result.destination || result.destination.index === result.source.index)
             return;
         reorderLinks(result.source.index, result.destination.index);
+    };
+
+    // Xử lý copy với hiệu ứng visual
+    const handleCopy = (url, id) => {
+        navigator.clipboard.writeText(url);
+        setCopiedId(id);
+        
+        // Reset lại sau 2 giây
+        setTimeout(() => {
+            setCopiedId(null);
+        }, 2000);
     };
 
     const LinkSkeleton = () => (
@@ -163,6 +177,7 @@ export default function LinksPage() {
                                             links.length > 0 &&
                                             links.map((link, index) => {
                                                 if (!link) return null;
+                                                const isCopied = copiedId === link._id;
 
                                                 return (
                                                     <Draggable
@@ -196,9 +211,12 @@ export default function LinksPage() {
                                                                         {/* title + url */}
                                                                         <div className="grow min-w-0 pr-4">
                                                                             <div className="flex items-center mb-1">
-                                                                                <span className="font-bold">
+                                                                                <div className={`text-lg font-bold ${link.isFlagged ? "text-red-600" : "text-gray-800"}`}>
                                                                                     {link.title}
-                                                                                </span>
+                                                                                </div>
+                                                                                {!link.isFlagged && link.isEnable && (
+                                                                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse ml-2.5"></div>
+                                                                                )}
                                                                             </div>
 
                                                                             <div className="flex items-center">
@@ -206,8 +224,9 @@ export default function LinksPage() {
                                                                                     href={link.url}
                                                                                     target="_blank"
                                                                                     rel="noopener noreferrer"
-                                                                                    className="text-sm text-blue-600 hover:text-blue-500 truncate min-w-0"
+                                                                                    className="text-sm text-gray-500 hover:text-blue-500 truncate min-w-0"
                                                                                 >
+                                                                                    <i class="fa-solid fa-link text-blue-500 mr-2"></i>
                                                                                     {link.url}
                                                                                 </a>
                                                                             </div>
@@ -228,13 +247,21 @@ export default function LinksPage() {
                                                                         </div>
 
                                                                         {/* share + toggle enable ẩn hiện */}
-                                                                        <div className="flex items-start pt-1 space-x-3">
-                                                                            <div>
-                                                                                <i
-                                                                                    className="fa-solid fa-share-from-square text-gray-500 text-lg hover:text-gray-700 cursor-pointer"
-                                                                                    title="Share"
-                                                                                ></i>
-                                                                            </div>
+                                                                        <div className="flex items-center pt-1 space-x-3">
+                                                                            <button 
+                                                                                onClick={() => handleCopy(link.url, link._id)}
+                                                                                className={`flex items-center gap-1.5 font-bold px-2 py-1 rounded transition-all duration-300 ${isCopied ? 'bg-green-100 text-green-700' : 'text-gray-400 cursor-pointer hover:text-gray-700'}`}
+                                                                                title="Copy URL"
+                                                                            >
+                                                                                {isCopied ? (
+                                                                                    <>
+                                                                                        <i className="fa-solid fa-check"></i>
+                                                                                        <span className="animate-fade-in text-xs">Copied!</span>
+                                                                                    </>
+                                                                                ) : (
+                                                                                    <i className="fa-solid fa-copy text-xl"></i>
+                                                                                )}
+                                                                            </button>
 
                                                                             <label className="relative inline-flex items-center cursor-pointer">
                                                                                 <input
@@ -257,33 +284,24 @@ export default function LinksPage() {
                                                                     {/* option */}
                                                                     <div className="flex items-center justify-between mt-4 text-gray-500 text-sm">
                                                                         <div className="flex items-center space-x-3 flex-wrap gap-2">
-                                                                            <i
-                                                                                className="fa-solid fa-star text-base hover:text-gray-700 cursor-pointer"
-                                                                                title="Favourite"
-                                                                            ></i>
-                                                                            <i
-                                                                                className="fa-solid fa-lock text-base hover:text-gray-700 cursor-pointer"
-                                                                                title="Lock"
-                                                                            ></i>
-
                                                                             <div 
-                                                                                className=" text-base hover:text-gray-700 cursor-pointer"
+                                                                                className=" text-base font-semibold text-red-400 cursor-pointer"
                                                                                 title="Analytics"
                                                                             >
-                                                                            <i className="fa-regular fa-chart-bar mr-2"></i>
-                                                                            {link.clickCount} clicks.
+                                                                                <i className="fa-regular fa-chart-bar mr-2"></i>
+                                                                                {link.clickCount} clicks.
                                                                             </div>
                                                                         </div>
 
                                                                         <div>
                                                                             <i
                                                                                 title="Edit"
-                                                                                className="fa-solid fa-pen text-gray-400 text-lg mr-2 cursor-pointer hover:text-[#47B6FF]"
+                                                                                className="fa-solid fa-pen text-blue-400 text-lg mr-2 cursor-pointer hover:text-blue-700"
                                                                                 onClick={() => handleOpenEdit(link)}
                                                                             ></i>
                                                                             <i
                                                                                 title="Delete"
-                                                                                className="fa-solid fa-trash-can text-lg hover:text-red-500 cursor-pointer"
+                                                                                className="fa-solid fa-trash-can text-lg text-red-400 hover:text-red-600 cursor-pointer"
                                                                                 onClick={() =>
                                                                                     handleOpenDelete(link._id)
                                                                                 }

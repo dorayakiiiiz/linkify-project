@@ -73,35 +73,35 @@ export default function InsightsPage() {
             </div>
 
             {/* 1. OVERVIEW CARDS */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-10 mb-8">
-                <div className="bg-white rounded-2xl p-6">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="text-gray-500 font-medium">Total Views</div>
+            <div className="grid grid-cols-3 gap-2 md:gap-6 lg:gap-10 mb-8">
+                <div className="bg-white rounded-2xl p-3 md:p-6 flex flex-col items-center md:items-start">
+                    <div className="flex flex-col md:flex-row gap-2 items-center justify-between mb-4 w-full">
+                        <div className="text-gray-500 font-medium text-center">Total <br className="md:hidden"/> Views</div>
                         <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
                             <i className="fa-regular fa-eye"></i>
                         </div>
                     </div>
-                    <div className="text-4xl font-bold text-gray-800">{stats.overview.views}</div>
+                    <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">{stats.overview.views}</div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="text-gray-500 font-medium">Total Clicks</div>
+                <div className="bg-white rounded-2xl p-3 md:p-6 flex flex-col items-center md:items-start">
+                    <div className="flex flex-col md:flex-row gap-2 items-center justify-between mb-4 w-full">
+                        <div className="text-gray-500 font-medium text-center">Total <br className="md:hidden"/> Clicks</div>
                         <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-500">
                             <i className="fa-solid fa-arrow-pointer"></i>
                         </div>
                     </div>
-                    <div className="text-4xl font-bold text-gray-800">{stats.overview.clicks}</div>
+                    <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">{stats.overview.clicks}</div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="text-gray-500 font-medium">Click Rate</div>
+                <div className="bg-white rounded-2xl p-3 md:p-6 flex flex-col items-center md:items-start">
+                    <div className="flex flex-col md:flex-row gap-2 items-center justify-between mb-4 w-full">
+                        <div className="text-gray-500 font-medium text-center">Click <br className="md:hidden"/> Rate</div>
                         <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-500">
                             <i className="fa-solid fa-percent"></i>
                         </div>
                     </div>
-                    <div className="text-4xl font-bold text-gray-800">{stats.overview.ctr}%</div>
+                    <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">{stats.overview.ctr}%</div>
                 </div>
             </div>
 

@@ -90,11 +90,11 @@ export default function LinkModal({ onClose, editingLink = null }) {
 
 	return (
 		<div
-			className="fixed inset-0 z-100 bg-black/50 backdrop-blur flex items-center justify-center"
+			className="fixed inset-0 z-100 bg-black/50 backdrop-blur flex items-end md:items-center justify-center"
 			onClick={onClose}
 		>
 			<div
-				className="flex flex-col w-full max-w-[750px] px-10 py-[26px] min-h-[460px] bg-white md:rounded-3xl animate-slide-up"
+				className="flex flex-col w-full max-w-[750px] px-10 py-[26px] min-h-[460px] bg-white rounded-t-4xl md:rounded-3xl animate-slide-up max-h-[90vh] overflow-y-auto"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<div className="w-full flex justify-between items-center">
