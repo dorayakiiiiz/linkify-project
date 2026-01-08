@@ -3,11 +3,14 @@ import { useProfile } from '../../context/ProfileContext';
 import { useNavigate } from 'react-router-dom';
 import InsightsPage from './InsightsPage';
 import PostIdeaPage from './Tools/PostIdeaPage';
+import UserSettingDropDown from './Modal/UserSettingDropDown';
 
 export default function MobileDashboardHome() {
     const { profile } = useProfile();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('home'); // home, insights, post-ideas, shortener
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     if (!profile) return null;
 
@@ -34,12 +37,23 @@ export default function MobileDashboardHome() {
                         {/* Header */}
                         <div className="px-4 pt-12 pb-6 flex flex-col items-center">
                             
-                            <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 mb-4 shadow-sm">
-                                <img 
-                                    src={profile.avatarUrl} 
-                                    alt="avatar" 
-                                    className="w-full h-full object-cover"
+                            <div className="relative mb-3 flex flex-col items-center">
+                                <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-200">
+                                    <img 
+                                        src={profile.avatarUrl} 
+                                        alt="avatar" 
+                                        className="w-full h-full object-cover"
+                                        onClick={() => setIsModalOpen(true)}
+                                    />
+                                </div>
+                                <UserSettingDropDown 
+                                    isOpen={isModalOpen} 
+                                    onClose={() => setIsModalOpen(false)} 
+                                    className="left-1/2 -translate-x-1/2 mt-2" 
                                 />
+                                {isModalOpen && (
+                                    <div className="fixed inset-0 z-[40]" onClick={() => setIsModalOpen(false)}></div>
+                                )}
                             </div>
                             <h2 className="text-3xl font-bold mb-2">@{profile.username}</h2>
                             <a href={`/${profile.username}`} className="text-gray-500 text-base mb-6 hover:underline">
@@ -198,6 +212,7 @@ export default function MobileDashboardHome() {
                     <span className="text-[10px] font-medium">Post ideas</span>
                 </div>
             </div>
+
         </div>
     );
 }
