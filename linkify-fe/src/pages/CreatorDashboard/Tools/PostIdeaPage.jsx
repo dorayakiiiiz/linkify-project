@@ -138,7 +138,7 @@ export default function PostIdeaPage() {
     );
 
     const renderStep1 = () => (
-        <div className="max-w-2xl mx-auto animate-fade-in">
+        <div className="max-w-2xl mx-auto animate-fade-in mt-4">
             <div className="text-center mb-8">
                 <h1 className="text-3xl font-momo font-bold text-gray-800 mb-2">Got an idea in mind?</h1>
                 <p className="text-gray-500">AI can turn it into a creative, ready-to-post caption.</p>
@@ -223,12 +223,12 @@ export default function PostIdeaPage() {
         if (creating) return renderLoadingScreen();
 
         return (
-            <div className="max-w-4xl mx-auto animate-fade-in">
+            <div className="max-w-4xl mx-auto animate-fade-in mt-3">
                 <div className="flex items-center justify-between mb-6">
                     <button onClick={() => setStep(1)} className="text-gray-500 text-sm md:text-lg hover:text-black font-medium">
                         <i className="fa-solid fa-arrow-left mr-2"></i> Back
                     </button>
-                    <h2 className="md:text-2xl font-momo font-bold">Choose an Angle</h2>
+                    <h2 className="text-2xl font-momo font-bold">Choose an Angle</h2>
                     <div className="w-14"></div>
                 </div>
 
@@ -258,7 +258,7 @@ export default function PostIdeaPage() {
                         ))}
                     </div>
                 )}
-                <div className="text-center mt-5">
+                <div className="text-center mt-5 mb-4">
                     <button onClick={handleGenerateHooks} className="text-gray-500 cursor-pointer hover:text-purple-600 text-sm font-medium">
                         <i className="fa-solid fa-rotate-right mr-1"></i> Not satisfied? Regenerate
                     </button>
@@ -269,12 +269,12 @@ export default function PostIdeaPage() {
 
     // STEP 3: FINAL CONTENT
     const renderStep3 = () => (
-        <div className="max-w-3xl mx-auto animate-fade-in">
+        <div className="max-w-3xl mx-auto animate-fade-in mt-3">
             <div className="flex items-center justify-between mb-6">
                 <button onClick={() => setStep(2)} className="text-gray-500 hover:text-black font-medium">
                     <i className="fa-solid fa-arrow-left mr-2"></i> Back
                 </button>
-                <h2 className="md:text-2xl lg:text-3xl font-momo font-bold">Ready to Post</h2>
+                <h2 className="text-2xl lg:text-3xl font-momo font-bold">Ready to Post</h2>
                 <button onClick={handleReset} className="text-purple-600 font-bold">
                     Start New
                 </button>
