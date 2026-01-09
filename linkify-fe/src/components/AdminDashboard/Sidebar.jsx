@@ -110,7 +110,6 @@ export default function Sidebar() {
                         className={`text-[#212529] absolute shadow-xl top-[calc(100%+4px)] w-[200px] bg-[#fff] rounded-xl flex flex-col ${dropdown ? 'scale-100' : 'scale-0'} transition duration-200`}
                         onClick={e => e.stopPropagation()}
                     >
-
                         <div 
                             className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE]"
                             onClick={handleAccountSetting}
