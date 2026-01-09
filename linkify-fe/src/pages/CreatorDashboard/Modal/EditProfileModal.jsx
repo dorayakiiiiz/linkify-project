@@ -28,7 +28,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
 
     useEffect(() => {
         if (log.content) {
-            const timerId = setTimeout(() => setLog({ type: '', content: '' }), 2000);
+            const timerId = setTimeout(() => setLog({ type: '', content: '' }), 1500);
             return () => clearTimeout(timerId);
         }
     }, [log]);
@@ -194,7 +194,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                     />
                     <label
                         htmlFor="avatar"
-                        className="cursor-pointer w-[90px] h-[90px] md:w-[110px] md:h-[110px] rounded-full overflow-hidden border border-[4px] border-[#ccc]"
+                        className="cursor-pointer w-[90px] h-[90px] md:w-[110px] md:h-[110px] rounded-full overflow-hidden border border-4 border-gray-200"
                         title="Edit"
                     >     
                         {avatarPreview ? (
@@ -262,7 +262,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                 </div>
 
                 <div className="w-full px-20 md:px-10 pt-4 pb-8">
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center px-6 md:px-0">
                         {!isActive ? (
                             <>
                                 <div className="text-gray-500 text-sm mb-3 hover:text-gray-800">
@@ -270,7 +270,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                                 </div>
                                 <button
                                     onClick={handleReactiveProfile}
-                                    className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-lg transition-colors bg-blue-400 hover:bg-blue-300"
+                                    className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-xl transition-colors bg-blue-400 hover:bg-blue-300"
                                 >
                                     <i className="fa-regular fa-trash-can mr-2"></i>
                                     Active profile
@@ -282,11 +282,11 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                                     No longer need this profile?
                                 </div>
 
-                                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2">
+                                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 px-6">
 
                                     <button
                                         onClick={handleDeactiveProfile}
-                                        className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-lg transition-colors bg-gray-400 hover:bg-gray-300"
+                                        className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-xl transition-colors bg-gray-400 hover:bg-gray-300"
                                     >
                                         <i className="fa-regular fa-trash-can mr-2"></i>
                                         Deactive profile
@@ -298,7 +298,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                                             </div>
                                             <button
                                                 onClick={() => setIsDeleteModalOpen(true)}
-                                                className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-lg transition-colors bg-red-500 hover:bg-red-400"
+                                                className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-xl transition-colors bg-red-500 hover:bg-red-400"
                                             >
                                                 <i className="fa-regular fa-trash-can mr-2"></i>
                                                 Delete your profile

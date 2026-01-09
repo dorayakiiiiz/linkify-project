@@ -209,6 +209,13 @@ export default function MobileDashboardHome() {
                     <span className="text-[10px] font-medium">Insights</span>
                 </div>
                 <div 
+                    onClick={() => navigate('/dashboard/donation')}
+                    className="flex flex-col items-center gap-1 cursor-pointer w-1/4 text-gray-400 hover:text-black"
+                >
+                    <i className="fa-solid fa-heart text-xl"></i>
+                    <span className="text-[10px] font-medium">Donation</span>
+                </div>
+                <div 
                     onClick={() => navigate('/dashboard/tools/post-ideas')}
                     className="flex flex-col items-center gap-1 cursor-pointer w-1/4 text-gray-400 hover:text-black"
                 >

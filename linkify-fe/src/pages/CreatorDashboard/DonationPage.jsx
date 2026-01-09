@@ -76,7 +76,7 @@ export default function DonationPage() {
         <div
             className="w-full h-full flex flex-col"
         >
-            <div className="p-6 md:px-[10px] lg:px-10">
+            <div className="p-6 md:px-[10px] lg:px-[20px] xl:px-[60px]">
     
                 {/* Toggle Switch */}
                 <div className="flex items-center justify-between mb-6">

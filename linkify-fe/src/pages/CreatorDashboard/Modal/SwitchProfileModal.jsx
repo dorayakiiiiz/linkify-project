@@ -63,7 +63,7 @@ export default function SwitchProfileModal({ onClose , onSuccess }) {
                                 <img
                                     src={p.avatarUrl}
                                     alt={p.username}
-                                    className="w-full h-full rounded-full"
+                                    className="w-full h-full rounded-full object-cover"
                                 />
                             </div>
 
