@@ -73,14 +73,14 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="bg-[#ecede8] lg:w-[280px] md:w-[200px] rounded-tl-xl relative flex-shrink-0 hidden md:block h-full border-r border-[#d7d6d4]">
+        <div className="bg-[#f1f0ee] w-[90px] lg:w-[250px] rounded-tl-xl relative flex-shrink-0 hidden md:block h-full border-r border-[#d7d6d4]">
             {isAccountModalOpen && (
                 <AccountSettingModal 
                     onClose={() => setIsAccountModalOpen(false)}
                 />
             )}
 
-            {/* User Info & Noti */}
+            {/* User Info */}
             <div className="flex border-b border-gray-300 justify-between items-center px-5 py-2 my-2.5">
                 <div 
                     ref={dropdownRef}
@@ -89,10 +89,10 @@ export default function Sidebar() {
                 >
                     <img
                         src={profile?.avatarUrl}
-                        className="rounded-full h-[30px] w-[30px]"
+                        className="rounded-full h-[30px] w-[30px] object-cover"
                         alt="avatar"
                     />
-                    <p className="ml-[4px] text-[#37181B] font-bold">
+                    <p className="ml-[4px] text-[#37181B] font-bold hidden lg:block">
                         {user?.displayName}
                     </p>
                     <i className={`fa-solid fa-angle-down text-[10px] pt-1 ml-auto mr-1 transition-transform duration-300 ${dropdown? "rotate-180" : ""}`}/>
@@ -103,7 +103,7 @@ export default function Sidebar() {
 
                 <div 
                     title="Setting" 
-                    className="w-8 h-8 border border-gray-400 bg-white hover:bg-gray-200 cursor-pointer rounded-full p-2 flex items-center justify-center"
+                    className="hidden lg:flex w-8 h-8 border border-gray-400 bg-white hover:bg-gray-200 cursor-pointer rounded-full p-2 items-center justify-center"
                     onClick={handleAccountSetting}
                 >
                    <i className="fa-solid fa-gear"></i>
@@ -118,14 +118,14 @@ export default function Sidebar() {
                             <div key={item.label} className="mb-1">
                                 <div
                                     onClick={() => handleClick(item)}
-                                    className={`flex items-center py-2 px-2 -mx-2 my-2 rounded-xl cursor-pointer transition-all duration-150
+                                    className={`flex items-center justify-center lg:justify-start py-2 px-2 -mx-2 my-2 rounded-xl cursor-pointer transition-all duration-150
                                         ${isActive(item.label) 
                                             ? "bg-gray-50 shadow-xs font-bold" // Style khi active
                                             : "hover:bg-[#d7d4cd] text-gray-600" // Style mặc định
                                         }`}
                                 >
-                                    <i className={`${isActive(item.label) ? 'text-blue-500' : ''} fa-solid ${item.icon}`} />
-                                    <span className="ml-1.5">{item.label}</span>
+                                    <i className={`${isActive(item.label) ? 'text-blue-500' : ''} w-6 fa-solid py-1 ${item.icon}`} />
+                                    <span className="ml-1.5 hidden lg:block">{item.label}</span>
                                 </div>
                             </div>
                         );
@@ -133,22 +133,22 @@ export default function Sidebar() {
                 </div>
 
                 {/* 3. Tools Section */}
-                <div className="px-6 lg:px-7 py-2">
-                    <div className="-ml-3 font-medium text-[#9c9b95] w-[32px]">
+                <div className="px-6 lg:px-7 lg:py-2">
+                    <div className="-ml-3 font-medium text-[#9c9b95] w-[32px] hidden lg:block">
                         Tools
                     </div>
                     {tools.map((t) => (
                         <div
                             key={t.label}
                             onClick={() => handleClick(t)} 
-                            className={`flex items-center py-2 px-2 -mx-2 my-2 rounded-xl cursor-pointer transition-all duration-150
+                            className={`flex items-center justify-center lg:justify-start py-2 px-2 -mx-2 my-2 rounded-xl cursor-pointer transition-all duration-150
                                 ${isActive(t.label) 
                                     ? "bg-gray-50 shadow-xs font-bold" // Style khi active
                                     : "hover:bg-[#d7d4cd] text-gray-600" // Style mặc định
                                 }`}
                         >
                             <i className={` ${isActive(t.label) ? 'text-blue-500' : ''} fa-solid ${t.icon}`} />
-                            <span className="ml-1.5">{t.label}</span>
+                            <span className="ml-1.5 hidden lg:block">{t.label}</span>
                         </div>
                     ))}
                 </div>
@@ -156,7 +156,7 @@ export default function Sidebar() {
                 <div className="mb-1 px-6 lg:px-7 text-gray-500 mt-auto cursor-pointer" onClick={handleAccountSetting}>
                     <div className="p-2 hover:bg-gray-50 hover:shadow-sm hover:text-blue-600 rounded-xl">
                         <i className="fa-solid fa-gear"></i>
-                        <span className="ml-1.5 text-gray-600">Account setting</span>
+                        <span className="ml-1.5 text-gray-600 hidden lg:inline">Account setting</span>
                     </div>
                 </div>
             </div>

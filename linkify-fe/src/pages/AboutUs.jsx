@@ -30,7 +30,7 @@ export default function AboutUs() {
             id: "23120195", 
             role: "Backend Developer",
             color: "from-blue-600 to-indigo-500",
-            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chuong" 
+            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=ThanhChuong" 
         },
         { 
             name: "Nguyễn Nhựt Thanh", 
@@ -42,8 +42,8 @@ export default function AboutUs() {
     ];
 
     return (
-        <div className="fixed inset-0 p-4 flex items-start md:items-center justify-center overflow-y-auto">
-            <div className="absolute inset-0 md:bg-[url('bg_group.jpg')] bg-cover bg-center brightness-[0.9]"></div>
+        <div className="w-full min-h-screen p-4 flex items-center justify-center overflow-y-auto">
+            <div className="absolute inset-0 lg:bg-[url('bg_group.jpg')] bg-cover bg-center brightness-[0.9]"></div>
 
             <div className="max-w-4xl mx-auto relative z-10 bg-white/90 rounded-2xl p-10 backdrop-blur-sm">
                 {/* Compact Header */}

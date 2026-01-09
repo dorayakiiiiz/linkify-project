@@ -16,7 +16,7 @@ export default function AdminDashboardLayout() {
     return (
         <div className="w-full h-screen flex flex-col font-quicksand font-medium">
             {/* Header */}
-            <div className="bg-[#153d18] h-[70px] w-full flex items-center">
+            <div className="bg-[#022c49] h-[70px] w-full flex items-center">
                 <Link to="/" className="text-[#fff] mb-[12px] ml-[20px] font-momo text-xl">
                     Linkify <i className="fa-brands fa-linktree text-[#49ff68]"></i>
                 </Link>
@@ -32,7 +32,6 @@ export default function AdminDashboardLayout() {
                     {/* header */}
                     <div className="h-[65px] flex justify-between items-center border-b border-[#dedcdc] w-full px-4 shrink-0">
                         <span className="font-bold text-2xl py-4 ml-[10px]">{getTitle()}</span>
-                        <i className="cursor-pointer fa-solid fa-gear bg-[#fff] pl-2 pr-6 py-2 rounded-3xl border border-[#ccc] border-solid"></i>
                     </div>
 
                     {/* content */}

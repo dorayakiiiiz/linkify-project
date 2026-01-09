@@ -26,7 +26,7 @@ export default function MobilePreview({ isDesignPanelOpen }) {
         <div className={`flex flex-col h-screen ${previewClasses}`}>
             {/* Link ở trên */}
             <div className="hidden mt-3 md:flex items-center">
-                <div className="bg-white py-2 px-[26px] rounded-3xl xl:w-[280px] lg:w-[240px] md:w-[200px] mx-auto flex items-center justify-between">
+                <div className="bg-white py-2 px-[26px] rounded-3xl xl:w-[280px] lg:w-[240px] md:w-[200px] mx-auto flex items-center justify-center">
                     {!loading ? (
                         <>
                             <a
@@ -42,7 +42,9 @@ export default function MobilePreview({ isDesignPanelOpen }) {
                             <div className="text-center flex-1">Loading...</div>
                         </>
                     )}
-                    <i className="fa-regular fa-share-from-square"></i>
+                    <span className="hidden lg:block">
+                        <i className="fa-regular fa-share-from-square"></i>
+                    </span>
                 </div>
             </div>
             

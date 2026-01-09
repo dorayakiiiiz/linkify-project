@@ -51,12 +51,12 @@ export function UserInfo() {
                         <div className="text-lg font-semibold">{profile.username}</div>
                         
                         {profile.isActive ? (
-                            <div className="px-2 py-1 rounded-full bg-green-100 text-green-600 text-xs font-bold flex items-center gap-1.5">
+                            <div className="px-2 py-[3px] rounded-full border bg-green-100/50 border-green-400 shadow-sm text-green-500 text-xs font-bold flex items-center gap-1.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse"></div>
                                 Active
                             </div>
                         ) : (
-                            <div className="px-2 py-1 rounded-full bg-red-100 text-red-600 text-xs font-bold flex items-center gap-1.5">
+                            <div className="px-2 py-[3px] rounded-full border bg-red-100/50 border-red-400 shadow-sm text-red-600 text-xs font-bold flex items-center gap-1.5">
                                 <i className="fa-regular fa-eye-slash text-[10px]"></i>
                                 Deactivated
                             </div>
