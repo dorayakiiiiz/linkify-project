@@ -43,7 +43,7 @@ export default function AboutUs() {
 
     return (
         <div className="w-full min-h-screen p-4 flex items-center justify-center overflow-y-auto">
-            <div className="absolute inset-0 lg:bg-[url('bg_group.jpg')] bg-cover bg-center brightness-[0.9]"></div>
+            <div className="absolute inset-0 lg:bg-[url('/bg_group.jpg')] bg-cover bg-center brightness-[0.9]"></div>
 
             <div className="max-w-4xl mx-auto relative z-10 bg-white/90 rounded-2xl p-10 backdrop-blur-sm">
                 {/* Compact Header */}
