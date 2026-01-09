@@ -68,7 +68,7 @@ export default function FooterDesign() {
                         <ColorPickerItem 
                             label="Footer Background" 
                             designSection="footer" 
-                            colorKey="background" 
+                            colorKey="backgroundColor" 
                         />
                         <ColorPickerItem 
                             label="Footer Text" 

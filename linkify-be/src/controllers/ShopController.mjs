@@ -58,7 +58,7 @@ class ShopController {
                 scheduledDisable
             });
 
-            checkProductContent(newProduct._id, name, price);
+            checkProductContent(newProduct._id, name, price, buyLink);
 
             res.status(201).json({ message: 'Product created successfully', product: newProduct });
 
@@ -82,7 +82,7 @@ class ShopController {
             });
 
             if (updates.name) {
-                checkProductContent(updatedProduct._id, updatedProduct.name, updatedProduct.price);
+                checkProductContent(updatedProduct._id, updatedProduct.name, updatedProduct.price, updatedProduct.buyLink);
             }
 
             res.status(200).json({
