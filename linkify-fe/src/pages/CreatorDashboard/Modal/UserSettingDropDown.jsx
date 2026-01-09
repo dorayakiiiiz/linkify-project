@@ -30,11 +30,6 @@ export default function UserSettingDropDown({ onClose, isOpen = true, className 
         if (onClose) onClose();
     }
 
-    const handleHelp = () => {
-
-    }
-
-
     const handleLogout = () => {
         if (isLoggingOut)
             return;
@@ -85,7 +80,7 @@ export default function UserSettingDropDown({ onClose, isOpen = true, className 
                     </div>
                 </div>
 
-                <div className="border-b border-[#e0dfde]">
+                <div className="">
                     <div
                         className="pl-[16px] py-[4px] mx-[4px] mt-[4px] rounded-md hover:bg-[#F1F0EE] cursor-pointer"
                         onClick={handleAccountSetting}
@@ -96,7 +91,7 @@ export default function UserSettingDropDown({ onClose, isOpen = true, className 
                 </div>
 
                 <div
-                    className={`pl-[16px] py-[4px] m-[4px] rounded-md transition-all duration-200
+                    className={`pl-[16px] py-[4px] mx-[4px] mb-1 rounded-md transition-all duration-200
                     ${isLoggingOut ? 'bg-gray-100 text-gray-400 cursor-wait' : 'hover:bg-[#F1F0EE] cursor-pointer'}`}
                     onClick={handleLogout}
                 >

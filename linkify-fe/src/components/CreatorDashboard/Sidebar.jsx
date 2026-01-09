@@ -12,9 +12,6 @@ export default function Sidebar() {
     const navigate = useNavigate();
     const location = useLocation();
     
-    // lưu index của menu cha đang dc mở (index/null)
-    const [openIndex, setOpenIndex] = useState(0); 
-
     // lưu trạng thái bật tắt của user dropdown
     const [dropdown, setDropdown] = useState(false);
     

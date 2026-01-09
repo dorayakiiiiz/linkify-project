@@ -40,6 +40,8 @@ import LinkManagementPage from "./pages/AdminDashboard/LinkManagementPage";
 import ShopManagementPage from "./pages/AdminDashboard/ShopManagementPage";
 import AnalyticsPage from "./pages/AdminDashboard/AnalyticsPage";
 
+import AboutUs from "./pages/AboutUs"; // Import trang mới
+
 // Định nghĩa các route trong này
 
 function App() {
@@ -53,6 +55,8 @@ function App() {
                             <Route element={<BaseLayout />}>
                                 <Route path="/" element={<Home />} />
                             </Route>
+
+                            <Route path="/about" element={<AboutUs />} />
 
                             {/* Layout ko có navbar + footer */}
                             <Route element={<BlankLayout />}>
@@ -105,7 +109,6 @@ function App() {
                                 <Route path="/:username" element={<PublicProfile />} />
                             </Route>
                         </Routes>
-                        {/* SHOP FEATURE - Close ShopProvider */}
                     </ShopProvider>
                 </LinkProvider>
             </ProfileProvider>

@@ -35,25 +35,29 @@ export default function MobileDashboardHome() {
                 return (
                     <div className="pb-[80px]"> {/* Thêm padding bottom để không bị che bởi footer */}
                         {/* Header */}
-                        <div className="px-4 pt-12 pb-6 flex flex-col items-center">
+                        <div className="px-4 pt-6 pb-6 flex flex-col items-center w-full">
+                            <div 
+                                className="relative mb-8 self-start w-10 h-10 rounded-full bg-blue-50/50 border border-blue-200 cursor-pointer text-blue-700 flex items-center justify-center"
+                                onClick={() => setIsModalOpen(!isModalOpen)}
+                            >
+                                <i className="fa-solid fa-gear"></i>
+                                <UserSettingDropDown 
+                                    isOpen={isModalOpen} 
+                                    onClose={() => setIsModalOpen(false)} 
+                                    className="top-10 left-0" 
+                                />
+                                
+                            </div>
                             
-                            <div className="relative mb-3 flex flex-col items-center">
+                            <div className="mb-3 flex flex-col items-center">
                                 <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-200">
                                     <img 
                                         src={profile.avatarUrl} 
                                         alt="avatar" 
                                         className="w-full h-full object-cover"
-                                        onClick={() => setIsModalOpen(true)}
                                     />
                                 </div>
-                                <UserSettingDropDown 
-                                    isOpen={isModalOpen} 
-                                    onClose={() => setIsModalOpen(false)} 
-                                    className="left-1/2 -translate-x-1/2 mt-2" 
-                                />
-                                {isModalOpen && (
-                                    <div className="fixed inset-0 z-[40]" onClick={() => setIsModalOpen(false)}></div>
-                                )}
+                                
                             </div>
                             <h2 className="text-3xl font-bold mb-2">@{profile.username}</h2>
                             <a href={`/${profile.username}`} className="text-gray-500 text-base mb-6 hover:underline">
@@ -189,7 +193,7 @@ export default function MobileDashboardHome() {
             </div>
 
             {/* Footer Menu - Fixed */}
-            <div className="fixed bottom-0 left-0 w-full h-[60px] bg-white border-t border-gray-200 px-4 flex justify-between items-center z-[100]">
+            <div className="fixed bottom-0 left-0 w-full h-[60px] bg-white border-t border-gray-200 px-4 flex justify-between items-center z-10">
                 <div 
                     onClick={() => navigate('/dashboard')}
                     className="flex flex-col items-center gap-1 cursor-pointer w-1/4 text-black"

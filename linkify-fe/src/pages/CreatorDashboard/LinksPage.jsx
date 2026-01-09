@@ -69,7 +69,7 @@ export default function LinksPage() {
     const handleCopy = (url, id) => {
         navigator.clipboard.writeText(url);
         setCopiedId(id);
-        
+
         // Reset lại sau 2 giây
         setTimeout(() => {
             setCopiedId(null);
@@ -106,9 +106,9 @@ export default function LinksPage() {
             )}
 
             {isDeleteModalOpen && (
-                <DeleteModal 
-                    deleteId={deleteId} 
-                    onClose={handleCloseDelete} 
+                <DeleteModal
+                    deleteId={deleteId}
+                    onClose={handleCloseDelete}
                     removeFunc={removeLink}
                     confirmMessage="Are you sure to delete this link?"
                     successLog="Link deleted successfully."
@@ -137,20 +137,21 @@ export default function LinksPage() {
                                 + Add
                             </button>
                         </div>
-                        
+
                     </div>
 
-                    <div 
+                    <div
                         className="flex justify-end"
                         onClick={() => setIsTrashOpen(true)}
                     >
-                        <div className="flex justify-center cursor-pointer gap-2 items-center border border-gray-300 shadow px-4 py-2 rounded-lg mr-2 bg-gray-100 hover:bg-[#fff]">
-                            <div>
+                        <div className="group flex items-center gap-3 px-5 py-2.5 bg-white border border-slate-200 rounded-full cursor-pointer transition-all duration-300 hover:border-red-400 hover:bg-red-50/50 hover:shadow-[0_8px_20px_-10px_rgba(59,130,246,0.3)] active:scale-95">
+                            <div className="flex items-center justify-center text-slate-400 group-hover:text-red-500 group-hover:rotate-12 transition-all duration-300">
+                                <i className="fa-regular fa-trash-can text-lg"></i>
+                            </div>
+
+                            <span className="text-slate-600 text-sm font-medium tracking-tight group-hover:text-red-600 transition-colors">
                                 View trash bin
-                            </div>
-                            <div className="flex justify-center items-center text-gray-500">
-                                <i className="fa-regular fa-trash-can text-xl"></i>
-                            </div>
+                            </span>
                         </div>
                     </div>
 
@@ -226,7 +227,7 @@ export default function LinksPage() {
                                                                                     rel="noopener noreferrer"
                                                                                     className="text-sm text-gray-500 hover:text-blue-500 truncate min-w-0"
                                                                                 >
-                                                                                    <i class="fa-solid fa-link text-blue-500 mr-2"></i>
+                                                                                    <i className="fa-solid fa-link text-blue-500 mr-2"></i>
                                                                                     {link.url}
                                                                                 </a>
                                                                             </div>
@@ -248,7 +249,7 @@ export default function LinksPage() {
 
                                                                         {/* share + toggle enable ẩn hiện */}
                                                                         <div className="flex items-center pt-1 space-x-3">
-                                                                            <button 
+                                                                            <button
                                                                                 onClick={() => handleCopy(link.url, link._id)}
                                                                                 className={`flex items-center gap-1.5 font-bold px-2 py-1 rounded transition-all duration-300 ${isCopied ? 'bg-green-100 text-green-700' : 'text-gray-400 cursor-pointer hover:text-gray-700'}`}
                                                                                 title="Copy URL"
@@ -284,7 +285,7 @@ export default function LinksPage() {
                                                                     {/* option */}
                                                                     <div className="flex items-center justify-between mt-4 text-gray-500 text-sm">
                                                                         <div className="flex items-center space-x-3 flex-wrap gap-2">
-                                                                            <div 
+                                                                            <div
                                                                                 className=" text-base font-semibold text-red-400 cursor-pointer"
                                                                                 title="Analytics"
                                                                             >

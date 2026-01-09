@@ -186,6 +186,12 @@ export default function OnboardingProfile() {
                         to="/"
                         className={`font-momo mx-[20px] mt-[40px] ${step > 3 ? 'mb-[100px]' : step === 3 ? 'mb-[40px]' : step === 2 ? 'mb-[50px]' : 'mb-[80px]'} self-start md:self-end`}
                     >
+                        <span 
+                            className="-ml-[20px] mr-3 md:hidden text-lg text-blue-300"
+                            onClick={() => navigate(-1)}
+                        >
+                            <i className="fa-solid fa-circle-arrow-left"></i>
+                        </span>
                         Linkify
                         <i className="fa-brands fa-linktree text-[#43E660]"></i>
                     </Link>

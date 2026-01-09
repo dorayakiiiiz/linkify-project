@@ -22,7 +22,7 @@ export default function Footer() {
                         },
                         {
                             title: "About us",
-                            link: "/"
+                            link: "/about" // Sửa đường dẫn ở đây
                         },
                         {
                             title: "Features",

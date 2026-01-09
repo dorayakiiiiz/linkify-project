@@ -205,7 +205,7 @@ export default function Login() {
                         </div>
 
 
-                        <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-[green] success-text' : ''} font-semibold`}>
+                        <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-green-400 success-text' : ''} font-semibold`}>
                             {log.content}
                         </div>
 
