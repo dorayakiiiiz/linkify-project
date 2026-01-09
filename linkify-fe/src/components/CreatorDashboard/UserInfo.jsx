@@ -68,7 +68,7 @@ export function UserInfo() {
                     </div>
 
                     <div 
-                        className="flex items-center justify-start gap-2 mt-2 text-gray-400 hover:text-purple-600 cursor-pointer"
+                        className="flex items-center justify-start gap-2 mt-2 text-blue-400 hover:text-purple-600 cursor-pointer"
                         onClick={handleEditProfile}    
                     >
                         Edit your profile

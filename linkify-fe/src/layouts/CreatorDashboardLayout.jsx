@@ -57,16 +57,16 @@ export default function CreatorDashboardLayout() {
                 {/* content */}
                 <div className="flex-1 flex flex-col border-r border-[#d7d6d4] overflow-hidden bg-[#f1f0ee]">
                     {/* header */}
-                    <div className="h-[65px] flex justify-between items-center border-b border-[#dedcdc] w-full px-4 shrink-0">
-                        <div className="flex items-center gap-3">
+                    <div className="h-[65px] flex items-center justify-center border-b border-[#dedcdc] w-full px-4">
+                        <div className="flex items-center h-full w-full mt-2 md:mt-0">
                             {/* Nút Back chỉ hiện trên mobile và khi ở trang con */}
                                 <button 
                                     onClick={handleBack}
-                                    className="md:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition"
+                                    className="md:hidden flex items-center justify-center rounded-full hover:bg-gray-200 transition"
                                 >
-                                    <i className="fa-solid fa-arrow-left text-xl text-gray-700"></i>
+                                    <i className="fa-solid fa-arrow-left text-lg text-gray-700"></i>
                                 </button>
-                            <span className="font-bold text-2xl py-4 ml-[10px]">{getTitle()}</span>
+                            <div className="font-bold text-2xl ml-[10px]">{getTitle()}</div>
                         </div>
                     </div>
 

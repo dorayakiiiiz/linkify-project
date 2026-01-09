@@ -105,7 +105,7 @@ export default function AccountSettingModal({ onClose }) {
             <div className="w-full font-bold text-xl text-green-600">
                 General information
             </div>
-            <div className="w-full mt-10 px-14">
+            <div className="w-full mt-10 px-2 md:px-14">
                 <div className="ml-1">
                     Email
                 </div>
@@ -121,7 +121,7 @@ export default function AccountSettingModal({ onClose }) {
                     <div className="text-sm text-gray-400 mt-1 ml-1">Email cannot be changed.</div>
                 </div>
             </div>
-            <div className="w-full mt-6 px-14">
+            <div className="w-full mt-6 px-2 md:px-14">
                 <div className="ml-1">
                     Display name
                 </div>
@@ -137,10 +137,10 @@ export default function AccountSettingModal({ onClose }) {
             </div>
         
 
-            <div className="w-full mt-3 px-14 flex flex-col items-center justify-center">
+            <div className="w-full mt-3 px-10 md:px-14 flex flex-col items-center justify-center">
 
                 <div
-                    className={`h-6 mb-2.5 ${log.type == "error" ? "text-[red]" : "text-[green] success-glow"
+                    className={`h-6 whitespace-nowrap mb-4 md:mb-2.5 ${log.type == "error" ? "text-[red]" : "text-[green] success-glow"
                         } font-semibold`}
                 >
                     {log.content}
@@ -163,7 +163,7 @@ export default function AccountSettingModal({ onClose }) {
             <div className="w-full font-bold text-xl text-blue-600">
                 Change your password
             </div>
-            <div className="w-full mt-6 px-14">
+            <div className="w-full mt-6 px-2 md:px-14">
                 <div className="ml-1">
                     Current password
                 </div>
@@ -177,7 +177,7 @@ export default function AccountSettingModal({ onClose }) {
                     />
                 </div>
             </div>
-            <div className="w-full mt-3 px-14">
+            <div className="w-full mt-3 px-2 md:px-14">
                 <div className="ml-1">
                     New password
                 </div>
@@ -191,7 +191,7 @@ export default function AccountSettingModal({ onClose }) {
                     />
                 </div>
             </div>
-            <div className="w-full mt-3 px-14">
+            <div className="w-full mt-3 px-2 md:px-14">
                 <div className="ml-1">
                     Confirm new password
                 </div>
@@ -206,10 +206,10 @@ export default function AccountSettingModal({ onClose }) {
                 </div>
             </div>
 
-            <div className="w-full mt-3 px-14 flex flex-col items-center justify-center">
+            <div className="w-full mt-3 px-10 md:px-14 flex flex-col items-center justify-center">
 
                 <div
-                    className={`h-6 mb-2.5 ${log.type == "error" ? "text-[red]" : "text-[green] success-glow"
+                    className={`h-6 mb-4 md:mb-2.5 whitespace-nowrap ${log.type == "error" ? "text-[red]" : "text-[green] success-glow"
                         } font-semibold`}
                 >
                     {log.content}
@@ -271,17 +271,19 @@ export default function AccountSettingModal({ onClose }) {
 
     return (
         <div
-            className="fixed inset-0 z-100 bg-black/50 backdrop-blur flex items-center justify-center"
+            className="fixed inset-0 z-100 bg-black/50 text-black backdrop-blur flex items-end md:items-center justify-center"
             onClick={onClose}
         >
             <div 
-                className="flex flex-col items-center w-full max-w-[800px] h-full max-h-[560px] bg-[#fff] md:rounded-2xl overflow-hidden"
+                className="flex flex-col items-center w-full max-w-[800px] h-full max-h-[620px] md:max-h-[560px] bg-[#fff] rounded-t-3xl md:rounded-2xl overflow-auto"
                 onClick={e => e.stopPropagation()}
             >
                 <div className="w-full relative flex items-center justify-center py-6 font-momo text-2xl border-b border-gray-200 shadow">
                     <div>
                         Account Setting
-                        <i className="fa-solid fa-gear ml-2 text-blue-800"></i>
+                        <span className="hidden md:inline">
+                            <i className="fa-solid fa-gear ml-2 text-blue-800"></i>
+                        </span>
                     </div>
 
                     <div
@@ -292,9 +294,9 @@ export default function AccountSettingModal({ onClose }) {
                     </div>
                 </div>
 
-                <div className="flex w-full h-full">
+                <div className="flex flex-col items-center md:items-stretch md:flex-row w-full h-full">
                     {/* menu */}
-                    <div className="flex-1 bg-[#F9F8FD] px-6 py-3 space-y-4">
+                    <div className="md:flex-1 flex md:flex-col justify-center md:justify-start bg-[#F9F8FD] px-2 md:px-6 py-2 md:py-3 md:space-y-4 w-full">
                         <div 
                             className={`p-3 rounded-xl cursor-pointer transition ${tab === 'general' ? 'font-bold bg-white shadow-md' : ''}`}
                             onClick={() => setTab('general')}
@@ -323,7 +325,7 @@ export default function AccountSettingModal({ onClose }) {
                     </div>
 
                     {/* content */}
-                    <div className="flex-3 px-10 py-5">
+                    <div className="md:flex-3 px-10 py-5">
                         {tab === 'general' && renderGeneralTab()}
                         {tab === 'change-password' && renderChangePasswordTab()}
                         {tab === 'delete-account' && renderDeleteAccountTab()}

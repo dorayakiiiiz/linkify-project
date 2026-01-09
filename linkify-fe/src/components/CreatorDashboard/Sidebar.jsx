@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useProfile } from "../../context/ProfileContext";
 import { creatorMenu, tools } from "../../constants/dashboard";
 import AccountSettingModal from "../Modal/AccountSettingModal";
-// import UserSettingDropDown from "../../pages/CreatorDashboard/Modal/UserSettingDropDown";
+import UserSettingDropDown from "../../pages/CreatorDashboard/Modal/UserSettingDropDown";
 
 export default function Sidebar() {
     const { user, logout } = useAuth();
@@ -12,9 +12,6 @@ export default function Sidebar() {
     const navigate = useNavigate();
     const location = useLocation();
     
-    // lưu index của menu cha đang dc mở (index/null)
-    const [openIndex, setOpenIndex] = useState(0); 
-
     // lưu trạng thái bật tắt của user dropdown
     const [dropdown, setDropdown] = useState(false);
     
@@ -101,7 +98,7 @@ export default function Sidebar() {
                     <i className={`fa-solid fa-angle-down text-[10px] pt-1 ml-auto mr-1 transition-transform duration-300 ${dropdown? "rotate-180" : ""}`}/>
 
                     {/* user dropdown menu */}
-                    {/* <UserSettingDropDown isOpen={dropdown} onClose={() => setDropdown(false)} /> */}
+                    <UserSettingDropDown isOpen={dropdown} onClose={() => setDropdown(false)} />
                 </div>
 
                 <div 

@@ -227,7 +227,7 @@ export default function LinksPage() {
                                                                                     rel="noopener noreferrer"
                                                                                     className="text-sm text-gray-500 hover:text-blue-500 truncate min-w-0"
                                                                                 >
-                                                                                    <i class="fa-solid fa-link text-blue-500 mr-2"></i>
+                                                                                    <i className="fa-solid fa-link text-blue-500 mr-2"></i>
                                                                                     {link.url}
                                                                                 </a>
                                                                             </div>

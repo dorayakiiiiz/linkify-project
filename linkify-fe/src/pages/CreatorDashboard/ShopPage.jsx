@@ -210,7 +210,7 @@ export default function ShopPage() {
                                                                                     rel="noopener noreferrer"
                                                                                     className="text-sm text-gray-500 hover:text-blue-600 mb-3 truncate block mr-[20px]"
                                                                                 >
-                                                                                    <i class="fa-solid fa-link text-blue-500 mr-2"></i>
+                                                                                    <i className="fa-solid fa-link text-blue-500 mr-2"></i>
                                                                                     {product.buyLink}
                                                                                 </a>
 

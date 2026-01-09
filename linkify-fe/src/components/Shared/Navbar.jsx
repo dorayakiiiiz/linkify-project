@@ -48,12 +48,12 @@ export default function Navbar() {
                     <Link to="/dashboard" className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
                         Dashboard
                     </Link>
-                    <div className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
+                    <Link to="/dashboard/design" className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
                         Design
-                    </div>
-                    <div className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
+                    </Link>
+                    <Link to="/about" className="py-[10px] px-[20px] hover:bg-[#EFF0EC] rounded-xl cursor-pointer">
                         About us
-                    </div>
+                    </Link> 
                 </div>
             </div>
 
