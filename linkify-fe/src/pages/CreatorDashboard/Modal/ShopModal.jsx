@@ -34,6 +34,7 @@ export default function ShopModal({ onClose, editingProduct = null }) {
             return () => clearTimeout(timerId);
         }
     }, [log]);
+    const [loading, setLoading] = useState(false);
 
     const fileInputRef = useRef(null);
     useEffect(() => {
@@ -88,20 +89,24 @@ export default function ShopModal({ onClose, editingProduct = null }) {
                     return;
                 }
 
+                setLoading(true);
                 await addProduct(formData);
                 setLog({ type: "success", content: "Add new product successfully." });
-                onClose();
+                setTimeout(() => onClose(), 1500);
             } else {
+                setLoading(true);
                 await updateProduct(editingProduct._id, formData);
                 setLog({ type: "success", content: "Product updated successfully." });
-                onClose();
+                setTimeout(() => onClose(), 1500);
             }
         } catch (err) {
             setLog({ type: "error", content: err?.response?.data?.message || "Error occured. Try again later." });
             return;
+        } finally {
+            setLoading(false);
         }
 
-        setTimeout(() => onClose(), 1200);
+        setTimeout(() => onClose(), 1500);
     };
 
     return (
@@ -260,6 +265,7 @@ export default function ShopModal({ onClose, editingProduct = null }) {
                             backgrond={{ normal: "#8129d9", hover: "#5D18A2 " }}
                             color="#fff"
                             text={editingProduct ? "Save changes" : "Add product"}
+                            disabled={loading}
                             onClick={handleSubmit}
                         />
                     </div>

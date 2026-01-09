@@ -6,6 +6,7 @@ import Button from "../../../components/Shared/Button";
 
 export default function LinkModal({ onClose, editingLink = null }) {
 	const { addNewLink, updateLink } = useLinks();
+	const [loading, setLoading] = useState(false);
 
 	const formatDate = (dateString) => {
 		if (!dateString) return "";
@@ -64,25 +65,34 @@ export default function LinkModal({ onClose, editingLink = null }) {
 			return;
 		}
 
-		if (!editingLink) {
-			await addNewLink(title, url, scheduledEnable, scheduledDisable);
-
-			setLog({
-				type: "success",
-				content: "Add new link successfully.",
-			});
-		} else {
-			await updateLink(editingLink._id, {
-				title,
-				url,
-				scheduledEnable,
-				scheduledDisable,
-			});
-
-			setLog({
-				type: "success",
-				content: "Link updated successfully.",
-			});
+		try {
+			if (!editingLink) {
+				setLoading(true);
+				await addNewLink(title, url, scheduledEnable, scheduledDisable);
+	
+				setLog({
+					type: "success",
+					content: "Add new link successfully.",
+				});
+			} else {
+				setLoading(true);
+				await updateLink(editingLink._id, {
+					title,
+					url,
+					scheduledEnable,
+					scheduledDisable,
+				});
+	
+				setLog({
+					type: "success",
+					content: "Link updated successfully.",
+				});
+			}
+		} catch (err) {
+			setLog({ type: "error", content: err?.response?.data?.message || "Error occured. Try again later." });
+            return;
+		} finally {
+			setLoading(false);
 		}
 
 		setTimeout(() => onClose(), 1500);
@@ -252,6 +262,7 @@ export default function LinkModal({ onClose, editingLink = null }) {
 							color="#fff"
 							text={editingLink ? "Save changes" : "Add link"}
 							onClick={handleSubmit}
+							disabled={loading}
 						/>
 					</div>
 				</div>
