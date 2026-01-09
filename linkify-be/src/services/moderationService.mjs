@@ -29,6 +29,14 @@ export const checkLinkContent = async (linkId, title, url) => {
             6. Malware/Illegal Links
             7. Harassment/Bullying
             8. Self-harm/Suicide Content
+
+            **VIETNAMESE BYPASS DETECTION:**
+            - Detect intentional misspellings and teencode in ALL categories.
+            - Examples: 
+                - Adult: "sec", "sếch", "gây", "p-o-r-n".
+                - Drugs: "cần", "kẹo", "ke" (if context is drug-related).
+                - Fraud: "acc giá rẻ", "tài khoản bị hack".
+            - Rule: If the phonetic sound in Vietnamese matches a prohibited term, mark as a violation.
             
             Respond ONLY with a JSON object:
             {
@@ -108,20 +116,34 @@ export const checkLinkContent = async (linkId, title, url) => {
     }
 }
 
-export const checkProductContent = async (productId, name, price) => {
+export const checkProductContent = async (productId, name, price, url) => {
     try {
         const prompt = `
             Analyze the following product listing for e-commerce policy violations.
             Product Name: "${name}"
-            Price: ${price}
-            
-            Categories to detect:
-            1. Weapons/Explosives 
-            2. Illegal Drugs/Substances 
-            3. Counterfeit/Fake Goods 
-            4. Adult Products/Toys
-            5. Stolen Digital Accounts/Hacking Tools
-            6. Fraud/Scam 
+            Price: ${price},
+            URL: ${url}
+
+            **CORE POLICY CATEGORIES:**
+            1. **Dangerous Goods:** Weapons, firearms, ammunition, knives (excluding kitchen tools), explosives, or hazardous chemicals.
+            2. **Illegal Substances:** Narcotics, prescription drugs without authorization, drug paraphernalia, or tobacco/vaping products.
+            3. **Intellectual Property:** Counterfeit items, "replica", "knock-off", "fake" versions of premium brands, or unauthorized digital distribution.
+            4. **Adult Content:** Explicit sexual material, pornography, sexually suggestive services, or highly offensive NSFW items.
+            5. **Digital Fraud:** Stolen accounts (Netflix, Spotify, etc.), hacking software, social media bot services, or phishing tools.
+            6. **Regulated Services:** Gambling, financial scams, pyramid schemes, or human organs/trafficking.
+
+            **VIETNAMESE BYPASS DETECTION:**
+            - Detect intentional misspellings and teencode in ALL categories.
+            - Examples: 
+                - Adult: "sec", "sếch", "gây", "p-o-r-n".
+                - Drugs: "cần", "kẹo", "ke" (if context is drug-related).
+                - Fraud: "acc giá rẻ", "tài khoản bị hack".
+            - Rule: If the phonetic sound in Vietnamese matches a prohibited term, mark as a violation.
+
+            **ANALYSIS GUIDELINES:**
+            - Be objective. A kitchen knife is OK, but a combat knife is a "Dangerous Good".
+            - If the price is 0 or suspiciously low for a premium brand, flag as potential Fraud/Counterfeit.
+            - Maintain a high sensitivity for all categories listed above.
 
             Respond ONLY with a JSON object:
             {
@@ -133,7 +155,7 @@ export const checkProductContent = async (productId, name, price) => {
     
         const completion = await groq.chat.completions.create({
             messages: [
-                { role: 'system', content: 'You are an e-commerce moderation AI.' },
+                { role: 'system', content: 'You are a STRICT content moderation AI. Prioritize safety over false negatives.' },
                 { role: 'user', content: prompt }
             ],
             model: 'qwen/qwen3-32b', 
