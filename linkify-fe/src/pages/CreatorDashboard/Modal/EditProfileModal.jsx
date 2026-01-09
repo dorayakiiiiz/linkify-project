@@ -261,11 +261,11 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                     />
                 </div>
 
-                <div className="w-full px-20 md:px-10 pt-4 pb-8">
-                    <div className="flex flex-col items-center px-6 md:px-0">
+                <div className="w-full px-10 pt-4 pb-8">
+                    <div className="flex flex-col items-center">
                         {!isActive ? (
                             <>
-                                <div className="text-gray-500 text-sm mb-3 hover:text-gray-800">
+                                <div className="text-gray-500 text-sm mb-3 hover:text-gray-800 text-center">
                                     This profile is currently deactivated.
                                 </div>
                                 <button
@@ -282,7 +282,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                                     No longer need this profile?
                                 </div>
 
-                                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 px-6">
+                                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4">
 
                                     <button
                                         onClick={handleDeactiveProfile}
