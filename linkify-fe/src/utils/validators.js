@@ -3,6 +3,11 @@
 const validateUsername = (username) => {
     if (!username || username.trim() === "") return "Please input username.";
 
+    if (/\s/.test(username)) return "Username must not contain whitespace.";
+
+    const validRegex = /^[a-zA-Z0-9._]+$/;
+    if (!validRegex.test(username)) return "Username must contain only letters, numbers, underscores and periods (no accents).";
+
     if (username.length < 5) return "Username must be at least 5 characters.";
 
     return null;
