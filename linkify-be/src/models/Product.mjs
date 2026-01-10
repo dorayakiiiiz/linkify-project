@@ -76,5 +76,5 @@ const ProductSchema = new Schema(
         timestamps: true,
     }
 );
-
+//add new cmt
 export default mongoose.model("Product", ProductSchema);
