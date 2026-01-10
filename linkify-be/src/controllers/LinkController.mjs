@@ -182,3 +182,6 @@ class LinkController {
 
 export default new LinkController();
 
+// Full CRUD API: Create (auto-order), Read (sorted), Update, Delete, Reorder (bulkWrite optimization)
+// Supports scheduling: scheduledEnable/scheduledDisable for auto show/hide links
+

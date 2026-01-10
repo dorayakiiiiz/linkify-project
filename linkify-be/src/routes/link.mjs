@@ -28,3 +28,7 @@ router.delete('/:linkId/permanent', linkController.hardDeleteLink);
 
 export default router;
 
+// Routes: GET (read), POST (create), PATCH (update), PUT (reorder), DELETE - All protected by authMiddleware
+// Validation: title & url required, order auto-generated, supports scheduledEnable/scheduledDisable
+
+
