@@ -204,9 +204,7 @@ export default function OnboardingLink() {
 
                         </div>
 
-                        <div
-                            className="font-semibold text-3xl font-momo px-[24px] mt-2 md:mt-0"
-                        >
+                        <div className="font-semibold text-3xl font-momo px-[24px] mt-2 md:mt-0">
                             {step === 1 ? 'Select Your Social Media' : 'Link Your Accounts'}
                         </div>
 
