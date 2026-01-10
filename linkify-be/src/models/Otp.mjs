@@ -17,4 +17,5 @@ const OtpSchema = new Schema({
     }
 });
 
+
 export default mongoose.model('Otp', OtpSchema);

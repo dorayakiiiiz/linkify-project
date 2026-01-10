@@ -64,4 +64,6 @@ const LinkSchema = new Schema({
     
 }, { timestamps: true })
 
+
+
 export default mongoose.model('Link', LinkSchema);
