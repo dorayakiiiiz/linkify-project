@@ -16,5 +16,5 @@ const OtpSchema = new Schema({
         expires: 300
     }
 });
-
+//add new cmt
 export default mongoose.model('Otp', OtpSchema);

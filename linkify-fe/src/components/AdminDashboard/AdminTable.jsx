@@ -1,5 +1,5 @@
 import React from 'react';
-
+// add cmt
 export default function AdminTable({ columns, data, isLoading, actions }) {
     if (isLoading) {
         return <div className="w-full p-10 text-center text-gray-500">Loading data...</div>;

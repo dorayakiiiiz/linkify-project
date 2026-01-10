@@ -181,7 +181,7 @@ export default function OnboardingLink() {
     return (
         <div className="flex justify-center items-center w-full min-h-screen md:bg-[url('/onboarding_link.jpg')] bg-cover">
             <div className="absolute inset-0 bg-black opacity-10 backdrop-blur-lg"></div>
-            <div className="w-[700px] h-[600px] bg-[#fff] rounded-3xl flex flex-col items-center z-10">
+            <div className="w-[700px] h-screen md:h-[600px] bg-[#fff] md:rounded-3xl flex flex-col items-center z-10">
 
                 {!showReady && (
                     <>
@@ -205,7 +205,7 @@ export default function OnboardingLink() {
                         </div>
 
                         <div
-                            className="font-semibold text-3xl font-momo px-[24px]"
+                            className="font-semibold text-3xl font-momo px-[24px] mt-2 md:mt-0"
                         >
                             {step === 1 ? 'Select Your Social Media' : 'Link Your Accounts'}
                         </div>
@@ -217,7 +217,7 @@ export default function OnboardingLink() {
                         </div>
                         
                         {step === 1 && (
-                            <div className="grid grid-cols-3 md:grid-cols-4 gap-[20px] w-full max-w-[540px] h-full max-h-[340px] mb-[14px] px-[20px] rounded-xl overflow-y-auto">
+                            <div className="grid grid-cols-3 md:grid-cols-4 gap-[20px] w-full max-w-[540px] h-full max-h-[500px] md:max-h-[340px] mb-[14px] px-[20px] rounded-xl overflow-y-auto">
                                 {SOCIALS.map(platform => {
                                     const isSelected = selectedPlatforms.find(p => p.id === platform.id);
                                     return (
