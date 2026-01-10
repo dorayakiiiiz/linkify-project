@@ -2,6 +2,8 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { useProfile } from "./ProfileContext";
 import { shopService } from "../services/shopService";
 
+
+
 const ShopContext = createContext();
 export const useShop = () => useContext(ShopContext);
 
