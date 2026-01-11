@@ -117,7 +117,8 @@ class AdminController {
     }
   }
 
-  // [GET] /api/admin/links
+  // [GET] /api/admin/links - Lấy danh sách links với filter theo trạng thái vi phạm
+  // Feature: Flagged items listing
   async getAllLinks(req, res, next) {
     try {
       const { page = 1, limit = 10, search = "", status } = req.query;
@@ -125,6 +126,7 @@ class AdminController {
         deletedBy: null,
       };
 
+      // Filter: lấy links bị flagged hoặc safe
       if (status === "flagged") {
         query.isFlagged = true;
       } else if (status === "safe") {
@@ -166,7 +168,8 @@ class AdminController {
     }
   }
 
-  // PATCH /api/admin/links/:id/resolve
+  // PATCH /api/admin/links/:id/resolve - Xử lý link vi phạm
+  // Feature: Approve/Ban actions (safe/banned/ban_user)
   async resolveLinkViolation(req, res, next) {
     try {
       const { id } = req.params;
@@ -179,6 +182,7 @@ class AdminController {
       const link = await Link.findById(id);
       if (!link) return res.status(404).json({ message: "Link not found" });
 
+      // Action: APPROVE - đánh dấu link an toàn, giảm violation count
       if (decision === "safe") {
         link.isFlagged = false;
         link.violationReason = null;
@@ -198,6 +202,7 @@ class AdminController {
             $inc: { violationCount: -1 },
           });
         }
+        // Action: BAN - xóa mềm link vi phạm
       } else if (decision === "banned") {
         link.deletedBy = "admin";
         link.deletedAt = new Date();
@@ -208,6 +213,7 @@ class AdminController {
         return res.json({
           message: "Link has been removed (soft delete) due to violation.",
         });
+        // Action: BAN USER - xóa link và khóa tài khoản user
       } else if (decision === "ban_user") {
         link.deletedBy = "admin";
         link.deletedAt = new Date();
@@ -232,12 +238,14 @@ class AdminController {
     }
   }
 
-  // [GET] /api/admin/products
+  // [GET] /api/admin/products - Lấy danh sách products với filter vi phạm
+  // Feature: Flagged items listing
   async getAllProducts(req, res, next) {
     try {
       const { page = 1, limit = 10, search = "", status } = req.query;
       const query = { deletedBy: null };
 
+      // Filter theo trạng thái flagged/safe
       if (status === "flagged") query.isFlagged = true;
       else if (status === "safe") query.isFlagged = false;
 
@@ -276,7 +284,8 @@ class AdminController {
     }
   }
 
-  // [PATCH] /api/admin/products/:id/resolve
+  // [PATCH] /api/admin/products/:id/resolve - Xử lý product vi phạm
+  // Feature: Approve/Ban actions
   async resolveProductViolation(req, res, next) {
     try {
       const { id } = req.params;
@@ -290,6 +299,7 @@ class AdminController {
       if (!product)
         return res.status(404).json({ message: "Product not found" });
 
+      // APPROVE - đánh dấu product an toàn
       if (decision === "safe") {
         product.isFlagged = false;
         product.violationReason = null;
@@ -307,6 +317,7 @@ class AdminController {
             $inc: { violationCount: -1 },
           });
         }
+        // BAN - xóa mềm product vi phạm
       } else if (decision === "banned") {
         product.deletedBy = "admin";
         product.deletedAt = new Date();
@@ -314,6 +325,7 @@ class AdminController {
         product.adminDecision = "banned";
         await product.save();
         return res.json({ message: "Product removed (soft delete)." });
+        // BAN_USER - xóa product và khóa tài khoản
       } else if (decision === "ban_user") {
         product.deletedBy = "admin";
         product.deletedAt = new Date();

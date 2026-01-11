@@ -1,21 +1,23 @@
-// import OpenAI from 'openai'
-import Groq from 'groq-sdk'
-import Link from '../models/Link.mjs'
-import Product from '../models/Product.mjs'
-import Profile from '../models/Profile.mjs'
-import User from '../models/User.mjs'
+// AI Content Moderation Service - Tự động kiểm duyệt nội dung bằng Groq AI
+
+import Groq from "groq-sdk";
+import Link from "../models/Link.mjs";
+import Product from "../models/Product.mjs";
+import Profile from "../models/Profile.mjs";
+import User from "../models/User.mjs";
 
 // const openai = new OpenAI({
 //     apiKey: process.env.OPENAI_API_KEY
 // });
 
 const groq = new Groq({
-    apiKey: process.env.GROQAI_API_KEY
-})
+  apiKey: process.env.GROQAI_API_KEY,
+});
 
+// Kiểm tra link vi phạm - Tự động flag và tăng violationCount
 export const checkLinkContent = async (linkId, title, url) => {
-    try {
-        const prompt = `
+  try {
+    const prompt = `
             Analyze the following link information for policy violations.
             Title: "${title}"
             URL: "${url}"
@@ -45,80 +47,84 @@ export const checkLinkContent = async (linkId, title, url) => {
                 "confidence": number (0-100)
             }
         `;
-    
-        // const completion = await openai.chat.completions.create({
-        //     messages: [
-        //         {
-        //             role: 'system',
-        //             content: 'You are a content moderation AI.'
-        //         },
-        //         {
-        //             role: 'user',
-        //             content: prompt
-        //         }
-        //     ],
-        //     model: 'gpt-4o-mini',
-        //     response_format: { type: 'json_object' },
-        //     temperature: 0
-        // });
-    
-        const completion = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are a content moderation AI.'
-                },
-                {
-                    role: 'user',
-                    content: prompt
-                }
-            ],
-            model: 'qwen/qwen3-32b',
-            response_format: { type: 'json_object' },
-            temperature: 0
-        });
 
-        const result = JSON.parse(completion.choices[0].message.content);
+    // const completion = await openai.chat.completions.create({
+    //     messages: [
+    //         {
+    //             role: 'system',
+    //             content: 'You are a content moderation AI.'
+    //         },
+    //         {
+    //             role: 'user',
+    //             content: prompt
+    //         }
+    //     ],
+    //     model: 'gpt-4o-mini',
+    //     response_format: { type: 'json_object' },
+    //     temperature: 0
+    // });
 
-        const currentLink = await Link.findById(linkId);
-        if (!currentLink) return;
-    
-        if (result.isViolating && result.confidence > 70) {
-            await Link.findByIdAndUpdate(linkId, {
-                isFlagged: true,
-                violationReason: result.reason,
-                violationConfidence: result.confidence,
-                isEnable: false 
-            }, { new: true });
+    const completion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a content moderation AI.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      model: "qwen/qwen3-32b",
+      response_format: { type: "json_object" },
+      temperature: 0,
+    });
 
-            if (!currentLink.isFlagged && currentLink.profileId) {
+    const result = JSON.parse(completion.choices[0].message.content);
 
-                const profile = await Profile.findById(currentLink.profileId);
-                if (profile && profile.userId) {
-                    await User.findByIdAndUpdate(profile.userId, {
-                        $inc: { violationCount: 1 }
-                    });
-                }
-            }
-        } else {
-            if (currentLink.isFlagged) {
-                await Link.findByIdAndUpdate(linkId, {
-                    isFlagged: false,
-                    violationReason: null,
-                    violationConfidence: 0,
-                    isEnable: true,
-                });
-            }
+    const currentLink = await Link.findById(linkId);
+    if (!currentLink) return;
+
+    // Nếu vi phạm với confidence > 70%, flag link và tăng violation count
+    if (result.isViolating && result.confidence > 70) {
+      await Link.findByIdAndUpdate(
+        linkId,
+        {
+          isFlagged: true,
+          violationReason: result.reason,
+          violationConfidence: result.confidence,
+          isEnable: false,
+        },
+        { new: true }
+      );
+
+      if (!currentLink.isFlagged && currentLink.profileId) {
+        const profile = await Profile.findById(currentLink.profileId);
+        if (profile && profile.userId) {
+          await User.findByIdAndUpdate(profile.userId, {
+            $inc: { violationCount: 1 },
+          });
         }
-
-    } catch (err) {
-        console.log('Error while calling AI API: ', err.message);
+      }
+    } else {
+      if (currentLink.isFlagged) {
+        await Link.findByIdAndUpdate(linkId, {
+          isFlagged: false,
+          violationReason: null,
+          violationConfidence: 0,
+          isEnable: true,
+        });
+      }
     }
-}
+  } catch (err) {
+    console.log("Error while calling AI API: ", err.message);
+  }
+};
 
+// Kiểm tra product vi phạm - Tự động flag và tăng violationCount
 export const checkProductContent = async (productId, name, price, url) => {
-    try {
-        const prompt = `
+  try {
+    const prompt = `
             Analyze the following product listing for e-commerce policy violations.
             Product Name: "${name}"
             Price: ${price},
@@ -152,49 +158,57 @@ export const checkProductContent = async (productId, name, price, url) => {
                 "confidence": number (0-100)
             }
         `;
-    
-        const completion = await groq.chat.completions.create({
-            messages: [
-                { role: 'system', content: 'You are a STRICT content moderation AI. Prioritize safety over false negatives.' },
-                { role: 'user', content: prompt }
-            ],
-            model: 'qwen/qwen3-32b', 
-            response_format: { type: 'json_object' },
-            temperature: 0
-        });
 
-        const result = JSON.parse(completion.choices[0].message.content);
+    const completion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a STRICT content moderation AI. Prioritize safety over false negatives.",
+        },
+        { role: "user", content: prompt },
+      ],
+      model: "qwen/qwen3-32b",
+      response_format: { type: "json_object" },
+      temperature: 0,
+    });
 
-        const currentProduct = await Product.findById(productId);
-        if (!currentProduct) return;
-    
-        if (result.isViolating && result.confidence > 70) {
-            await Product.findByIdAndUpdate(productId, {
-                isFlagged: true,
-                violationReason: result.reason,
-                violationConfidence: result.confidence,
-                isEnable: false 
-            }, { new: true });
+    const result = JSON.parse(completion.choices[0].message.content);
 
-            if (!currentProduct.isFlagged && currentProduct.profileId) {
-                const profile = await Profile.findById(updatedProduct.profileId);
-                if (profile && profile.userId) {
-                    await User.findByIdAndUpdate(profile.userId, {
-                        $inc: { violationCount: 1 }
-                    });
-                }
-            }
-        } else {
-            if (currentProduct.isFlagged) {
-                await Product.findByIdAndUpdate(productId, {
-                    isFlagged: false,
-                    violationReason: null,
-                    violationConfidence: 0,
-                    isEnable: true
-                });
-            }
+    const currentProduct = await Product.findById(productId);
+    if (!currentProduct) return;
+
+    if (result.isViolating && result.confidence > 70) {
+      await Product.findByIdAndUpdate(
+        productId,
+        {
+          isFlagged: true,
+          violationReason: result.reason,
+          violationConfidence: result.confidence,
+          isEnable: false,
+        },
+        { new: true }
+      );
+
+      if (!currentProduct.isFlagged && currentProduct.profileId) {
+        const profile = await Profile.findById(updatedProduct.profileId);
+        if (profile && profile.userId) {
+          await User.findByIdAndUpdate(profile.userId, {
+            $inc: { violationCount: 1 },
+          });
         }
-    } catch (err) {
-        console.log('Error while calling AI API for Product: ', err.message);
+      }
+    } else {
+      if (currentProduct.isFlagged) {
+        await Product.findByIdAndUpdate(productId, {
+          isFlagged: false,
+          violationReason: null,
+          violationConfidence: 0,
+          isEnable: true,
+        });
+      }
     }
-}
+  } catch (err) {
+    console.log("Error while calling AI API for Product: ", err.message);
+  }
+};
