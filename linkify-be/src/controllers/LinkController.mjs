@@ -1,4 +1,5 @@
 import Link from "../models/Link.mjs";
+import { checkLinkContent } from "../services/moderationService.mjs";
 
 class LinkController {
   // [GET] /api/links/:profileId
@@ -6,7 +7,28 @@ class LinkController {
     try {
       const { profileId } = req.params;
 
-      const links = await Link.find({ profileId }).sort({ order: 1 });
+      const links = await Link.find({
+        profileId,
+        deletedBy: null,
+      }).sort({ order: 1 });
+
+      res.status(200).json({ links });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  // [GET] /api/links/public/:profileId
+  async getPublicLinks(req, res, next) {
+    try {
+      const { profileId } = req.params;
+      const links = await Link.find({
+        profileId,
+        deletedBy: null,
+        isEnable: true,
+        isFlagged: false,
+      }).sort({ order: 1 });
+
       res.status(200).json({ links });
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -30,6 +52,9 @@ class LinkController {
         scheduledDisable,
       });
 
+      // check violation, gọi ngầm chứ ko await để ko phải chờ
+      checkLinkContent(newLink._id, title, url);
+
       res
         .status(201)
         .json({ message: "Create link successfully", link: newLink });
@@ -46,6 +71,11 @@ class LinkController {
       const updatedLink = await Link.findByIdAndUpdate(linkId, updates, {
         new: true,
       });
+
+      // update xong check lại
+      if (updates.title || updates.url) {
+        checkLinkContent(updatedLink._id, updatedLink.title, updatedLink.url);
+      }
 
       res.status(200).json({ message: "Link updated", link: updatedLink });
     } catch (err) {
@@ -77,12 +107,70 @@ class LinkController {
     }
   }
 
-  //[DELETE] api/links/:linkId
+  //[DELETE] api/links/:linkId (soft delete)
   async deleteLink(req, res, next) {
     try {
       const { linkId } = req.params;
-      await Link.findByIdAndDelete(linkId);
+
+      // soft delete
+      await Link.findByIdAndUpdate(linkId, {
+        deletedBy: "creator",
+        deletedAt: new Date(),
+        isEnable: false,
+      });
+
       res.status(200).json({ message: "Link deleted" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  // [GET] api/links/:profileId/trash
+  async getTrashLinks(req, res, next) {
+    try {
+      const { profileId } = req.params;
+      const links = await Link.find({
+        profileId,
+        deletedBy: "creator" || "admin",
+      }).sort({ deletedAt: -1 });
+
+      res.status(200).json({ links });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  // [PATCH] api/links/:linkId/restore
+  async restoreLink(req, res, next) {
+    try {
+      const { linkId } = req.params;
+      const link = await Link.findById(linkId);
+
+      if (!link) return res.status(404).json({ message: "Link not found." });
+
+      if (link.isFlagged || link.deletedBy === "admin")
+        return res
+          .status(403)
+          .json({ message: "Cannot restore flagged or admin-deleted links." });
+
+      link.deletedBy = null;
+      link.deletedAt = null;
+      link.isEnable = true;
+      await link.save();
+
+      res.status(200).json({ message: "Link restored successfully." });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  // [DELETE] api/links/:linkId/permanent
+  async hardDeleteLink(req, res, next) {
+    try {
+      const { linkId } = req.params;
+      await Link.findByIdAndDelete(linkId);
+
+      res.status(200).json({ message: "Link deleted permanently" });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -91,4 +179,5 @@ class LinkController {
 
 export default new LinkController();
 
-// Link ordering via 'order' field + scheduled enable/disable logic via scheduledEnable/scheduledDisable
+// Full CRUD API: Create (auto-order), Read (sorted), Update, Delete, Reorder (bulkWrite optimization)
+// Supports scheduling: scheduledEnable/scheduledDisable for auto show/hide links
