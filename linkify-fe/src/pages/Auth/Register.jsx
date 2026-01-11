@@ -6,15 +6,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
 import { Validator } from "../../utils/validators";
 import { useAuth } from "../../context/AuthContext";
+import { useProfile } from "../../context/ProfileContext";
 
-import Input from "../../components/Input";
-import Button from "../../components/Button";
+import Input from "../../components/Shared/Input";
+import Button from "../../components/Shared/Button";
 
 export default function Register() {
     const [email, setEmail] = useState('');
     const [displayName, setDisplayName] = useState('');
     const [password, setPassword] = useState('');
     const [log, setLog] = useState({ type: '', content: '' });
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (log.content) {
@@ -24,7 +26,8 @@ export default function Register() {
     }, [log]);
 
     const navigate = useNavigate();
-    const { isLogin } = useAuth();
+    const { login ,isLogin } = useAuth();
+    const { fetchProfile } = useProfile();
 
     // đã đăng nhập rồi mà vào lại -> tự redirect về dashboard
     useEffect(() => {
@@ -32,6 +35,34 @@ export default function Register() {
             navigate('/dashboard', { replace: true });
         }
     }, [isLogin, navigate]);
+
+    //Lăng nghe sự kiện gửi message của cửa sổ pop up
+    useEffect(() => {
+        const receiveMessageFromPopUp = async(e) => {
+            if (e.data.type === 'login_success') {
+                const token = e.data.payload.token;
+                login(token);
+                setLog({
+                    type: 'success',
+                    content: 'Login successfully! Redirecting...'
+                });
+
+                await fetchProfile();
+
+                setTimeout(() => {
+                    navigate('/dashboard', { replace: true })
+                }, 2600);
+            }
+            else {
+                setLog({
+                    type: 'error',
+                    content: e.data.payload?.message || 'Login failed'
+                })
+            }
+        }
+        window.addEventListener('message', receiveMessageFromPopUp)
+        return () => window.removeEventListener('message', receiveMessageFromPopUp)
+    }, [isLogin, navigate])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -56,12 +87,14 @@ export default function Register() {
         }
         
         try {
+            setLoading(true);
             await authService.register({
                 email,
                 displayName,
                 password
             });
 
+            setLoading(false);
             setLog({
                 type: 'success',
                 content: 'Register successfully! Redirecting to login page...'
@@ -69,15 +102,33 @@ export default function Register() {
 
             setTimeout(() => {
                 navigate('/auth/login');
-            }, 3000);
+            }, 2600);
 
         } catch (err) {
             setLog({
                 type: 'error',
                 content: err?.response?.data?.message || 'Error occured. Try again later.'
             });
+        } finally {
+            setLoading(false);
         }
         
+    }
+
+    // Hàm click vào mở pop up Auth GG
+    const handleGoogleLogin = (e) => {
+        //Chuyển hướng sang backend để xác thực GG
+        const fullAuthUrl = authService.getGoogleAuthUrl();
+        // Mở pop up xác nhận GG
+        window.open(fullAuthUrl, 'googleAuthPopup', 'width=600,height=600');
+    }
+
+    // Hàm click vào mở pop up Auth FB
+    const handleGFacebookLogin = (e) => {
+        //Chuyển hướng sang backend để xác thực GG
+        const fullAuthUrl = authService.getFacebookAuthUrl();
+        // Mở pop up xác nhận GG
+        window.open(fullAuthUrl, 'facebookAuthPopup', 'width=600,height=600');
     }
 
     return (
@@ -132,7 +183,7 @@ export default function Register() {
                         setState={setPassword}
                     />
 
-                    <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-[green] success-text' : ''} font-semibold`}>
+                    <div className={`mt-[4px] mb-[10px] ${log.type === 'error' ? 'text-[red]' : log.type === 'success' ? 'text-green-400 success-text' : ''} font-semibold`}>
                         {log.content}
                     </div>
 
@@ -140,8 +191,8 @@ export default function Register() {
                         By clicking 
                         <span className="font-semibold"> Create account</span>
                         , you agree to Linkify's 
-                        <a href="" className="font-semibold underline"> privacy notice</a>, 
-                        <a href="" className="font-semibold underline">T&Cs </a> 
+                        <span className="font-semibold"> privacy notice</span>, 
+                        <span className="font-semibold">T&Cs </span> 
                         and to receive offers, news and updates.
                     </div>
 
@@ -162,6 +213,7 @@ export default function Register() {
                     <button
                         type="submit"
                         className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] border bg-[#ff2821] hover:bg-[#f96666] text-[#fff] font-semibold rounded-3xl"
+                        onClick={handleGoogleLogin}
                     >
                         <i className="fa-brands fa-google md:mr-[10px]"></i>
                         <div className="hidden md:block">Sign up with Google</div>
@@ -170,6 +222,7 @@ export default function Register() {
                     <button
                         type="submit"
                         className="cursor-pointer flex-1 flex items-center justify-center py-[16px] md:py-[12px] bg-[#295ff4] hover:bg-[#5683ff] text-[#fff] font-semibold rounded-3xl"
+                        onClick={handleGFacebookLogin}
                     >
                         <i className="fa-brands fa-facebook md:mr-[10px]"></i>
                         <div className="hidden md:block">Sign up with Facebook</div>

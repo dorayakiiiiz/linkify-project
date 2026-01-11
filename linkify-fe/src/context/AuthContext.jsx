@@ -1,7 +1,7 @@
 // cung cấp data global về authentication qua useContext
 
 import { createContext, useContext, useState, useEffect } from "react";
-import api from "../services/api";
+import { userService } from "../services/userService";
 
 const AuthContext = createContext();
 
@@ -19,9 +19,9 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             const fetchUser = async () => {
                 try {
-                    const res = await api.get('/user/account');
+                    const { user } = await userService.getAccount();
                     // data trả về nằm trong res.data
-                    setUser(res.data.user);
+                    setUser(user);
                 } catch (err) {
                     console.log('Error while getting user account: ', err);
                 } finally {
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, isLogin: !!token }}>
+        <AuthContext.Provider value={{ user, setUser, token, login, logout, isLogin: !!token }}>
             {children}
         </AuthContext.Provider>
     )

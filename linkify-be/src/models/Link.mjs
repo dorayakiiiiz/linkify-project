@@ -26,8 +26,42 @@ const LinkSchema = new Schema({
     scheduledDisable: {
         type: Date,
         default: null,
+    },
+
+
+    clickCount: {
+        type: Number,
+        default: 0,
+    },
+
+    isFlagged: {
+        type: Boolean,
+        default: false,
+    },
+    violationReason: {
+        type: String,
+        default: null,
+    },
+    violationConfidence: {
+        type: Number,
+        default: 0
+    },
+    adminDecision: {
+        type: String,
+        enum: [null, 'safe', 'banned'],
+        default: null
+    },
+
+    deletedBy: {
+            type: String,
+            enum: [null, 'creator', 'admin'],
+            default: null
+    },
+    deletedAt: {
+        type: Date,
+        default: null
     }
     
-})
+}, { timestamps: true })
 
 export default mongoose.model('Link', LinkSchema);

@@ -1,0 +1,88 @@
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import Sidebar from "../components/CreatorDashboard/Sidebar";
+import MobilePreview from "../components/CreatorDashboard/MobilePreview";
+
+export default function CreatorDashboardLayout() {
+    const location = useLocation();
+    const navigate = useNavigate();
+    
+    // Logic hiển thị Preview bên phải (chỉ hiện ở tab Links, Design...)
+    // Dựa vào logic cũ: label.includes('My Linkify')
+    const showPreview = ['/dashboard/links', '/dashboard/design', '/dashboard/shop', '/dashboard/donation'].includes(location.pathname);
+
+    // Lấy Title cho Header (thay thế activeItem/activeSubItem cũ)
+    const getTitle = () => {
+        if (location.pathname.includes('links')) return 'Links';
+        if (location.pathname.includes('design')) return 'Design';
+        if (location.pathname.includes('shop')) return 'Shop';
+        if (location.pathname.includes('donation')) return 'Donation';
+        if (location.pathname.includes('insights')) return 'Insights';
+        if (location.pathname.includes('post-ideas')) return 'Post Ideas';
+        return 'Dashboard';
+    };
+
+    // Kiểm tra xem có phải trang con cần nút back không (ví dụ Design)
+    // Mặc định trang chính là Links, các trang khác coi như trang con khi ở mobile
+    // Logic xử lý nút Back
+    const handleBack = () => {
+        // [MỚI] Logic riêng cho Mobile: Luôn back về trang Menu chính
+        if (window.innerWidth < 768) {
+            navigate('/dashboard');
+            return;
+        }
+
+        // [CŨ] Logic cho Desktop (giữ nguyên để không ảnh hưởng)
+        if (location.pathname.includes('/dashboard/links')) {
+            navigate('/dashboard');
+        } else {
+            // Nếu đang ở các trang con khác (Design, Shop...) -> Back về Links
+            navigate('/dashboard/links');
+        }
+    };
+
+    return (
+        <div className="w-full h-screen flex flex-col font-quicksand font-medium">
+            {/* Header */}
+            <div className="bg-[#022c49] h-[70px] w-full hidden md:flex items-center">
+                <Link to="/" className="text-[#fff] mb-[12px] ml-[20px] font-momo text-xl">
+                    Linkify <i className="fa-brands fa-linktree text-[#49ff68]"></i>
+                </Link>
+            </div>
+
+            {/* Body */}
+            <div className="bg-[#0060AD] rounded-t-xl w-full h-[calc(100vh-70px)] flex-1 flex relative -mt-2.5 rounded-t-xl">
+                
+                <Sidebar />
+
+                {/* content */}
+                <div className="flex-1 flex flex-col border-r border-[#d7d6d4] overflow-hidden bg-[#f1f0ee]">
+                    {/* header */}
+                    <div className="h-[65px] flex items-center justify-center border-b border-[#dedcdc] w-full px-4">
+                        <div className="flex items-center h-full w-full mt-2 md:mt-0">
+                            {/* Nút Back chỉ hiện trên mobile và khi ở trang con */}
+                                <button 
+                                    onClick={handleBack}
+                                    className="md:hidden flex items-center justify-center rounded-full hover:bg-gray-200 transition"
+                                >
+                                    <i className="fa-solid fa-arrow-left text-lg text-gray-700"></i>
+                                </button>
+                            <div className="font-bold text-2xl ml-[10px]">{getTitle()}</div>
+                        </div>
+                    </div>
+
+                    {/* content */}
+                    <div className="w-full flex flex-col items-center overflow-y-auto flex-1">
+                        <Outlet />
+                    </div>
+                </div>
+
+                {/* preview */}
+                {showPreview && (
+                    <div className="hidden md:flex xl:w-[450px] lg:w-[300px] md:w-[250px] overflow-y-hidden bg-[#f1f0ee] flex-col items-center border-l border-[#d7d6d4]">
+                         <MobilePreview /> 
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

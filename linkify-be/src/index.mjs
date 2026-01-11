@@ -1,5 +1,9 @@
-import express from "express";
-import cors from "cors";
+
+import express from 'express'
+import cors from 'cors'
+import passport from 'passport'
+import cookiePaser from 'cookie-parser'
+
 
 import { configDotenv } from "dotenv";
 configDotenv();
@@ -13,6 +17,9 @@ const PORT = process.env.PORT;
 // connect to database
 dbConnect();
 
+// Init passport
+app.use(passport.initialize())
+
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -21,22 +28,20 @@ app.use(
 );
 
 const allowedOrigins = [
-  "http://localhost:5173", // frontend dev
+    "http://localhost:5173", // frontend dev
+    'https://my-linkify.vercel.app'
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error("Blocked by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  })
-);
+const corsOptions = {
+    origin: allowedOrigins, 
+    credentials: true, 
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
+
+app.options(/.*/, cors(corsOptions));
 
 // route app
 route(app);

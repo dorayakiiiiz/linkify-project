@@ -4,15 +4,27 @@ import authMiddleware from "../middleware/AuthMiddleware.mjs";
 
 const router = Router();
 
-router.get('/:profileId', authMiddleware, linkController.getLinksByProfileId);
+router.get('/public/:profileId', linkController.getPublicLinks);
 
-router.post('/', authMiddleware, linkController.addLink);
+router.use(authMiddleware);
 
-router.patch('/:linkId', authMiddleware, linkController.updateLink);
+router.get('/:profileId', linkController.getLinksByProfileId);
 
-router.put('/reorder', authMiddleware, linkController.reorderLinks);
+router.post('/', linkController.addLink);
 
-router.delete('/:linkId', authMiddleware, linkController.deleteLink);
+router.patch('/:linkId', linkController.updateLink);
+
+router.put('/reorder', linkController.reorderLinks);
+
+// soft delete
+router.delete('/:linkId', linkController.deleteLink);
+
+router.get('/:profileId/trash', linkController.getTrashLinks);
+
+router.patch('/:linkId/restore', linkController.restoreLink);
+
+// hard delete
+router.delete('/:linkId/permanent', linkController.hardDeleteLink);
 
 export default router;
 

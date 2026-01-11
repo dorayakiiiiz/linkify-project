@@ -1,26 +1,29 @@
-export const mainMenu = [
-    {
-        icon: "fa-layer-group",
-        label: "My Linkify",
-        hasDropdown: true,
-        subItems: [{ label: "Links" }, { label: "Shop" }, { label: "Design" }],
-    },
-    { icon: "fa-chart-simple", label: "Insights", hasDropdown: false },
+export const creatorMenu = [
+    { icon: "fa-link", label: "Links" },
+    { icon: "fa-bag-shopping", label: "Shop" },
+    { icon: "fa-palette", label: "Design" },
+    { icon: "fa-sack-dollar", label: "Donation" },
+    { icon: "fa-chart-simple", label: "Insights" },
+];
+
+export const adminMenu = [
+    { icon: "fa-solid fa-users", label: "User" },
+    { icon: "fa-solid fa-link", label: "Links" },
+    { icon: "fa-solid fa-bag-shopping", label: "Shop" },
+    { icon: "fa-solid fa-chart-line", label: "Analytics" },
 ];
 
 export const tools = [
-    { icon: "fa-regular fa-comments", label: "Instagram auto-reply" },
-    { icon: "fa-solid fa-link", label: "Link shortener" },
     { icon: "fa-solid fa-pencil", label: "Post ideas" },
 ];
 
 export const designNavItems = [
     { name: "Header", iconClass: "fa-solid fa-user" },
     { name: "Theme", iconClass: "fa-solid fa-table-cells" },
-    { name: "Wallpaper", iconClass: "fa-regular fa-square-full" },
+    { name: "Background", iconClass: "fa-regular fa-square-full" },
     { name: "Text", iconClass: "fa-solid fa-font" },
     { name: "Buttons", iconClass: "fa-solid fa-bars-staggered" },
-    { name: "Colors", iconClass: "fa-solid fa-palette" },
+    { name: "Footer & Donation", iconClass: "fa-solid fa-window-maximize" },
 ];
 
 export const sampleThemes = [

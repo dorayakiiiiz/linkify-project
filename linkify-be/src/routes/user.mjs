@@ -4,6 +4,11 @@ import authMiddleware from "../middleware/AuthMiddleware.mjs";
 
 const router = Router();
 
-router.get('/account', authMiddleware, userController.getAccount);
+router.use(authMiddleware);
+
+router.get('/account', userController.getAccount);
+router.patch('/info', userController.updateAccountInfo);
+router.delete('/account', userController.deleteAccount);
+router.patch('/password', userController.changePassword);
 
 export default router;

@@ -6,138 +6,100 @@ const ShopContext = createContext();
 export const useShop = () => useContext(ShopContext);
 
 export const ShopProvider = ({ children }) => {
-  const { profile } = useProfile();
-  const [products, setProducts] = useState([]);
-  const [loadingProducts, setLoadingProducts] = useState(false);
-  const [error, setError] = useState(null);
+    const { profile } = useProfile();
+    const [products, setProducts] = useState([]);
+    const [loadingProducts, setLoadingProducts] = useState(false);
 
-  const fetchProducts = async (profileId) => {
-    const targetProfileId = profileId || profile?._id;
-    if (!targetProfileId) return;
+    const fetchProducts = async () => {
+        if (!profile?._id)
+            return;
 
-    try {
-      setLoadingProducts(true);
-      setError(null);
-      const { products } = await shopService.getProductsByProfile(
-        targetProfileId
-      );
-      setProducts(products || []);
-    } catch (err) {
-      console.log("Error while getting products: ", err);
-      setError(err.message || "Failed to fetch products");
-    } finally {
-      setLoadingProducts(false);
-    }
-  };
+        try {
+            setLoadingProducts(true);
+            const { products } = await shopService.getProducts(profile._id);
+            setProducts(products || []);
+        } catch (err) {
+            console.log("Error while getting products: ", err);
+        } finally {
+            setLoadingProducts(false);
+        }
+    };
 
-  useEffect(() => {
-    if (profile?._id) {
-      fetchProducts(profile._id);
-    } else {
-      setProducts([]);
-    }
-  }, [profile?._id]);
+    useEffect(() => {
+        if (profile?._id) {
+            fetchProducts();
+        } else {
+            setProducts([]);
+        }
+    }, [profile?._id]);
 
-  const addProduct = async (productData, imageFile) => {
-    try {
-      setError(null);
-      const formData = new FormData();
-      formData.append("name", productData.name);
-      formData.append("price", productData.price);
-      formData.append("description", productData.description || "");
-      formData.append("buyLink", productData.buyLink || "");
-      formData.append("profileId", profile._id);
+    const addProduct = async (formData) => {
+        try {
+            if (profile?._id) {
+                formData.append('profileId', profile._id);
+            }
+            const { product } = await shopService.addProduct(formData);
+            setProducts((prev) => [...prev, product]);
+        } catch (err) {
+            console.log("Error while adding product: ", err);
+            throw err;
+        }
+    };
 
-      if (imageFile) {
-        formData.append("productImage", imageFile);
-      }
+    const updateProduct = async (itemId, formData) => {
+        try {
+            const { product } = await shopService.updateProduct(itemId, formData);
+            setProducts((prev) => prev.map((p) => (p._id === itemId ? product : p)));
+        } catch (err) {
+            console.log("Error while updating product: ", err);
+            fetchProducts();
+            throw err;
+        }
+    };
 
-      const { product } = await shopService.addProduct(formData);
-      setProducts((prev) => [product, ...prev]);
-      return { success: true, product };
-    } catch (err) {
-      console.log("Error while adding product: ", err);
-      setError(err.message || "Failed to add product");
-      return { success: false, error: err.message };
-    }
-  };
+    const reorderProducts = async (srcIndex, desIndex) => {
+        const newProducts = [...products];
+        const [reorderedItem] = newProducts.splice(srcIndex, 1);
+        newProducts.splice(desIndex, 0, reorderedItem);
 
-  const updateProduct = async (itemId, productData, imageFile) => {
-    try {
-      setError(null);
-      const formData = new FormData();
+        setProducts(newProducts);
 
-      if (productData.name !== undefined)
-        formData.append("name", productData.name);
-      if (productData.price !== undefined)
-        formData.append("price", productData.price);
-      if (productData.description !== undefined)
-        formData.append("description", productData.description);
-      if (productData.buyLink !== undefined)
-        formData.append("buyLink", productData.buyLink);
-      if (productData.visible !== undefined)
-        formData.append("visible", productData.visible);
+        const productsToUpdate = newProducts.map((product, index) => ({
+            _id: product._id,
+            order: index
+        }));
 
-      if (imageFile) {
-        formData.append("productImage", imageFile);
-      }
+        try {
+            await shopService.reorderProducts(productsToUpdate);
+        } catch (err) {
+            console.log("Error while reordering products: ", err);
+            fetchProducts();
+        }
+    };
 
-      const { product } = await shopService.updateProduct(itemId, formData);
-      setProducts((prev) => prev.map((p) => (p._id === itemId ? product : p)));
-      return { success: true, product };
-    } catch (err) {
-      console.log("Error while updating product: ", err);
-      setError(err.message || "Failed to update product");
-      fetchProducts();
-      return { success: false, error: err.message };
-    }
-  };
+    const removeProduct = async (itemId) => {
+        try {
+            await shopService.deleteProduct(itemId);
+            setProducts((prev) => prev.filter((p) => p._id !== itemId));
+        } catch (err) {
+            console.log("Error while deleting product: ", err);
+            fetchProducts();
+        }
+    };
 
-  const toggleProductVisible = async (itemId, currentVisible) => {
-    try {
-      const formData = new FormData();
-      formData.append("visible", !currentVisible);
-      await shopService.updateProduct(itemId, formData);
-      setProducts((prev) =>
-        prev.map((p) =>
-          p._id === itemId ? { ...p, visible: !currentVisible } : p
-        )
-      );
-    } catch (err) {
-      console.log("Error while toggling product visibility: ", err);
-      setError(err.message || "Failed to toggle visibility");
-      fetchProducts();
-    }
-  };
-
-  const deleteProduct = async (itemId) => {
-    try {
-      setError(null);
-      await shopService.deleteProduct(itemId);
-      setProducts((prev) => prev.filter((p) => p._id !== itemId));
-      return { success: true };
-    } catch (err) {
-      console.log("Error while deleting product: ", err);
-      setError(err.message || "Failed to delete product");
-      fetchProducts();
-      return { success: false, error: err.message };
-    }
-  };
-
-  return (
-    <ShopContext.Provider
-      value={{
-        products,
-        loadingProducts,
-        error,
-        fetchProducts,
-        addProduct,
-        updateProduct,
-        toggleProductVisible,
-        deleteProduct,
-      }}
-    >
-      {children}
-    </ShopContext.Provider>
-  );
+    return (
+        <ShopContext.Provider
+            value={{
+                products,
+                loadingProducts,
+                fetchProducts,
+                addProduct,
+                updateProduct,
+                reorderProducts,
+                removeProduct,
+            }}
+        >
+            {children}
+        </ShopContext.Provider>
+    );
 };
