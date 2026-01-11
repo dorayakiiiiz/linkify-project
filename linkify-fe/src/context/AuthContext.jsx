@@ -56,8 +56,8 @@ export const AuthProvider = ({ children }) => {
     // render ra trang loading ở đây
     if (isLoading) {
         return (
-            <div className="h-screen w-full flex justify-center items-center bg-[#0060AD] text-5xl text-[#fff] font-momo">
-                Linkify is loading...
+            <div className="h-screen w-full flex justify-center items-center bg-[#0060AD] text-5xl text-[#fff] font-momo text-center">
+                Linkify is loading
             </div>
         )
     }
