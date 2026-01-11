@@ -101,8 +101,8 @@ export const ProfileProvider = ({ children }) => {
 
     if (loading) {
         return (
-            <div className="h-screen w-full flex justify-center items-center bg-[#0060AD] text-5xl text-[#fff] font-momo">
-                Linkify is loading...
+            <div className="h-screen text-center w-full flex justify-center items-center bg-[#0060AD] text-5xl text-[#fff] font-momo">
+                Linkify is loading
             </div>
         )
     }
