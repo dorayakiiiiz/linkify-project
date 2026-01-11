@@ -210,17 +210,52 @@ export default function LinksPage() {
                                                                     {/* title + url + toggle enable */}
                                                                     <div className="flex justify-between items-start">
                                                                         {/* title + url */}
-                                                                        <div className="grow min-w-0 pr-4">
-                                                                            <div className="flex items-center mb-1">
-                                                                                <div className={`text-lg font-bold ${link.isFlagged ? "text-red-600" : "text-gray-800"}`}>
-                                                                                    {link.title}
+                                                                        <div className="grow min-w-0">
+                                                                            <div className="flex items-center mb-1 justify-between">
+                                                                                <div className="flex items-center">
+                                                                                    <div className={`text-lg font-bold ${link.isFlagged ? "text-red-600" : "text-gray-800"}`}>
+                                                                                        {link.title}
+                                                                                    </div>
+                                                                                    {!link.isFlagged && link.isEnable && (
+                                                                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse ml-2.5"></div>
+                                                                                    )}
                                                                                 </div>
-                                                                                {!link.isFlagged && link.isEnable && (
-                                                                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse ml-2.5"></div>
-                                                                                )}
+                                                                                {/* copy + toggle enable ẩn hiện */}
+                                                                                <div className="flex items-center gap-3">
+                                                                                    <button
+                                                                                        onClick={() => handleCopy(link.url, link._id)}
+                                                                                        className={`flex items-center gap-1.5 font-bold px-2 py-1 rounded transition-all duration-300 ${isCopied ? 'bg-green-100 text-green-700' : 'text-gray-400 cursor-pointer hover:text-gray-700'}`}
+                                                                                        title="Copy URL"
+                                                                                    >
+                                                                                        {isCopied ? (
+                                                                                            <>
+                                                                                                <i className="fa-solid fa-check"></i>
+                                                                                                <span className="animate-fade-in text-xs">Copied!</span>
+                                                                                            </>
+                                                                                        ) : (
+                                                                                            <i className="fa-solid fa-copy text-xl"></i>
+                                                                                        )}
+                                                                                    </button>
+
+                                                                                    <label className="relative inline-flex items-center cursor-pointer">
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            className="sr-only peer"
+                                                                                            checked={link.isEnable}
+                                                                                            disabled={link.isFlagged}
+                                                                                            onChange={() =>
+                                                                                                handleToggleEnable(link)
+                                                                                            }
+                                                                                        />
+                                                                                        <div
+                                                                                            className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-green-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"
+                                                                                            title="Enable/Disable"
+                                                                                        ></div>
+                                                                                    </label>
+                                                                                </div>
                                                                             </div>
 
-                                                                            <div className="flex items-center">
+                                                                            <div className="flex items-center mr-6">
                                                                                 <a
                                                                                     href={link.url}
                                                                                     target="_blank"
@@ -233,8 +268,8 @@ export default function LinksPage() {
                                                                             </div>
 
                                                                             {link.isFlagged && (
-                                                                                <div className="mt-2 bg-red-50 px-3 py-2 border border-red-200 rounded-lg flex items-center gap-3">
-                                                                                    <i className="fa-solid fa-triangle-exclamation text-red-600 mt-0.5 text-sm"></i>
+                                                                                <div className="mt-2 bg-red-50 px-3 py-2 border border-red-200 rounded-lg flex items-center gap-3 mr-10">
+                                                                                    <i className="fa-solid fa-triangle-exclamation text-red-600 mt-0.5 text-sm mr"></i>
                                                                                     <div>
                                                                                         <p className="font-bold text-red-700">
                                                                                             Violation Detected
@@ -245,41 +280,10 @@ export default function LinksPage() {
                                                                                     </div>
                                                                                 </div>
                                                                             )}
+    
                                                                         </div>
 
-                                                                        {/* share + toggle enable ẩn hiện */}
-                                                                        <div className="flex items-center pt-1 space-x-3">
-                                                                            <button
-                                                                                onClick={() => handleCopy(link.url, link._id)}
-                                                                                className={`flex items-center gap-1.5 font-bold px-2 py-1 rounded transition-all duration-300 ${isCopied ? 'bg-green-100 text-green-700' : 'text-gray-400 cursor-pointer hover:text-gray-700'}`}
-                                                                                title="Copy URL"
-                                                                            >
-                                                                                {isCopied ? (
-                                                                                    <>
-                                                                                        <i className="fa-solid fa-check"></i>
-                                                                                        <span className="animate-fade-in text-xs">Copied!</span>
-                                                                                    </>
-                                                                                ) : (
-                                                                                    <i className="fa-solid fa-copy text-xl"></i>
-                                                                                )}
-                                                                            </button>
-
-                                                                            <label className="relative inline-flex items-center cursor-pointer">
-                                                                                <input
-                                                                                    type="checkbox"
-                                                                                    className="sr-only peer"
-                                                                                    checked={link.isEnable}
-                                                                                    disabled={link.isFlagged}
-                                                                                    onChange={() =>
-                                                                                        handleToggleEnable(link)
-                                                                                    }
-                                                                                />
-                                                                                <div
-                                                                                    className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-green-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"
-                                                                                    title="Enable/Disable"
-                                                                                ></div>
-                                                                            </label>
-                                                                        </div>
+                                                                        
                                                                     </div>
 
                                                                     {/* option */}
