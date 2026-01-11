@@ -172,7 +172,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                 <div className="w-full relative flex items-center justify-center mt-6 font-momo text-2xl">
                     <div>
                         Edit your profile
-                        <i className="fa-regular fa-id-badge ml-2 text-blue-500"></i>
+                        <span className="hidden md:inline"><i className="fa-regular fa-id-badge ml-2 text-blue-500"></i></span>
                     </div>
 
                     <div
@@ -270,7 +270,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                                 </div>
                                 <button
                                     onClick={handleReactiveProfile}
-                                    className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-xl transition-colors bg-blue-400 hover:bg-blue-300"
+                                    className="cursor-pointer text-white font-semibold px-10 md:px-20 py-3 rounded-xl transition-colors bg-blue-400 hover:bg-blue-300"
                                 >
                                     <i className="fa-regular fa-trash-can mr-2"></i>
                                     Active profile
@@ -282,7 +282,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                                     No longer need this profile?
                                 </div>
 
-                                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4">
+                                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 px-8 md:px-0">
 
                                     <button
                                         onClick={handleDeactiveProfile}

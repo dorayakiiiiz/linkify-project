@@ -240,7 +240,7 @@ export default function ShopPage() {
 
                                                                         </div>
 
-                                                                        <div className=" flex flex-col justify-between items-center">
+                                                                        <div className="flex flex-col justify-between items-center">
                                                                             <label className="relative inline-flex items-center cursor-pointer">
                                                                                 <input
                                                                                     type="checkbox"

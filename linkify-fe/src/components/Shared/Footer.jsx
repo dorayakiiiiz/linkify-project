@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 export default function Footer() {
     return (
         <div className="relative">
-            <div className="md:absolute left-[40px] right-[40px] bottom-[80px] px-[20px] md:px-[40px] min-h-[100px] rounded-3xl bg-[#fff] flex items-center justify-between gap-[20px]">
+            <div className="md:absolute left-[40px] right-[40px] bottom-[80px] px-[20px] md:px-[40px] min-h-[80px] md:min-h-[100px] rounded-3xl bg-[#fff] flex items-center justify-between gap-[20px]">
                 
                 <Link
                     to="/"
@@ -13,7 +13,7 @@ export default function Footer() {
                     <i className="fa-brands fa-linktree text-[#43E660]"></i>
                 </Link>
 
-                <div className="w-full flex-1 flex gap-x-[40px] gap-y-[10px] md:gap-y-[20px] text-[#0b3abc] items-center justify-center">
+                <div className="w-full flex-1 flex gap-x-[40px] gap-y-[10px] md:gap-y-[20px] text-[#0b3abc] uppercase md:normal-case items-center justify-center">
                     {[
                         {
                             title: "Home",
@@ -39,7 +39,7 @@ export default function Footer() {
 
             </div>
 
-            <div className="hidden md:flex w-full h-[150px] bg-[#502274] items-end justify-center">
+            <div className="hidden md:flex w-full h-[150px] bg-[#7fcaac] items-end justify-center">
                 <div className="font-momo md:text-xl text-[#fff] mb-[30px]">
                     © 2025 Linkify. Built with ❤️ by group 10.
                 </div>
