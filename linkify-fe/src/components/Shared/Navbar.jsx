@@ -37,7 +37,7 @@ export default function Navbar() {
             <div className="flex justify-center items-center">
                 <Link 
                     to="/"
-                    className="flex-shrink-0 text-lg md:text-xl font-bold font-inter ml-[10px] cursor-pointer"
+                    className="flex-shrink-0 md:text-xl font-bold font-inter ml-[10px] cursor-pointer"
                 >
                     <span className="">Linkify</span>
                     <i className="fa-brands fa-linktree"></i>
@@ -57,17 +57,17 @@ export default function Navbar() {
                 </div>
             </div>
 
-            <div className={`${isLogin ? "hidden" : "flex gap-2 md:gap-5"}`}>
+            <div className={`${isLogin ? "hidden" : "flex items-center gap-2 md:gap-5"}`}>
                 <Link 
                     to="/auth/login"
-                    className="flex-shrink-0 font-semibold bg-[#EFF0EC] px-[20px] py-[14px] rounded"
+                    className="font-semibold bg-[#EFF0EC] px-4 md:px-5 py-3.5 rounded"
                 >
                     Login
                 </Link>
 
                 <Link 
                     to="/auth/register"
-                    className="flex-shrink-0 font-semibold bg-[#262D3E] text-[#fff] px-[20px] py-[14px] rounded-4xl"
+                    className="flex-shrink-0 font-semibold bg-[#262D3E] text-[#fff] px-4 md:px-5 py-3.5 rounded-4xl"
                 >
                     Sign up
                 </Link>
@@ -85,7 +85,7 @@ export default function Navbar() {
                 </div>
                 <button 
                     onClick={handleLogOut}
-                    className="flex-shrink-0 font-semibold bg-[#EFF0EC] px-[20px] py-[14px] rounded-2xl cursor-pointer"
+                    className="flex-shrink-0 font-semibold bg-[#EFF0EC] px-4 md:px-5 py-3.5 rounded-2xl cursor-pointer"
                 >
                     Log out
                 </button>
