@@ -16,6 +16,8 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
     const [avatarPreview, setAvatarPreview] = useState(profile.avatarUrl);
     const [avatar, setAvatar] = useState(null);
     const [loading, setLoading] = useState(false); 
+    const [processingActive, setProcessingActive] = useState(false);
+    const [processingDelete, setProcessingDelete] = useState(false);
 
     const [log, setLog] = useState({ type: '', content: '' });
 
@@ -56,6 +58,7 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
 
     const handleDeactiveProfile = async (id) => {
         try {
+            setProcessingActive(true);
             await profileService.deactivateProfile(profile._id);
             setLog({ type: 'success', content: 'Profile deactivated successfully.' });
             
@@ -66,11 +69,14 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
             
         } catch (error) {
             setLog({ type: 'error', content: 'Failed to deactivate.' });
+        } finally {
+            setProcessingActive(false);
         }
     }
 
     const handleReactiveProfile = async () => {
         try {
+            setProcessingActive(true);
             await profileService.reactivateProfile(profile._id);
             setLog({ type: 'success', content: 'Profile reactivated successfully.' });
             
@@ -81,12 +87,14 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
 
         } catch (error) {
             setLog({ type: 'error', content: 'Failed to activate.' });
+        } finally {
+            setProcessingActive(false);
         }
     }
 
     const handleDeleteProfile = async () => {
         try {
-           
+            setProcessingDelete(true);
             await profileService.deleteProfile(profile._id);
 
             // tìm đại profile khác thay thế
@@ -102,6 +110,8 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
 
         } catch (error) {
             setLog({ type: 'error', content: 'Failed to delete.' });
+        } finally {
+            setProcessingDelete(false);
         }
     }
 
@@ -270,10 +280,17 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                                 </div>
                                 <button
                                     onClick={handleReactiveProfile}
+                                    disabled={processingActive}
                                     className="cursor-pointer text-white font-semibold px-10 md:px-20 py-3 rounded-xl transition-colors bg-blue-400 hover:bg-blue-300"
                                 >
-                                    <i className="fa-regular fa-trash-can mr-2"></i>
-                                    Active profile
+                                    {!processingActive ? (
+                                        <>
+                                            <i className="fa-regular fa-trash-can mr-2"></i>
+                                            Active profile
+                                        </>
+                                    ) : (
+                                        <i className="fa-solid fa-spinner animate-spin"></i>
+                                    )}
                                 </button>
                             </>
                         ) : (
@@ -286,10 +303,17 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
 
                                     <button
                                         onClick={handleDeactiveProfile}
+                                        disabled={processingActive}
                                         className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-xl transition-colors bg-gray-400 hover:bg-gray-300"
                                     >
-                                        <i className="fa-regular fa-trash-can mr-2"></i>
-                                        Deactive profile
+                                        {!processingActive ? (
+                                            <>
+                                                <i className="fa-regular fa-trash-can mr-2"></i>
+                                                Deactive profile
+                                            </>
+                                        ) : (
+                                            <i className="fa-solid fa-spinner animate-spin"></i>
+                                        )}
                                     </button>
                                     {!isSingleProfile && (
                                         <>
@@ -297,11 +321,18 @@ export default function EditProfileModal({ onClose, profile, onSuccess }) {
                                                 OR
                                             </div>
                                             <button
+                                                disabled={processingDelete}
                                                 onClick={() => setIsDeleteModalOpen(true)}
                                                 className="w-full cursor-pointer text-white font-semibold px-4 py-3 rounded-xl transition-colors bg-red-500 hover:bg-red-400"
                                             >
-                                                <i className="fa-regular fa-trash-can mr-2"></i>
-                                                Delete your profile
+                                                {!processingDelete ? (
+                                                    <>
+                                                        <i className="fa-regular fa-trash-can mr-2"></i>
+                                                        Delete your profile
+                                                    </>
+                                                ) : (
+                                                    <i className="fa-solid fa-spinner animate-spin"></i>
+                                                )}
                                             </button>
                                         </>
                                     )}
