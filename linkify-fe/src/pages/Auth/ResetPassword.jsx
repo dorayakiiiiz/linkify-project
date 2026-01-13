@@ -226,7 +226,7 @@ export default function ResetPassword() {
 
                 {/* Ảnh */}
                 <img 
-                    src="/social_background.jpeg" 
+                    src="/bg.jpg" 
                     alt="Background" 
                     className="hidden lg:block w-[40%] h-full object-cover"
                 />
