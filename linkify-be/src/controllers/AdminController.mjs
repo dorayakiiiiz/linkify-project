@@ -8,7 +8,7 @@ class AdminController {
     // [GET] /api/admin/users
     async getAllUser(req, res, next) {
         try {
-            const { page = 1, limit = 10, search = '', status } = req.query;
+            const { page = 1, limit = 10, search = '', status, sortBy = 'createdAt', order = 'desc' } = req.query;
 
             const query = {
                 role: 'creator'
@@ -26,12 +26,16 @@ class AdminController {
                 query.isLocked = status === 'locked';
             }
 
+            const sortOptions = {
+                [sortBy]: order === 'asc' ? 1 : -1
+            };
+
             // parse từ string
             const skip = (parseInt(page) - 1) * parseInt(limit);
 
             const users = await User.find(query)
                 .select('-password')
-                .sort({ createdAt: -1 })
+                .sort(sortOptions)
                 .skip(skip)
                 .limit(parseInt(limit));
 

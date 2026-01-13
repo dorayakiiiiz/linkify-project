@@ -238,7 +238,6 @@ export default function Background() {
                 </div>
             )}
             
-            <p className="text-sm text-gray-500">Suggested colors are based on your profile image</p>
         </div>
     );
 }   
