@@ -26,6 +26,9 @@ export default function UserManagementPage() {
     const [status, setStatus] = useState('all');
     const [totalPages, setTotalPages] = useState(1);
 
+    const [sortBy, setSortBy] = useState('createdAt');
+    const [order, setOrder] = useState('desc');
+
     const [selectedUserId, setSelectedUserId] = useState(null);
 
     useEffect(() => {
@@ -36,7 +39,9 @@ export default function UserManagementPage() {
                     page,
                     limit: 10,
                     search: debouncedSearch,
-                    status
+                    status,
+                    sortBy,
+                    order
                 });
 
                 setUsers(data);
@@ -49,7 +54,7 @@ export default function UserManagementPage() {
             }
         }
         fetchUsers();
-    }, [page, debouncedSearch, status]);
+    }, [page, debouncedSearch, status, sortBy, order]);
 
     useEffect(() => {
         setPage(1);
@@ -72,6 +77,29 @@ export default function UserManagementPage() {
         }
 
     }
+
+    const handleSort = (field) => {
+        if (sortBy === field) {
+            setOrder(order === 'asc' ? 'desc' : 'asc'); // Toggle nếu cùng cột
+        } else {
+            setSortBy(field);
+            setOrder('desc'); // Reset về desc nếu chọn cột mới
+        }
+    };
+
+    const SortableHeader = ({ label, field }) => (
+        <div 
+            className="flex items-center gap-2 cursor-pointer hover:text-blue-600 select-none group"
+            onClick={() => {handleSort(field)}}
+        >
+            {label}
+            <div className="flex flex-col text-[10px] leading-tight text-gray-400 group-hover:text-blue-400">
+                <i className={`fa-solid fa-caret-up ${sortBy === field && order === 'asc' ? 'text-blue-600' : ''}`}></i>
+                <i className={`fa-solid fa-caret-down ${sortBy === field && order === 'desc' ? 'text-blue-600' : ''}`}></i>
+            </div>
+        </div>
+    );
+
 
     const columns = [
         {
@@ -113,7 +141,7 @@ export default function UserManagementPage() {
             )
         },
         {
-            header: "Join",
+            header: <SortableHeader label="Join" field="createdAt" />,
             accessor: "createdAt",
             render: (user) => (
                 <span className="text-gray-500">
@@ -122,7 +150,7 @@ export default function UserManagementPage() {
             )
         },
         {
-            header: "Risk Level",
+            header: <SortableHeader label="Risk Level" field="violationCount" />,
             render: (user) => {
                 const count = user.violationCount || 0;
                 let color = "bg-green-100 text-green-700";
@@ -150,7 +178,7 @@ export default function UserManagementPage() {
             }
         },
         {
-            header: "Status",
+            header: <SortableHeader label="Status" field="isLocked" />,
             render: (user) => (
                 <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                     user.isLocked ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'

@@ -5,52 +5,55 @@ import Profile from "../models/Profile.mjs";
 import Analytic from "../models/Analytic.mjs";
 
 class AdminController {
-  // [GET] /api/admin/users - Lấy danh sách tất cả users với phân trang và filter
-  async getAllUser(req, res, next) {
-    try {
-      const { page = 1, limit = 10, search = "", status } = req.query;
+    // [GET] /api/admin/users
+    async getAllUser(req, res, next) {
+        try {
+            const { page = 1, limit = 10, search = '', status, sortBy = 'createdAt', order = 'desc' } = req.query;
 
-      // Query chỉ lấy user có role là 'creator'
-      const query = {
-        role: "creator",
-      };
+            const query = {
+                role: 'creator'
+            };
 
-      // Tìm kiếm theo displayName hoặc email
-      if (search) {
-        query.$or = [
-          // i: ignore case
-          { displayName: { $regex: search, $options: "i" } },
-          { email: { $regex: search, $options: "i" } },
-        ];
-      }
+            if (search) {
+                query.$or = [
+                    // i: ignore case
+                    { displayName: { $regex: search, $options: 'i' }},
+                    { email: { $regex: search, $options: 'i' }},
+                ]
+            }
 
-      // Filter theo trạng thái khóa/mở
-      if (status && status !== "all") {
-        query.isLocked = status === "locked";
-      }
+            if (status && status !== 'all') {
+                query.isLocked = status === 'locked';
+            }
 
-      // parse từ string
-      const skip = (parseInt(page) - 1) * parseInt(limit);
+            const sortOptions = {
+                [sortBy]: order === 'asc' ? 1 : -1
+            };
 
-      const users = await User.find(query)
-        .select("-password")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(parseInt(limit));
+            // parse từ string
+            const skip = (parseInt(page) - 1) * parseInt(limit);
 
-      const totalUsers = await User.countDocuments(query);
+            const users = await User.find(query)
+                .select('-password')
+                .sort(sortOptions)
+                .skip(skip)
+                .limit(parseInt(limit));
 
-      return res.status(200).json({
-        data: users,
-        pagination: {
-          page: parseInt(page),
-          limit: parseInt(limit),
-          total: totalUsers,
-          totalPages: Math.ceil(totalUsers / parseInt(limit)),
-        },
-      });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
+            const totalUsers = await User.countDocuments(query);
+            
+            return res.status(200).json({
+                data: users,
+                pagination: {
+                    page: parseInt(page),
+                    limit: parseInt(limit),
+                    total: totalUsers,
+                    totalPages: Math.ceil(totalUsers / parseInt(limit))
+                }
+            });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
     }
   }
 
