@@ -17,6 +17,8 @@ export default function Register() {
     const [password, setPassword] = useState('');
     const [log, setLog] = useState({ type: '', content: '' });
     const [loading, setLoading] = useState(false);
+    // dùng trong trường hợp đang đăng nhập r ở chỗ khác mà tnhien nhảy vào trang login lại
+    const [justLoggedIn, setJustLoggedIn] = useState(false);
 
     useEffect(() => {
         if (log.content) {
@@ -31,10 +33,10 @@ export default function Register() {
 
     // đã đăng nhập rồi mà vào lại -> tự redirect về dashboard
     useEffect(() => {
-        if (isLogin) {
-            navigate('/dashboard', { replace: true });
+        if (isLogin && !justLoggedIn) {
+            navigate('/dashboard', { replace: true })
         }
-    }, [isLogin, navigate]);
+    }, [isLogin, justLoggedIn, navigate]);
 
     //Lăng nghe sự kiện gửi message của cửa sổ pop up
     useEffect(() => {
@@ -42,6 +44,7 @@ export default function Register() {
             if (e.data.type === 'login_success') {
                 const token = e.data.payload.token;
                 login(token);
+                setJustLoggedIn(true);
                 setLog({
                     type: 'success',
                     content: 'Login successfully! Redirecting...'
