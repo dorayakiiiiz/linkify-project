@@ -35,7 +35,4 @@ router.get('/facebook/redirect',
     passport.authenticate('facebook', {session: false, failureRedirect: '/login'}), // BỎ scope khỏi đây
     authController.facebook
 );
-
-router.post('/logout', authController.logout);
-
 export default router;

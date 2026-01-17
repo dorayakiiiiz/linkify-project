@@ -4,17 +4,11 @@ import jwt from "jsonwebtoken"
 
 // Để xác nhận người dùng đã đăng nhập
 const authMiddleware = (req, res, next) => {
-    // cách cũ: lấy token từ header authorization
-    // const authHeader = req.headers.authorization;
-    // if (!authHeader)
-    //     return res.status(401).json({ message: "Missing token" });
-    // const token = authHeader.split(' ')[1];
+    const authHeader = req.headers.authorization;
+    if (!authHeader)
+        return res.status(401).json({ message: "Missing token" });
 
-    // cách mới: lấy từ cookie
-    const token = req.cookies.token;
-    
-    if (!token)
-        return res.status(401).json({ message: 'Missing token.' });
+    const token = authHeader.split(' ')[1];
 
     try {
 
@@ -25,7 +19,7 @@ const authMiddleware = (req, res, next) => {
         next();
         
     } catch (err) {
-        res.status(403).json({ message: "Invalid or expired token."});
+        res.status(403).json({ message: "Invalid or expired token"} );
     }
 }
 
