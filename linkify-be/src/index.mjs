@@ -2,7 +2,7 @@
 import express from 'express'
 import cors from 'cors'
 import passport from 'passport'
-import cookiePaser from 'cookie-parser'
+import cookieParser from 'cookie-parser'
 
 
 import { configDotenv } from "dotenv";
@@ -19,6 +19,9 @@ dbConnect();
 
 // Init passport
 app.use(passport.initialize())
+
+// Dùng cookie parser
+app.use(cookieParser()); 
 
 app.use(express.json());
 app.use(

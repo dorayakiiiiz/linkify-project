@@ -23,6 +23,16 @@ const generateAuthScript = (type, data) => {
     `;
 };
 
+// Hàm helper để set cookie chuẩn
+const setTokenCookie = (res, token) => {
+    res.cookie('token', token, {
+        httpOnly: true, // Client JS không đọc được (chống XSS)
+        secure: process.env.NODE_ENV === 'production', // Chỉ gửi qua HTTPS ở production
+        sameSite: 'lax', // Bảo vệ CSRF cơ bản
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 ngày
+    });
+};
+
 class AuthController {
     // [POST] /auth/register
     // TODO: xử lí validate data ng dùng gửi lên
@@ -74,10 +84,15 @@ class AuthController {
                 { expiresIn: "7d" }
             );
 
+            // set cookie cho res
+            setTokenCookie(res, token);
+
             res.json({
                 message: 'Login successfully!',
-                token
+                // token
+                // cũ dùng local storage
             });
+
 
         } catch (err) {
             res.status(500).json({ error: err.message });
@@ -160,10 +175,8 @@ Linkify Team`
     async google(req, res, next) {
         try { 
             const userInfo = req.user; 
-            console.log(userInfo)
             
             if (!userInfo) {
-                console.log('Lỗi không có userInfo')
                 // Nếu có lỗi, chuyển hướng về trang đăng nhập của FE
                 return res.send(generateAuthScript('login_failed', { message: 'User info not found' }));
             }
@@ -178,19 +191,12 @@ Linkify Team`
                 { expiresIn: "7d" }
             );
 
-            // 3. Đặt JWT vào HTTP-only Cookie
+            setTokenCookie(res, token);
 
-            // res.cookie('jwt', token, {
-            //     httpOnly: true, // Rất quan trọng: không thể truy cập từ JavaScript client-side
-            //     secure: process.env.NODE_ENV === 'production', // Dùng HTTPS trong production
-            //     maxAge: 7 * 24 * 60 * 60 * 1000 // Hết hạn sau 7 ngày
-            // });
-
-            console.log('[THÀNH CÔNG!!!]')
-            return res.send(generateAuthScript('login_success', { token })); 
+            // return res.send(generateAuthScript('login_success', { token })); 
+            return res.send(generateAuthScript('login_success', { message: 'Login successfully.' })); 
             
         } catch (err) {
-            console.log("Google Auth Callback Error:", err);
             // Chuyển hướng về trang báo lỗi của Front-end
             return res.send(generateAuthScript('login_failed', { message: 'Authentication failed' }));
         }
@@ -200,10 +206,8 @@ Linkify Team`
     async facebook(req, res, next) {
         try { 
             const userInfo = req.user; 
-            console.log(userInfo)
             
             if (!userInfo) {
-                console.log('Lỗi không có userInfo')
                 // Nếu có lỗi, chuyển hướng về trang đăng nhập của FE
                 return res.send(generateAuthScript('login_failed', { message: 'User info not found' }));
             }
@@ -215,23 +219,23 @@ Linkify Team`
                 { expiresIn: "7d" }
             );
 
-            // 3. Đặt JWT vào HTTP-only Cookie
+            setTokenCookie(res, token);
 
-            // res.cookie('jwt', token, {
-            //     httpOnly: true, // Rất quan trọng: không thể truy cập từ JavaScript client-side
-            //     secure: process.env.NODE_ENV === 'production', // Dùng HTTPS trong production
-            //     maxAge: 7 * 24 * 60 * 60 * 1000 // Hết hạn sau 7 ngày
-            // });
-
-            console.log('[THÀNH CÔNG!!!]')
-            return res.send(generateAuthScript('login_success', { token })); 
+            // return res.send(generateAuthScript('login_success', { token })); 
+            return res.send(generateAuthScript('login_success', { message: 'Login successfully.' })); 
             
         } catch (err) {
-            console.log("Facebook Auth Callback Error:", err);
             // Chuyển hướng về trang báo lỗi của Front-end
             return res.send(generateAuthScript('login_failed', { message: 'Authentication failed' }));
         }
     }
+
+    // [POST] auth/logout
+    async logout(req, res, next) {
+        res.clearCookie('token');
+        res.status(200).json({ message: 'Logged out successfully.' });
+    }
+
 
 }
 
