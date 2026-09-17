@@ -1,3 +1,5 @@
+// Router for Server-Sent Events (SSE) real-time streaming
+
 import express from 'express';
 import { addClient } from '../utils/sseManager.mjs';
 import authenticationMiddleware from '../middleware/AuthenticationMiddleware.mjs';
