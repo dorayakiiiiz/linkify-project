@@ -26,7 +26,7 @@ const processQueue = async () => {
             if (item.type === 'link') {
                 await checkLinkContent(item.id, item.title, item.url);
             } else if (item.type === 'product') {
-                await checkProductContent(item.id, item.name, item.buyLink, item.price);
+                await checkProductContent(item.id, item.name, item.price, item.buyLink);
             }
         } catch (err) {
             console.error(`Moderation queue processing error for ${item.type} ${item.id}:`, err.message);
